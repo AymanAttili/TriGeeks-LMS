@@ -1,27 +1,12 @@
 body {
   margin: 0;
+  color: #1C1B56;
+  background-color: #f7f7f7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+
 input::-ms-reveal {
   display: none;
 }
-.LogoContainer{
-    max-width: 300px;
-    border-radius: 230px;
-    align-items: center;
-    background-color: white;
-    overflow: hidden;
-    margin: auto;
-  }
-  
-  .Logo{
-    margin-top: 10%;
-    width: 100%;
-  }
-  
-  .css-niqf4j-MuiStack-root{
-    align-items: center;
-  }
-  .css-1xot77b-MuiDrawer-docked, .MuiDrawer-paper, .MuiDrawer-docked{
-    max-width: 250px !important; 
-  }
-  
