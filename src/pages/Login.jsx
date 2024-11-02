@@ -76,8 +76,7 @@ const Login = () => {
                             {...register('workId', { required: true })}
                         >
                         </TextField>
-                        {/* {formErrors.workId && <Typography mt={1} fontSize={12} textAlign={'left'}
-                            color="error">*Work id is required</Typography>} */}
+                        {formErrors.workId && <Typography mt={1} fontSize={12} textAlign={'left'} color="error">*Work id is required</Typography>}
                     </Box>
                     <Grid container flexDirection={'column'} gap={1}>
                         <TextField id="password" label="Password" variant="outlined" type={showPassword ? 'text' : 'password'}
