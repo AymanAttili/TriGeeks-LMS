@@ -1,10 +1,14 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import Cookies from 'js-cookie'
-function PrivateRoute() {
-    return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+
+function PrivateRoute({ children, allowedRoles }) {
+    const { isAuthenticated, user } = useAuth();
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" />;
+    }
+
+    return allowedRoles.includes(user?.role) ? children : <Navigate replace to="/" />;
 }
 
-function isAuthenticated() {
-    return !!Cookies.get('authToken');
-}
 export default PrivateRoute;
