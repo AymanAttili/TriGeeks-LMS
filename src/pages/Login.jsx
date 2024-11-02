@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Navigate, Link as RouterLink } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import VpnKey from "@mui/icons-material/VpnKey"
@@ -8,8 +8,11 @@ import { Box, Button, Checkbox, FormControlLabel, Grid2 as Grid, IconButton, Inp
 
 import logo from '../images/logo.jpg'
 import { useAuth } from "../hooks/useAuth";
+import { useNotifications } from "@toolpad/core";
 
 const Login = () => {
+    const notifications = useNotifications()
+
     const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
 
     const { loginUser, isAuthenticated, error: authError } = useAuth();
@@ -25,10 +28,23 @@ const Login = () => {
         setShowPassword((prev) => !prev);
     };
 
+
+
+    useEffect(() => {
+        if (authError) {
+            var key = notifications.show(authError, {
+                severity: 'error',
+                autoHideDuration: 4000,
+            })
+        }
+        return () => {
+            notifications.close(key)
+        }
+    })
+
     if (isAuthenticated) {
         return <Navigate replace to="/" />
     }
-
 
     return (
         <Grid container justifyContent={'space-between'} textAlign={'center'} sx={{
@@ -55,17 +71,13 @@ const Login = () => {
                     <Typography variant='h3' paddingBottom={5}>
                         Login
                     </Typography>
-                    <Typography color='error'>
-                        User Id: userId<br />
-                        Password: password
-                    </Typography>
                     <Box >
-                        <TextField id="userId" fullWidth label="User ID" variant="outlined"
-                            {...register('userId', { required: true })}
+                        <TextField id="workId" fullWidth label="Work ID" variant="outlined"
+                            {...register('workId', { required: true })}
                         >
                         </TextField>
-                        {formErrors.password && <Typography mt={1} fontSize={12} textAlign={'left'}
-                            color="error">*Password is required</Typography>}
+                        {/* {formErrors.workId && <Typography mt={1} fontSize={12} textAlign={'left'}
+                            color="error">*Work id is required</Typography>} */}
                     </Box>
                     <Grid container flexDirection={'column'} gap={1}>
                         <TextField id="password" label="Password" variant="outlined" type={showPassword ? 'text' : 'password'}
@@ -87,10 +99,11 @@ const Login = () => {
                         >
                         </TextField>
                         {formErrors.password && <Typography fontSize={12} textAlign={'left'} color="error">*Password is required</Typography>}
-                        <FormControlLabel control={<Checkbox {...register('rememberUser')} />} label="Remember me." />
-
+                        <FormControlLabel control={<Checkbox
+                            {...register('rememberUser')}
+                        />} label="Remember me." />
                     </Grid>
-                    {authError && <Typography fontSize={12} textAlign={'left'} color="error">{authError.message}</Typography>}
+
                     <Button type={'submit'} variant="contained" startIcon={<VpnKey />}>
                         <span color='primary'>Login</span>
                     </Button>

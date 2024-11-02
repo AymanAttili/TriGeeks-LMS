@@ -6,7 +6,10 @@ import PageNotFound from "./pages/PageNotFound"
 import PrivateRoute from "./services/PrivateRoute"
 import AppLayout from "./ui/AppLayout"
 import Dashboard from "./pages/Dashboard"
+import MyCertificates from "./pages/MyCertificates"
 import Courses from "./pages/Courses"
+import Course from './features/courses/Course'
+import Quiz from './features/quiz/Quiz'
 import MyCourses from "./pages/MyCourses"
 import Users from "./pages/Users"
 import Certificates from "./pages/Certificates"
@@ -29,33 +32,63 @@ function App() {
     <ThemeProvider theme={theme} >
       <BrowserRouter >
         <Routes>
-          {/* User Routes */}
           <Route element=
             {
-              <PrivateRoute allowedRoles={['admin', 'staff', 'user']} >
+
+              <PrivateRoute checkAuth="true" >
                 <AppLayout />
               </PrivateRoute>
             }
           >
+            {/* Global Routes */}
+
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="account" element={<Account />} />
-            <Route path="my-courses" element={<MyCourses />} />
             <Route path="courses" element={<Courses />} />
-            <Route path="certificates" element={<Certificates />} />
-          </Route>
+            <Route path="course">
+              <Route index element={<Course />} />
+              <Route path="quiz/:quizId" element={<Quiz />} />
+            </Route>
 
-          {/* Admin routes */}
-          <Route element=
-            {
-              <PrivateRoute allowedRoles={['admin']} >
-                <AppLayout />
-              </PrivateRoute>
-            }
-          >
-            <Route path="users" element={<Users />} />
-          </Route>
 
+            {/* Staff routes */}
+            <Route element=
+              {
+                <PrivateRoute allowedRoles={['Staff']} />
+              }
+            >
+              <Route path="my-certificates" element={<MyCertificates />} />
+            </Route>
+
+            {/* Admin routes */}
+            <Route element=
+              {
+                <PrivateRoute allowedRoles={['Admin']} />
+              }
+            >
+              <Route path="users" element={<Users />} />
+            </Route>
+
+            {/* SubAdmin & Staff routes */}
+            <Route element=
+              {
+                <PrivateRoute allowedRoles={['SubAdmin']} />
+              }
+            >
+              <Route path="my-courses" element={<MyCourses />} />
+            </Route>
+
+            {/* SubAdmin & Admin routes */}
+            <Route element=
+              {
+                <PrivateRoute allowedRoles={['Admin', 'SubAdmin']} />
+              }
+            >
+              <Route path="certificates" Component={Certificates} />
+            </Route>
+
+          </Route>
           {/* Guest Routes */}
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />

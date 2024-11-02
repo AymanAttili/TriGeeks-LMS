@@ -1,6 +1,6 @@
 import { AppProvider } from '@toolpad/core/AppProvider'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../images/logo.jpg'
 import { useMemo, useState } from 'react'
 import theme from '../utils/theme'
@@ -9,7 +9,8 @@ import { useAuth } from '../hooks/useAuth.js'
 
 
 const AppLayout = () => {
-    const [pathname, setPathName] = useState('/dashboard');
+    const location = useLocation();
+    const [pathname, setPathName] = useState(location.pathname);
     const navigate = useNavigate();
     const { logoutUser, user } = useAuth();
 
@@ -31,7 +32,7 @@ const AppLayout = () => {
             signOut: logoutUser,
             signIn: () => null
         };
-    }, [navigate]);
+    }, [logoutUser]);
 
 
     return (
@@ -40,7 +41,7 @@ const AppLayout = () => {
                 logo: <img src={logo} alt="Makassed LMS" />,
                 title: 'Makassed LMS',
             }}
-            navigation={navigation}
+            navigation={navigation[user.role]}
             router={router}
             authentication={authentication}
             theme={theme}

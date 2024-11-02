@@ -4,15 +4,13 @@ const theme = responsiveFontSizes(
     createTheme({
         palette: {
             primary: {
-                main: '#338E4E'
+                main: '#027e7b'
             },
             // secondary: {
             // },
             // third: {
             // },
-            text: {
-                primary: '#338E4E'
-            }
+
         }, typography: {
             fontFamily: ['Sora', 'Courier', 'monospace'].join(',')
         }

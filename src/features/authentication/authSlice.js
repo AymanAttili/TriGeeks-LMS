@@ -1,7 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-// import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
+const API_URL = import.meta.env.VITE_API_URL
+
+
+const convertToJson = (token) => {
+    const decoded = jwtDecode(token);
+    const newToken = {};
+    Object.keys(decoded).forEach((key) => {
+        let newKey = key.split('/').slice(-1)
+        if (newKey[0] === 'emailaddress')
+            newKey[0] = 'email';
+        if (newKey[0] === 'nameidentifier')
+            newKey[0] = 'id'
+        console.log(newKey)
+
+        newToken[newKey] = decoded[key]; // Example modification
+    });
+
+    console.log(newToken);
+
+    return newToken;
+}
 
 const initialState = () => {
     var token = Cookies.get('authToken');
@@ -10,50 +31,73 @@ const initialState = () => {
 
     if (token) {
         token = JSON.parse(token);
+        token.accessToken = convertToJson(token.accessToken)
         isAuthenticated = true;
-        user = token;
+        user = token.accessToken;
     }
-
 
     return {
         user,
+        // refreshToken: token?.refreshToken,
         isAuthenticated,
         status: 'idle',
         error: '',
     }
 }
 
-// initialState = {
-//     user: {},
-//     isAuthenticated: false,
-//     status: 'idle',
-//     error: '',
-// }
+
 
 export const login = createAsyncThunk(
     'auth/login',
-    async (credentials, { rejectWithValue }) => {
+    async (credentials) => {
         try {
-            // const response = await axios.post('/api/login', credentials);
-            // return response.data;
-            if (!(credentials.userId === 'userId') || !(credentials.password === 'password'))
-                throw new Error('UserId or Password are wrong, try again!')
-            const user = {
-                name: 'Ayman Attili',
-                image: 'https://avatars.githubusercontent.com/u/19550456',
-                role: 'admin',
+            const response = await fetch(`${API_URL}/identity/login`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    workId: credentials.workId, //TODO: change userId to workId in login page
+                    password: credentials.password
+                }),
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            })
+            const data = await response.json();
+
+            console.log(data)
+            if (!response.ok) {
+                let errorMessage = '';
+
+                switch (response.status) {//TODO: checking the types of errors
+                    case 400: {
+                        errorMessage = data.title;
+                        break
+                    }
+                    case 401: {
+                        errorMessage = "Invalid credentials";
+                        break;
+                    }
+
+                    default: errorMessage = "Server error, please check network and try again!"
+                }
+
+                throw new Error(errorMessage)
             }
-            Cookies.set('authToken', JSON.stringify(user), {
+
+
+
+            Cookies.set('authToken', JSON.stringify(data), { //TODO: checking if we have to tell the BE about the 'Remember me'
                 expires: credentials.rememberUser ? 365 : 30 / 1440,
                 secure: true,
                 sameSite: 'Strict',
             });
-            return {
-                user
-            }
+
+            const user = convertToJson(data.accessToken)
+
+
+            return { user }
         }
         catch (error) {
-            return rejectWithValue(error.response.data);
+            throw new Error(error.message);
         }
     });
 
@@ -65,6 +109,8 @@ const authSlice = createSlice({
             state.user = null;
             state.isAuthenticated = false;
             state.status = 'idle';
+            state.refreshToken = '';
+            Cookies.remove('authToken');
         },
     },
     extraReducers: (builder) => {
@@ -73,13 +119,13 @@ const authSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                state.status = 'idle';
                 state.user = action.payload.user;
                 state.isAuthenticated = true;
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.payload;
+                state.error = action.error.message;
             });
     },
 });
