@@ -9,6 +9,7 @@ import { Box, Button, Checkbox, FormControlLabel, Grid2 as Grid, IconButton, Inp
 import logo from '../images/logo.jpg'
 import { useAuth } from "../hooks/useAuth";
 import { useNotifications } from "@toolpad/core";
+import InputPassword from "../ui/InputPassword";
 
 const Login = () => {
     const notifications = useNotifications()
@@ -79,24 +80,8 @@ const Login = () => {
                         {formErrors.workId && <Typography mt={1} fontSize={12} textAlign={'left'} color="error">*Work id is required</Typography>}
                     </Box>
                     <Grid container flexDirection={'column'} gap={1}>
-                        <TextField id="password" label="Password" variant="outlined" type={showPassword ? 'text' : 'password'}
-                            {...register('password', { required: true })}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={handleClickShowPassword}
-                                                edge="end"
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }
-                            }}
-                        >
-                        </TextField>
+                        <InputPassword id="password" label="Password" showPassword={showPassword} register={register} handleClickShowPassword={handleClickShowPassword} />
+
                         {formErrors.password && <Typography fontSize={12} textAlign={'left'} color="error">*Password is required</Typography>}
                         <FormControlLabel control={<Checkbox
                             {...register('rememberUser')}
@@ -108,14 +93,14 @@ const Login = () => {
                     </Button>
                     <Link
                         component={RouterLink}
-                        to={'/forgotPassword'}
+                        to={'/forgot-password'}
                         underline="none"
                     >
                         <Typography >FORGOT PASSWORD?</Typography>
                     </Link>
                 </Grid>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
 

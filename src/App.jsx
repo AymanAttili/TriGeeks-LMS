@@ -8,6 +8,8 @@ import AppLayout from "./ui/AppLayout"
 import Dashboard from "./pages/Dashboard"
 import MyCertificates from "./pages/MyCertificates"
 import Courses from "./pages/Courses"
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
 import Course from './features/courses/Course'
 import Quiz from './features/quiz/Quiz'
 import MyCourses from "./pages/MyCourses"
@@ -91,6 +93,8 @@ function App() {
           </Route>
           {/* Guest Routes */}
           <Route path="login" element={<Login />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="*" element={<PageNotFound />} />
 
         </Routes>
