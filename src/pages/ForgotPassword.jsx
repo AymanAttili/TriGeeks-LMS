@@ -38,7 +38,7 @@ const ForgotPassword = () => {
                 });
                 return;
             }
-            navigate('/reset-password')
+            navigate('/login')
         }
         else {
             notifications.show('Please verify if the work ID is correct', {
