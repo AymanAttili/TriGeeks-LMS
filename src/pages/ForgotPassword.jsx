@@ -1,32 +1,52 @@
-import { Button, FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
-import logo from '../images/logo.jpg'
-import LoginIcon from '@mui/icons-material/Login'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { useDialogs } from '@toolpad/core/useDialogs';
 import { useForm } from 'react-hook-form'
+
+import { Button, FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
+import { useNotifications } from '@toolpad/core'
+import LoginIcon from '@mui/icons-material/Login'
+import { useDialogs } from '@toolpad/core/useDialogs';
+
+import { forgotPassword } from '../services/apiAuth'
+
+import logo from '../images/logo.jpg'
 
 
 const ForgotPassword = () => {
-    const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
+    const notifications = useNotifications();
+
+    const {
+        register,
+        handleSubmit,
+        // formState: { errors: formErrors }
+    } = useForm();
     const dialogs = useDialogs();
     const navigate = useNavigate();
 
-    const onSending = async (data) => {
-        console.log(data);
+    const onSending = async ({ workId }) => {
+        const response = await forgotPassword(workId);
 
-        const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
-            okText: `I didn't recieve the link.`,
-            cancelText: `Recieved`,
-            title: 'Link sent'
-        });
-        if (confirmed) {
-            await dialogs.alert("The link has been sent again✅!", {
+        if (response.ok) {
+            const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
+                okText: `I didn't recieve the link.`,
+                cancelText: `Recieved`,
                 title: 'Link sent'
             });
-
+            if (confirmed) {
+                notifications.show('Please verify if the work ID is correct', {
+                    severity: 'warning',
+                    autoHideDuration: 3000,
+                });
+                return;
+            }
+            navigate('/reset-password')
         }
-        navigate('/reset-password')
+        else {
+            notifications.show('Please verify if the work ID is correct', {
+                severity: 'warning',
+                autoHideDuration: 3000,
+            });
+        }
+
     }
     return (
         <>
@@ -52,18 +72,18 @@ const ForgotPassword = () => {
                     </Typography>
                     <Grid container gap={1}>
                         <Grid container >
-                            <InputLabel htmlFor="email">
-                                Email
+                            <InputLabel htmlFor="id">
+                                Work Id
                             </InputLabel>
-                            <TextField id='email'
-                                {...register('email', { required: true })}
-                                type='email'
-                                aria-describedby="email-helper-text"
+                            <TextField id='id'
+                                {...register('workId', { required: true })}
+                                type='text'
+                                aria-describedby="id-helper-text"
                                 size='small'
                                 fullWidth
                             ></TextField>
-                            <FormHelperText id="email-helper-text" >
-                                Use your registered email to receive the link to reset your password.
+                            <FormHelperText id="id-helper-text" >
+                                Use your registered workId to receive the link to reset your password.
                             </FormHelperText>
                         </Grid>
 

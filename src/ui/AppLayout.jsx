@@ -1,18 +1,23 @@
+import { useMemo, useState } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+
 import { AppProvider } from '@toolpad/core/AppProvider'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import logo from '../images/logo.jpg'
-import { useMemo, useState } from 'react'
+
 import theme from '../utils/theme'
 import navigation from '../utils/navigation.jsx'
-import { useAuth } from '../hooks/useAuth.js'
 
+import { useUser } from '../features/authentication/useUser.js'
+import { useLogout } from '../features/authentication/useLogout.js'
+
+import logo from '../images/logo.jpg'
 
 const AppLayout = () => {
     const location = useLocation();
     const [pathname, setPathName] = useState(location.pathname);
     const navigate = useNavigate();
-    const { logoutUser, user } = useAuth();
+    const { user } = useUser();
+    const { logout } = useLogout();
 
     const router = useMemo(() => {
         return {
@@ -26,13 +31,12 @@ const AppLayout = () => {
     }, [pathname, navigate]);
 
 
-    //Temp
     const authentication = useMemo(() => {
         return {
-            signOut: logoutUser,
+            signOut: logout,
             signIn: () => null
         };
-    }, [logoutUser]);
+    }, [logout]);
 
 
     return (

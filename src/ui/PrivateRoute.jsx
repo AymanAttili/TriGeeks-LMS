@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-
+import { useUser } from '../features/authentication/useUser'
 function PrivateRoute({ children, allowedRoles, checkAuth = false }) {
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, user } = useUser();
 
     if (!isAuthenticated) {
         return <Navigate to="/login" />;
@@ -10,10 +9,6 @@ function PrivateRoute({ children, allowedRoles, checkAuth = false }) {
 
     if (checkAuth)
         return children;
-
-    console.log(allowedRoles.includes(user?.role));
-
-
 
     return allowedRoles.includes(user?.role) ? <Outlet /> : <Navigate replace to="/" />;
 }
