@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Suspense, useMemo } from 'react'
+import { Outlet } from 'react-router-dom'
 
-import { AppProvider } from '@toolpad/core/AppProvider'
+import { AppProvider } from '@toolpad/core/react-router-dom'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 
 import theme from '../utils/theme'
@@ -10,26 +10,13 @@ import navigation from '../utils/navigation.jsx'
 import { useUser } from '../features/authentication/useUser.js'
 import { useLogout } from '../features/authentication/useLogout.js'
 
+import SpinnerLoader from './SpinnerLoader.jsx'
+
 import logo from '../images/logo.jpg'
 
 const AppLayout = () => {
-    const location = useLocation();
-    const [pathname, setPathName] = useState(location.pathname);
-    const navigate = useNavigate();
     const { user } = useUser();
     const { logout } = useLogout();
-
-    const router = useMemo(() => {
-        return {
-            pathname,
-            searchParams: new URLSearchParams(),
-            navigate: (path) => {
-                navigate(path)
-                setPathName(path)
-            },
-        };
-    }, [pathname, navigate]);
-
 
     const authentication = useMemo(() => {
         return {
@@ -37,6 +24,15 @@ const AppLayout = () => {
             signIn: () => null
         };
     }, [logout]);
+
+    const dashboardUser = useMemo(() => {
+        return {
+            id: user.workId,
+            email: user.email,
+            name: user.firstName + ' ' + user.lastName,
+            image: user.image
+        }
+    }, [user])
 
 
     return (
@@ -46,13 +42,16 @@ const AppLayout = () => {
                 title: 'Makassed LMS',
             }}
             navigation={navigation[user.role]}
-            router={router}
             authentication={authentication}
             theme={theme}
-            session={{ user }}
+            session={{
+                user: dashboardUser
+            }}
         >
             <DashboardLayout>
-                <Outlet />
+                <Suspense fallback={<SpinnerLoader />}>
+                    <Outlet />
+                </Suspense>
             </DashboardLayout>
         </AppProvider>
     )

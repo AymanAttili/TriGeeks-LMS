@@ -1,62 +1,67 @@
+import axiosAPI from "../API/axiosAPI";
+import { clearTokens, getAccessToken, getRefreshToken } from "../utils/handleTokens";
 import { convertToJson } from "../utils/helpers";
-import Cookies from 'js-cookie';
 
 const API_URL = import.meta.env.VITE_API_URL
 
 export async function login({ workId, password, rememberUser }) {
-    const response = await fetch(`${API_URL}/identity/login`, {
-        method: 'POST',
-        body: JSON.stringify({
-            workId,
-            password
-        }),
-        headers: {
-            'Content-type': 'application/json'
-        }
-    })
+    const response = await axiosAPI.post(`${API_URL}/identity/login`, {
+        workId,
+        password
+    }).catch(() => { throw new Error('Invalid credentials') })
 
-    if (!response.ok) throw new Error("Invalid credentials");
-
-    const data = await response.json();
-
+    const data = response.data
     return { data, rememberUser };
 }
 
 export async function resetPassword(workId, token, newPassword) {
-    const response = await fetch(`${API_URL}/identity/reset-forgotten-password`, {
-        method: 'POST',
-        body: JSON.stringify({
-            workId,
-            token,
-            newPassword
-        }),
-        headers: {
-            'Content-type': 'application/json'
-        }
+    const response = await axiosAPI.post(`${API_URL}/identity/reset-forgotten-password`, {
+        workId,
+        token,
+        newPassword
     })
 
     return response;
 }
 
 export async function forgotPassword(workId) {
-    const response = await fetch(`${API_URL}/identity/forgot-password`, {
-        method: 'POST',
-        body: JSON.stringify({
-            workId
-        }),
-        headers: {
-            'Content-type': 'application/json'
-        }
-    })
+    return await axiosAPI.post(`${API_URL}/identity/forgot-password`, { workId })
+}
 
-    return response;
+export async function fetchUser() {
+    const accessToken = getAccessToken();
+    const user = convertToJson(accessToken)
+    if (!user?.id || !user?.exp) {
+        clearTokens();
+        return null;
+    }
+
+    const expDate = new Date(user.exp * 1000);
+
+    const currentDate = new Date();
+
+    console.log(expDate, currentDate);
+
+    if (expDate < currentDate) {
+        await refreshToken();
+    }
+
+    return await axiosAPI.get(`${API_URL}/identity/users/${user?.id}`)
+}
+
+export async function refreshToken() {
+    const refreshToken = getRefreshToken();
+    return await axiosAPI.post('/identity/refresh-token', {
+        refreshToken,
+    })
 }
 
 export async function getCurrentUser() {
-    const token = Cookies.get('accessToken');
-    if (!token) return null;
+    const accessToken = getAccessToken();
 
-    const user = convertToJson(token)
+    if (!accessToken) return null;
 
-    return user;
+    const response = await fetchUser()
+
+    return response.data;
 }

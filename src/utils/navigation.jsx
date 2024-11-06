@@ -2,7 +2,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { PiCertificateFill } from "react-icons/pi";
+import { PiCertificateFill, PiUser, PiUserBold, PiUserCheck } from "react-icons/pi";
+import { AccountBox } from '@mui/icons-material';
 const navigation = {
     Admin: [
         {
@@ -14,22 +15,28 @@ const navigation = {
             title: 'Courses',
             icon: <MenuBookIcon />,
         },
+        {
+            segment: 'certificates',
+            title: 'Certificates',
+            icon: <PiCertificateFill size='24' />
+        },
+        {
+            segment: 'users',
+            title: 'Users',
+            icon: <PiUserBold size='24' />
+        },
+        {
+            kind: 'divider'
+        }, {
+            segment: 'account',
+            title: 'My Account',
+            icon: <AccountBox />
+        }
         // {
         //     segment: 'chats',
         //     title: 'Chats',
         //     icon: <ChatRoundedIcon />,
         // },
-        {
-            kind: 'divider'
-        }, {
-            segment: 'account',
-            title: 'Account',
-            icon: <AccountCircleIcon />
-        }, {
-            segment: 'certificates',
-            title: 'Certificates',
-            icon: <PiCertificateFill size='24' />
-        }
     ],
     SubAdmin: [
         {
@@ -41,22 +48,27 @@ const navigation = {
             title: 'My Courses',
             icon: <MenuBookIcon />,
         },
+        {
+            segment: 'courses',
+            title: 'Search courses',
+            icon: <SearchIcon />,
+        }, {
+            segment: 'certificates',
+            title: 'Certificates',
+            icon: <PiCertificateFill size='24' />
+        },
+        {
+            kind: 'divider'
+        }, {
+            segment: 'account',
+            title: 'My Account',
+            icon: <AccountBox />
+        }
         // {
         //     segment: 'chats',
         //     title: 'Chats',
         //     icon: <ChatRoundedIcon />,
         // },
-        {
-            kind: 'divider'
-        }, {
-            segment: 'account',
-            title: 'Account',
-            icon: <AccountCircleIcon />
-        }, {
-            segment: 'certificates',
-            title: 'Certificates',
-            icon: <PiCertificateFill size='24' />
-        }
     ],
     Staff: [
         {
@@ -68,32 +80,32 @@ const navigation = {
             title: 'My Courses',
             icon: <MenuBookIcon />,
         },
-        // {
-        //     segment: 'favourite-courses',
-        //     title: 'Favourite courses',
-        //     icon: <StarRoundedIcon />,
-        // },
         {
             segment: 'courses',
             title: 'Search courses',
             icon: <SearchIcon />,
+        }, {
+            segment: 'my-certificates',
+            title: 'My Certificates',
+            icon: <PiCertificateFill size='24' />
         },
+        {
+            kind: 'divider'
+        }, {
+            segment: 'account',
+            title: 'My Account',
+            icon: <AccountBox />
+        }
         // {
         //     segment: 'chats',
         //     title: 'Chats',
         //     icon: <ChatRoundedIcon />,
         // },
-        {
-            kind: 'divider'
-        }, {
-            segment: 'account',
-            title: 'Account',
-            icon: <AccountCircleIcon />
-        }, {
-            segment: 'my-certificates',
-            title: 'My Certificates',
-            icon: <PiCertificateFill size='24' />
-        }
+        // {
+        //     segment: 'favourite-courses',
+        //     title: 'Favourite courses',
+        //     icon: <StarRoundedIcon />,
+        // },
     ]
 };
 

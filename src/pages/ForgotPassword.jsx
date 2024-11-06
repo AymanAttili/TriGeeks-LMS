@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { Button, FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
@@ -46,8 +46,9 @@ const ForgotPassword = () => {
                 autoHideDuration: 3000,
             });
         }
-
     }
+
+
     return (
         <>
             <Link

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+import { clearTokens } from "../../utils/handleTokens";
 
 export function useLogout() {
   const navigate = useNavigate();
@@ -8,9 +8,8 @@ export function useLogout() {
 
   const { mutate: logout, isLoading } = useMutation({
     mutationFn: () => {
+      clearTokens();
       queryClient.removeQueries();
-      Cookies.remove('accessToken');
-      Cookies.remove('refreshToken');
       navigate("/login", { replace: true });
     },
   });

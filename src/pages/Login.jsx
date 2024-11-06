@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Navigate, Link as RouterLink } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 
-import { Box, Button, Checkbox, FormControlLabel, Grid2 as Grid, Link, TextField, Typography } from "@mui/material"
+import { Box, Button, Checkbox, CircularProgress, FormControlLabel, Grid2 as Grid, Link, TextField, Typography } from "@mui/material"
 import VpnKey from "@mui/icons-material/VpnKey"
 
 import InputPassword from "../ui/InputPassword";
@@ -16,7 +16,7 @@ const Login = () => {
 
     const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
     const { isAuthenticated } = useUser();
-    const { login } = useLogin();
+    const { login, isLoading } = useLogin();
 
     const handleClickShowPassword = () => {
         setShowPassword((prev) => !prev);
@@ -71,7 +71,7 @@ const Login = () => {
                         />} label="Remember me." />
                     </Grid>
 
-                    <Button type={'submit'} variant="contained" startIcon={<VpnKey />}>
+                    <Button type={'submit'} variant="contained" disabled={isLoading} startIcon={<VpnKey />} endIcon={isLoading && <CircularProgress size={24} sx={{ position: 'absolute', right: 7, top: 7 }} />}>
                         <span color='primary'>Login</span>
                     </Button>
                     <Link

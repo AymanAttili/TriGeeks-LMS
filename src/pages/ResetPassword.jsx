@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { Button, Grid2 as Grid, InputLabel, Typography } from "@mui/material"
@@ -9,10 +9,12 @@ import InputPassword from "../ui/InputPassword";
 import { resetPassword } from "../services/apiAuth";
 
 import logo from '../images/logo.jpg'
+import { useUser } from "../features/authentication/useUser";
 
 const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
 
+    const { isAuthenticated } = useUser();
     const navigate = useNavigate();
     const notifications = useNotifications();
     const
@@ -24,6 +26,9 @@ const ResetPassword = () => {
 
 
     let token = searchParams.get('token');
+    if (!searchParams.get('token'))
+        return <Navigate replace to='/' />
+
     token = token.replaceAll(' ', '+');
     const workId = searchParams.get('workId');
 
@@ -32,7 +37,6 @@ const ResetPassword = () => {
     };
 
     const onReset = async ({ password }) => {
-        console.log(workId, token, password);
         const response = await resetPassword(workId, token, password);
 
         if (response.ok) {
@@ -50,6 +54,9 @@ const ResetPassword = () => {
             });
         }
     }
+
+    if (isAuthenticated)
+        return <Navigate replace to='/' />
 
     return (
         <Grid container flexDirection={'column'} justifyContent={'space-evenly'} alignItems={'center'} paddingBlockStart={5} bgcolor='main.secondary' height={'100dvh'}>
