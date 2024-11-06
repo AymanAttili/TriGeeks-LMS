@@ -2,10 +2,10 @@ import { Card, Grid2 as Grid, Link, Typography, } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 function CoursesStatusCard({ title, filter, num }) {
     return (
-        <Grid component={Card} size={{ xs: 6, lg: 4 }} variant="outlined" sx={{
+        <Grid component={Card} size={{ lg: 4 }} variant="outlined" sx={{
             borderRadius: 1,
             borderWidth: 1.5,
-            minWidth: '180px'
+            minWidth: '170px'
         }}>
             <Grid flexDirection={'column'} sx={{
                 p: 2,
