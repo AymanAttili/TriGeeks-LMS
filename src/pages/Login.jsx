@@ -71,7 +71,7 @@ const Login = () => {
                         />} label="Remember me." />
                     </Grid>
 
-                    <Button type={'submit'} variant="contained" disabled={isLoading} startIcon={<VpnKey />} endIcon={isLoading && <CircularProgress size={24} sx={{ position: 'absolute', right: 7, top: 7 }} />}>
+                    <Button type={'submit'} variant="contained" disabled={isLoading} startIcon={<VpnKey />} endIcon={isLoading && <CircularProgress size={20} />}>
                         <span color='primary'>Login</span>
                     </Button>
                     <Link

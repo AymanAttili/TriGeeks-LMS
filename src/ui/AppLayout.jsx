@@ -1,6 +1,7 @@
 import { Suspense, useMemo } from 'react'
 import { Outlet } from 'react-router-dom'
 
+import { Grid2 as Grid } from '@mui/material'
 import { AppProvider } from '@toolpad/core/react-router-dom'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 
@@ -49,7 +50,12 @@ const AppLayout = () => {
         >
             <DashboardLayout sidesidebarExpandedWidth={'250px'}>
                 <Suspense fallback={<SpinnerLoader />}>
-                    <Outlet />
+                    <Grid container alignItems={'center'} justifyContent={'center'} sx={{
+                        flex: 1,
+                        bgcolor: 'whitesmoke',
+                    }}>
+                        <Outlet />
+                    </Grid>
                 </Suspense>
             </DashboardLayout>
         </AppProvider>

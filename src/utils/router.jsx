@@ -3,14 +3,13 @@ import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import PrivateRoute from "../ui/PrivateRoute";
 import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
-import Department from "../features/departments/Department";
 
 
 const PageNotFound = lazy(() => import("../pages/PageNotFound"));
 const Login = lazy(() => import("../pages/Login"));
 const Account = lazy(() => import("../pages/Account"));
 const Users = lazy(() => import("../pages/Users"));
-const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
 const Courses = lazy(() => import("../pages/Courses"));
 const MyCourses = lazy(() => import("../pages/MyCourses"));
 const Certificates = lazy(() => import("../pages/Certificates"));
@@ -20,6 +19,7 @@ const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const Course = lazy(() => import("../features/courses/Course"));
 const Quiz = lazy(() => import("../features/quiz/Quiz"));
 const Departments = lazy(() => import("../pages/Departments"));
+const Department = lazy(() => import("../features/departments/Department"));
 
 
 const router = createBrowserRouter([
