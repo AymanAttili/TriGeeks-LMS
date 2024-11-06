@@ -6,10 +6,10 @@ import { Box, Button, Checkbox, CircularProgress, FormControlLabel, Grid2 as Gri
 import VpnKey from "@mui/icons-material/VpnKey"
 
 import InputPassword from "../ui/InputPassword";
-import { useUser } from "../features/authentication/useUser";
 import { useLogin } from "../features/authentication/useLogin";
 
 import logo from '../images/logo.jpg'
+import { useUser } from "../features/users/useUser";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false)

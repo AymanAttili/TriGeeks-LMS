@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { clearTokens, getAccessToken, updateTokens } from '../utils/handleTokens';
+import { getAccessToken, updateTokens } from '../utils/handleTokens';
 import { refreshToken } from '../services/apiAuth';
 const axiosAPI = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -24,9 +24,7 @@ axiosAPI.interceptors.response.use(response => {
     return response;
 }, async (error) => {
     const request = error.request;
-    const endpoint = request.responseURL.split('/').slice(-1)[0]
-    if (endpoint === 'refresh-token') {
-        clearTokens();
+    if (request.__URL__.includes('refresh-token')) {
         throw new Error(error)
     }
     if (error.code === 'ERR_NETWORK') { // must be switched to Error.status === 401

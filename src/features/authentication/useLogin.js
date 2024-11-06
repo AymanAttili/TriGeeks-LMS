@@ -20,7 +20,7 @@ export function useLogin() {
                 autoHideDuration: 3000,
             });
 
-            queryClient.invalidateQueries('user');
+            queryClient.invalidateQueries();
             navigate('/dashboard', { replace: true });
         },
         onError: (err) => {

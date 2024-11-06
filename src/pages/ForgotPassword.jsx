@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { Button, FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
@@ -23,30 +23,30 @@ const ForgotPassword = () => {
     const navigate = useNavigate();
 
     const onSending = async ({ workId }) => {
-        const response = await forgotPassword(workId);
-
-        if (response.ok) {
-            const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
-                okText: `I didn't recieve the link.`,
-                cancelText: `Recieved`,
-                title: 'Link sent'
-            });
-            if (confirmed) {
+        forgotPassword(workId)
+            .then(async () => {
+                const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
+                    okText: `I didn't recieve the link.`,
+                    cancelText: `Recieved`,
+                    title: 'Link sent'
+                });
+                if (confirmed) {
+                    notifications.show('Please verify if the work ID is correct', {
+                        severity: 'warning',
+                        autoHideDuration: 3000,
+                    });
+                    return;
+                }
+                navigate('/login')
+            })
+            .catch(() => {
                 notifications.show('Please verify if the work ID is correct', {
                     severity: 'warning',
                     autoHideDuration: 3000,
                 });
-                return;
-            }
-            navigate('/login')
-        }
-        else {
-            notifications.show('Please verify if the work ID is correct', {
-                severity: 'warning',
-                autoHideDuration: 3000,
-            });
-        }
+            })
     }
+
 
 
     return (

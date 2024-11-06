@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import PrivateRoute from "../ui/PrivateRoute";
 import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
+import Department from "../features/departments/Department";
 
 
 const PageNotFound = lazy(() => import("../pages/PageNotFound"));
@@ -18,6 +19,7 @@ const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const Course = lazy(() => import("../features/courses/Course"));
 const Quiz = lazy(() => import("../features/quiz/Quiz"));
+const Departments = lazy(() => import("../pages/Departments"));
 
 
 const router = createBrowserRouter([
@@ -60,6 +62,12 @@ const router = createBrowserRouter([
                             </PrivateRoute>,
                         children: [
                             { path: 'users', element: <Users /> },
+                            {
+                                path: 'departments', children: [
+                                    { index: true, element: <Departments /> },
+                                    { path: '/departments/:departmentId', element: <Department /> },
+                                ]
+                            },
                         ]
                     },
                     // SubAdmin & Staff routes

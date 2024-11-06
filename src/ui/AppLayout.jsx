@@ -5,9 +5,8 @@ import { AppProvider } from '@toolpad/core/react-router-dom'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 
 import theme from '../utils/theme'
-import navigation from '../utils/navigation.jsx'
-
-import { useUser } from '../features/authentication/useUser.js'
+import useDashboardNavigation from '../utils/useDashboardNavigation.jsx'
+import { useUser } from '../features/users/useUser.js'
 import { useLogout } from '../features/authentication/useLogout.js'
 
 import SpinnerLoader from './SpinnerLoader.jsx'
@@ -17,7 +16,7 @@ import logo from '../images/logo.jpg'
 const AppLayout = () => {
     const { user } = useUser();
     const { logout } = useLogout();
-
+    const navigation = useDashboardNavigation(user.role)
     const authentication = useMemo(() => {
         return {
             signOut: logout,
@@ -41,14 +40,14 @@ const AppLayout = () => {
                 logo: <img src={logo} alt="Makassed LMS" />,
                 title: 'Makassed LMS',
             }}
-            navigation={navigation[user.role]}
+            navigation={navigation}
             authentication={authentication}
             theme={theme}
             session={{
                 user: dashboardUser
             }}
         >
-            <DashboardLayout>
+            <DashboardLayout sidesidebarExpandedWidth={'250px'}>
                 <Suspense fallback={<SpinnerLoader />}>
                     <Outlet />
                 </Suspense>
