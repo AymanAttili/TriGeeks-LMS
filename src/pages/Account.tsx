@@ -13,7 +13,7 @@ import {
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import PalestineFlagIcon from "../ui/PalestineFlagIcon";
 import theme from "../utils/theme";
-import { useUser } from "./../features/authentication/useUser";
+import { useUser } from "./../features/users/useUser";
 
 function Account() {
   const { user } = useUser();
