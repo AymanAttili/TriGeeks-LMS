@@ -14,11 +14,10 @@ export async function login({ workId, password, rememberUser }) {
 
 export async function revokeRefreshToken() {
     const refreshToken = getRefreshToken();
+    clearTokens()
     const response = await axiosAPI.post(`/identity/revoke-refresh-token`, {
         refreshToken,
     })
-    clearTokens();
-
     return response;
 }
 
