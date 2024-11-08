@@ -50,7 +50,7 @@ export async function fetchUser() {
         await refreshToken();
     }
 
-    return await axiosAPI.get(`/identity/users/${user?.id}`)
+    return await axiosAPI.get(`/users/${user.id}`)
 }
 
 export async function refreshToken() {
