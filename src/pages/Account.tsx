@@ -20,6 +20,7 @@ import { useForm } from 'react-hook-form';
 import { updateProfilePicture } from '../services/apiUser';
 import { useUpdateUser } from '../features/users/useUpdateUser';
 import { useDialogs } from '@toolpad/core';
+import { levelNames } from '../Enums/educationLevels';
 function Account() {
   const { user } = useUser();
   const { updateUser } = useUpdateUser()
@@ -202,7 +203,7 @@ function Account() {
               <Grid item>
                 <TextField
                   variant="outlined"
-                  value={user.educationalLevel}
+                  value={levelNames[user.educationalLevel]}
                   readOnly
                   size="small"
                   sx={eduS}
