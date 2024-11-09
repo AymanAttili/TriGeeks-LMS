@@ -14,11 +14,12 @@ import { useLogout } from "../features/authentication/useLogout.js";
 import SpinnerLoader from "./SpinnerLoader.js";
 
 import logo from "../images/logo.jpg";
+import { roleNames } from '../Enums/roles.ts';
 
 const AppLayout = () => {
   const { user } = useUser();
   const { logout } = useLogout();
-  const navigation = useDashboardNavigation(user.role);
+  const navigation = useDashboardNavigation(roleNames[user.role]);
   const authentication = useMemo(() => {
     return {
       signOut: logout,
@@ -31,7 +32,7 @@ const AppLayout = () => {
       id: user.workId,
       email: user.email,
       name: user.firstName + " " + user.lastName,
-      image: user.image,
+      image: user.profilePicture?.path,
     };
   }, [user]);
 

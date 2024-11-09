@@ -1,6 +1,5 @@
 import axiosAPI from "../API/axiosAPI";
-import { clearTokens, getAccessToken, getRefreshToken, updateTokens } from "../utils/handleTokens";
-import { convertToJson } from "../utils/helpers";
+import { clearTokens, getRefreshToken, updateTokens } from "../utils/handleTokens";
 
 export async function login({ workId, password, rememberUser }) {
     const response = await axiosAPI.post(`/identity/login`, {
@@ -34,24 +33,7 @@ export async function forgotPassword(workId) {
     return await axiosAPI.post(`/identity/forgot-password`, { workId })
 }
 
-export async function fetchUser() {
-    const accessToken = getAccessToken();
-    const user = convertToJson(accessToken)
-    if (!user?.id || !user?.exp) {
-        clearTokens();
-        return null;
-    }
 
-    const expDate = new Date(user.exp * 1000);
-
-    const currentDate = new Date();
-
-    if (expDate < currentDate) {
-        await refreshToken();
-    }
-
-    return await axiosAPI.get(`/users/${user.id}`)
-}
 
 export async function refreshToken() {
     const refreshToken = getRefreshToken();
@@ -64,20 +46,4 @@ export async function refreshToken() {
     axiosAPI.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
     return response;
-}
-
-export async function getCurrentUser() {
-    const accessToken = getAccessToken();
-    const refreshToken = getRefreshToken();
-
-    if (!accessToken) {
-        if (refreshToken)
-            revokeRefreshToken()
-
-        return null;
-    }
-
-    const response = await fetchUser()
-
-    return response.data;
 }

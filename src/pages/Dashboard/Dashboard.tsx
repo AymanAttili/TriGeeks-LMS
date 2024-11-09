@@ -3,9 +3,11 @@ import { useUser } from "../../features/users/useUser"
 import AdminDashboard from "./AdminDashboard"
 import SubAdminDashboard from "./SubAdminDashboard"
 import StaffDashboard from "./StaffDashboard"
+import { roleNames } from '../../Enums/roles';
 
 function Dashboard() {
-    const { user: { role } } = useUser()
+    let { user: { role } } = useUser()
+    role = roleNames[role]
     return (
         <>
             {

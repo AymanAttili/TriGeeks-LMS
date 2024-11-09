@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDepartments } from "../../services/apiDepartments";
+import { roleNames } from "../../Enums/roles";
 
 export function useDepartments(userRole) {
 
@@ -7,7 +8,7 @@ export function useDepartments(userRole) {
         queryKey: ["departments"],
         queryFn: async () => {
             if (userRole === 'Admin')
-                return (await getDepartments()).data
+                return getDepartments()
 
             return null;
         },
