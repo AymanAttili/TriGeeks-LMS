@@ -49,7 +49,7 @@ const AppLayout = () => {
         user: dashboardUser,
       }}
     >
-      <DashboardLayout sidesidebarExpandedWidth={"250px"}>
+      <DashboardLayout sidebarExpandedWidth={"250px"}>
         <Suspense fallback={<SpinnerLoader />}>
           <Grid
             container

@@ -236,6 +236,7 @@ function Account() {
                 />
                 <VisuallyHiddenInput
                   type="file"
+                  accept='.png, .jpg'
                   {...register('profilePicture')}
                 />
 

@@ -52,7 +52,6 @@ export async function updateProfilePicture(file, oldPic){
     axiosAPI.patch('/user/profile-picture',
         [
             {
-                operationType: "Add",
                 path: "imageId",
                 op: "replace",
                 value: fileId

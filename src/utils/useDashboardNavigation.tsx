@@ -5,6 +5,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { PiCertificateFill, PiUserBold } from "react-icons/pi";
 import { AccountBox, Dashboard, Domain } from '@mui/icons-material';
 import { useDepartments } from '../features/departments/useDepartments';
+import { Tooltip } from '@mui/material';
 
 
 const useDashboardNavigation = (userRole) => {
@@ -17,7 +18,7 @@ const useDashboardNavigation = (userRole) => {
         departments.map((dep) => {
             departmentsChildren.push({
                 segment: dep.id,
-                title: dep.name,
+                title: <Tooltip title={dep.name} placement='bottom-end'>{dep.name}</Tooltip>,
                 icon: <Domain />,
             })
         })
