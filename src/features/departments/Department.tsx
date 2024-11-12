@@ -98,7 +98,7 @@ function Department() {
                                         fontWeight: 600
                                     }}>
                                         <Tooltip title="Manage Department">
-                                            <Link component={RouterLink} to={`${major.id}`} underline='none'>
+                                            <Link underline='none'>
                                                 {major.name}
                                             </Link>
                                         </Tooltip>
