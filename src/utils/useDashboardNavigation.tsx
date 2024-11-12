@@ -9,20 +9,6 @@ import { Tooltip } from '@mui/material';
 
 
 const useDashboardNavigation = (userRole) => {
-    const { departments, isLoading } = useDepartments(userRole);
-    let departmentsChildren = [{
-        icon: <strong>Manage departments</strong>
-    }]
-
-    if (!isLoading && userRole === 'Admin') {
-        departments.map((dep) => {
-            departmentsChildren.push({
-                segment: dep.id,
-                title: <Tooltip title={dep.name} placement='bottom-end'>{dep.name}</Tooltip>,
-                icon: <Domain />,
-            })
-        })
-    }
     const navigation = {
         Admin: [
             {
@@ -34,7 +20,6 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'departments',
                 title: 'Departments',
                 icon: <HomeWorkIcon />,
-                children: departmentsChildren
             }, {
                 segment: 'courses',
                 title: 'Courses',

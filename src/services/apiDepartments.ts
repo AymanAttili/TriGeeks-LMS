@@ -1,7 +1,8 @@
 import axiosAPI from "../API/axiosAPI";
 
 export async function getDepartment(id: number) {
-    return await axiosAPI.get(`/departments/${id}`);
+    const response = await axiosAPI.get(`/departments/${id}`);
+    return response.data;
 }
 
 export async function getDepartments() {

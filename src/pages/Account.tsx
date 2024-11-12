@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 import {
   Avatar,
   Box,
@@ -7,24 +7,27 @@ import {
   Grid2 as Grid,
   InputAdornment,
   TextField,
+  Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import PalestineFlagIcon from "../ui/PalestineFlagIcon";
-import theme from "../utils/theme";
 import { useUser } from "./../features/users/useUser";
 import { roleNames } from '../Enums/roles';
 import VisuallyHiddenInput from '../ui/VisuallyHiddenInput'
 import { useForm } from 'react-hook-form';
-import { updateProfilePicture } from '../services/apiUser';
 import { useUpdateUser } from '../features/users/useUpdateUser';
 import { useDialogs } from '@toolpad/core';
 import { levelNames } from '../Enums/educationLevels';
+import SpinnerLoader from '../ui/SpinnerLoader';
+import { AddAPhoto, NewReleases } from '@mui/icons-material';
 function Account() {
-  const { user } = useUser();
-  const { updateUser } = useUpdateUser()
+  const { user, isLoading: fetchingUser } = useUser();
+  const { updateUser, isLoading: updatingUser } = useUpdateUser()
   const { register, handleSubmit, watch } = useForm();
+
+  const profileBtn = useRef(null)
+  const selected = watch('profilePicture')
 
   const dialogs = useDialogs();
 
@@ -94,11 +97,13 @@ function Account() {
       },
     },
   };
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const updateProfile = async (data) => {
-    if (!data.profilePicture.length)
+    if (!data.profilePicture.length) {
+      profileBtn?.current.click()
       return;
+    }
+
 
     const confirmed = await dialogs.confirm('Are you sure you want to update profile picture?', {
       okText: 'Yes',
@@ -109,246 +114,216 @@ function Account() {
       updateUser(data.profilePicture[0], 'profile')
   }
 
+  if (updatingUser || fetchingUser)
+    return <SpinnerLoader />
+
   return (
-    <Box
+    <Grid container flexDirection={'column'} spacing={2}
       sx={{
         flex: 1,
         bgcolor: "#fafafad2",
+        padding: 2
       }}
     >
-      <Grid>
-        <Grid container justifyContent={"space-between"}>
-          <Grid size={9}>
-            <Grid container spacing={4} alignItems="center" margin={3}>
-              <Grid item>
-                <Typography variant="h5" sx={{ color: "primary.main" }}>
-                  User Information:
-                </Typography>
-              </Grid>
-
-              <Grid item>
-                <Grid container alignItems="center" spacing={2}>
-                  <Typography sx={{ color: "primary.main" }}>
-                    WorkId:
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    value={user.workId}
-                    readOnly
-                    size="small"
-                    sx={sx}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid container sx={{ ml: 5 }} size={12} spacing={2}>
-              <TextField
-                label="First name"
-                variant="outlined"
-                value={user.firstName}
-                readOnly
-                size="small"
-                sx={sx1}
-              />
-              <TextField
-                label="Middle name"
-                variant="outlined"
-                value={user.middleName}
-                readOnly
-                size="small"
-                sx={sx1}
-              />
-              <TextField
-                label="Last name"
-                variant="outlined"
-                value={user.lastName}
-                readOnly
-                size="small"
-                sx={sx1}
-              />
-            </Grid>
-            <Grid sx={{ ml: 5, mt: 4 }}>
-              <TextField
-                label="Birthdate"
-                variant="outlined"
-                value={user.birthDate}
-                readOnly
-                size="small"
-                sx={sx1}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="start">
-                        <DateRangeIcon sx={{ color: "primary.main" }} />
-                      </InputAdornment>
-                    ),
-                  },
-                }}
-              />
-            </Grid>
-            <Grid
-              container
-              spacing={3}
-              alignItems={"center"}
-              sx={{ ml: 5, mt: 3, mb: 2 }}
-            >
-              <Grid item>
-                <Typography
-                  alignItems={"center"}
-                  sx={{ color: "primary.main" }}
-                >
-                  Educational level
-                </Typography>
-              </Grid>
-              <Grid item>
-                <TextField
-                  variant="outlined"
-                  value={levelNames[user.educationalLevel]}
-                  readOnly
-                  size="small"
-                  sx={eduS}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={isSmallScreen && { width: "100%", mb: 2 }}
-            alignItems={isSmallScreen ? "center" : ""}
-            justifyContent={isSmallScreen ? "center" : ""}
-          >
-            <Grid component="form"
-              onSubmit={handleSubmit(updateProfile)}
-              container
-              direction={"column"}
-              size={2.5}
-              justifyContent={"center"}
-              alignItems={"center"}
-              sx={{ mt: 4, mr: 2 }}
-              spacing={2}
-            >
-
-              <label>
-                <Avatar
-                  sx={{ width: 100, height: 100 }}
-                  alt="user"
-                  src={user.profilePicture?.path}
-                />
-                <VisuallyHiddenInput
-                  type="file"
-                  accept='.png, .jpg'
-                  {...register('profilePicture')}
-                />
-
-              </label>
-
-              <Button
-                type='submit'
-                variant="contained"
-                disabled={!watch('profilePicture')}
-              >
-                Update Picture
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Divider sx={{ ml: 1 }} />
-        {
-          // ___________________________________________
-        }
-
-        <Grid sx={{ ml: 3, mt: 2 }}>
-          <Grid item sx={{ mb: 3 }}>
+      <Grid container flexDirection={{ xs: 'column', sm: 'row' }} justifyContent={"space-between"} alignItems={'center'} spacing={2}>
+        <Grid container flexDirection={'column'} size={{ xs: 12, sm: 8, lg: 9.5 }} spacing={2.5}>
+          <Grid container spacing={4} alignItems="center" >
             <Typography variant="h5" sx={{ color: "primary.main" }}>
-              Contact Information:
+              User Information:
             </Typography>
-          </Grid>
 
-          <Grid sx={{ ml: 2 }}>
-            <Grid sx={{ mb: 3 }}>
+            <Grid container alignItems="center" spacing={2}>
+              <Typography sx={{ color: "primary.main" }}>
+                WorkId:
+              </Typography>
               <TextField
-                label="Phone Number"
                 variant="outlined"
-                value={user.phoneNumber}
-                readOnly
+                value={user.workId}
                 size="small"
-                sx={sx1}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PalestineFlagIcon />
-                        <span>+97</span>
-                      </InputAdornment>
-                    ),
-                  },
-                }}
+                sx={sx}
               />
             </Grid>
-
-            <Grid>
-              <TextField
-                label="Email Address"
-                variant="outlined"
-                value={user.email}
-                readOnly
-                size="large"
-                sx={{ ...sx1, width: "18rem" }}
-              />
-            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <TextField
+              label="First name"
+              variant="outlined"
+              value={user.firstName}
+              readOnly
+              size="small"
+              sx={sx1}
+            />
+            <TextField
+              label="Middle name"
+              variant="outlined"
+              value={user.middleName}
+              readOnly
+              size="small"
+              sx={sx1}
+            />
+            <TextField
+              label="Last name"
+              variant="outlined"
+              value={user.lastName}
+              size="small"
+              sx={sx1}
+            />
+          </Grid>
+          <Grid container>
+            <TextField
+              label="Birthdate"
+              variant="outlined"
+              value={user.birthDate}
+              size="small"
+              sx={sx1}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <DateRangeIcon sx={{ color: "primary.main" }} />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          </Grid>
+          <Grid
+            container
+            spacing={2}
+            alignItems={"center"}
+          >
+            <Typography
+              alignItems={"center"}
+              sx={{ color: "primary.main" }}
+            >
+              Educational level
+            </Typography>
+            <TextField
+              variant="outlined"
+              value={levelNames[user.educationalLevel]}
+              size="small"
+              sx={eduS}
+            />
           </Grid>
         </Grid>
 
-        <Divider sx={{ ml: 1, mt: 3 }} />
+        <Grid component="form"
+          onSubmit={handleSubmit(updateProfile)}
+          container
+          direction={"column"}
+          size={{ xs: 12, sm: 4, lg: 2.5 }}
+          justifyContent={"center"}
+          alignItems={"center"}
+          spacing={2}
+        >
 
-        <Grid>
-          <Grid
-            sx={{ ml: 3, mt: 2 }}
-            container
-            direction={"column"}
-            spacing={3}
+          <Tooltip title="Select new picture" placement='top' style={{
+            cursor: 'pointer'
+          }}>
+            <label>
+              <Avatar
+                sx={{ width: 100, height: 100 }}
+                alt="user"
+                src={user.profilePicture?.path}
+              />
+              <VisuallyHiddenInput
+                type="file"
+                accept='.png, .jpg'
+                {...register('profilePicture')}
+                ref={(e) => {
+                  register("profilePicture").ref(e);
+                  profileBtn.current = e;
+                }}
+              />
+            </label>
+          </Tooltip>
+
+
+          <Button
+            type='submit'
+            size='small'
+            variant={selected ? 'contained' : 'outlined'}
+            endIcon={selected ? <NewReleases /> : <AddAPhoto />}
           >
-            <Grid>
-              <Typography variant="h5" sx={{ color: "primary.main" }}>
-                Job Information:
-              </Typography>
-            </Grid>
-            <Grid container spacing={3} sx={{ ml: 2 }}>
-              <Grid>
-                <TextField
-                  label="Department"
-                  variant="outlined"
-                  value={user.department.name}
-                  readOnly
-                  size="small"
-                  sx={{ ...sx1 }}
-                />
-              </Grid>
-              <Grid>
-                <TextField
-                  label="Major"
-                  variant="outlined"
-                  value={user.major.name}
-                  readOnly
-                  size="small"
-                  sx={{ ...sx1 }}
-                />
-              </Grid>
-              <Grid>
-                <TextField
-                  label="Role"
-                  variant="outlined"
-                  value={roleNames[user.role]}
-                  readOnly
-                  size="small"
-                  sx={{ ...sx1 }}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
+            {selected ? 'Update ' : 'Change '}
+            Picture
+          </Button>
         </Grid>
       </Grid>
-    </Box>
+      <Divider />
+      {
+        // ___________________________________________
+      }
+
+      <Grid container flexDirection={'column'} alignItems={{ xs: 'center', sm: 'start' }} justifyContent={'space-between'} spacing={3} >
+        <Typography variant="h5" sx={{ color: "primary.main" }}>
+          Contact Information:
+        </Typography>
+
+        <Grid container flexDirection={'column'} gap={3}>
+          <TextField
+            label="Phone Number"
+            variant="outlined"
+            value={user.phoneNumber}
+            size="small"
+            sx={sx1}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PalestineFlagIcon />
+                    <span>+97</span>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+
+          <TextField
+            label="Email Address"
+            variant="outlined"
+            value={user.email}
+            size='medium'
+            sx={{ ...sx1, width: "18rem" }}
+          />
+        </Grid>
+      </Grid>
+
+      <Divider />
+
+      <Grid container flexDirection={'column'} alignItems={{ xs: 'center', sm: 'start' }} justifyContent={'space-between'} spacing={3}
+      >
+        <Typography variant="h5" sx={{ color: "primary.main" }}>
+          Job Information:
+        </Typography>
+        <Grid container flexDirection={{ xs: 'column', sm: 'row' }} gap={3}>
+          <TextField
+            label="Department"
+            variant="outlined"
+            value={user.department.name}
+            readOnly
+            size="small"
+            sx={{ ...sx1 }}
+          />
+          <TextField
+            label="Major"
+            variant="outlined"
+            value={user.major.name}
+            readOnly
+            size="small"
+            sx={{ ...sx1 }}
+          />
+          <TextField
+            label="Role"
+            variant="outlined"
+            value={roleNames[user.role]}
+            readOnly
+            size="small"
+            sx={{ ...sx1 }}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 

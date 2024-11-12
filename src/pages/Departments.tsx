@@ -1,14 +1,16 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, Grid2 as Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, Grid2 as Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom'
 
 import { useDepartments } from '../features/departments/useDepartments';
 import { useDialogs } from '@toolpad/core';
 import AddDepartmentDialog from '../ui/Dialogs/AddDepartmentDialog';
 import ActionsMenu from '../ui/ActionsMenu';
+import SpinnerLoader from '../ui/SpinnerLoader';
 import { useDispatchDepartment } from '../features/departments/useDispatchDepartment';
 function Departments() {
-    const { departments } = useDepartments();
-    const { departmentDispatch } = useDispatchDepartment()
+    const { departments, isLoading: fetchingDeps } = useDepartments();
+    const { departmentDispatch, isLoading: dispatchingDeps } = useDispatchDepartment()
     const dialogs = useDialogs();
 
     const openDepartmentDialog = async () => {
@@ -31,6 +33,10 @@ function Departments() {
         if (confirmed)
             departmentDispatch({ action: 'delete', payload: { id } })
     }
+
+    if (fetchingDeps || dispatchingDeps)
+        return <SpinnerLoader />
+
     return (
         <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} m={2} spacing={5}>
             <Grid container justifyContent={'space-between'} padding={1} sx={{
@@ -64,28 +70,34 @@ function Departments() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {departments.map((dep) =>
-                            <TableRow key={dep.id}>
-                                <TableCell sx={{
-                                    fontSize: 16
-                                }}>
-                                    {dep.id}
-                                </TableCell>
-                                <TableCell sx={{
-                                    fontSize: 16
-                                }}>
-                                    {dep.name}
-                                </TableCell>
-                                <TableCell>
-                                    <ActionsMenu key={dep.id}
-                                        items={[
-                                            { title: 'Edit', onClick: () => handleEdit(dep.id, dep.name) },
-                                            { title: 'Delete', onClick: () => handleDelete(dep.id, dep.name) }
-                                        ]}
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        )}
+                        {
+                            departments?.map((dep) =>
+                                <TableRow key={dep.id}>
+                                    <TableCell sx={{
+                                        fontSize: 16
+                                    }}>
+                                        {dep.id}
+                                    </TableCell>
+                                    <TableCell sx={{
+                                        fontSize: 16,
+                                        fontWeight: 600
+                                    }}>
+                                        <Tooltip title="Manage Department">
+                                            <Link component={RouterLink} to={`${dep.id}`} underline='none'>
+                                                {dep.name}
+                                            </Link>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell>
+                                        <ActionsMenu key={dep.id}
+                                            items={[
+                                                { title: 'Edit', onClick: () => handleEdit(dep.id, dep.name) },
+                                                { title: 'Delete', onClick: () => handleDelete(dep.id, dep.name) }
+                                            ]}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            )}
                     </TableBody>
                 </Table>
             </TableContainer>

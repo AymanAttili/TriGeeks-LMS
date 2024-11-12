@@ -1,15 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDepartments } from "../../services/apiDepartments";
 
-export function useDepartments(userRole = 'Admin') {
+export function useDepartments() {
 
     const { isFetching, data: departments } = useQuery({
         queryKey: ["departments"],
         queryFn: async () => {
-            if (userRole === 'Admin')
-                return await getDepartments()
-
-            return null;
+            return await getDepartments()
         },
 
         throwOnError: true

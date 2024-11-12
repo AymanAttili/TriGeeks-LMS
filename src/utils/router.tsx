@@ -26,9 +26,10 @@ const Department = lazy(() => import("../features/departments/Department"));
 const router = createBrowserRouter([
     {
         path: '/*',
-        element: <ErrorBoundary>
-            <Outlet />
-        </ErrorBoundary>,
+        element:
+            <ErrorBoundary>
+                <Outlet />
+            </ErrorBoundary>,
         children: [
             {
                 element:

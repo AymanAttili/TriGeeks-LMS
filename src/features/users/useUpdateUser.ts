@@ -8,17 +8,17 @@ export function useUpdateUser() {
   const queryClient = useQueryClient();
   const {user: {profilePicture}} = useUser()
 
-  const { mutate: updateUser, isLoading } = useMutation({
+  const { mutate: updateUser, isPending } = useMutation({
     mutationFn: async (data, action) => {
         if(action === 'user'){
             // 
         }
         else{
             await updateProfilePicture(data, profilePicture.id);
-            queryClient.invalidateQueries('user');
+            queryClient.invalidateQueries({ queryKey: ['user'] });
         }
     },
   });
 
-  return { updateUser, isLoading };
+  return { updateUser, isLoading: isPending };
 }
