@@ -10,8 +10,8 @@ import { useDispatchUsers } from '../features/users/useDispatchUsers';
 import { Add } from '@mui/icons-material';
 import { useMemo, useRef, useState } from 'react';
 import { filterOperators } from '../Enums/filterOperators';
-import AddUserDialog from '../ui/Dialogs/AddUserDialog';
 import ShowUserDetails from '../ui/Dialogs/ShowUserDetails';
+import AddUserDialog from '../ui/Dialogs/AddUserDialog';
 
 function Users() {
     const [filters, setFilters] = useState('')
