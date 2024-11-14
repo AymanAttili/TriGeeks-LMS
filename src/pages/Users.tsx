@@ -11,7 +11,7 @@ import { Add } from '@mui/icons-material';
 import { useMemo, useRef, useState } from 'react';
 import { filterOperators } from '../Enums/filterOperators';
 import ShowUserDetails from '../ui/Dialogs/ShowUserDetails';
-import AddUserDialog from '../ui/Dialogs/AAddUserDialog';
+import AddUserDialog from '../ui/Dialogs/AddUserDialog';
 
 function Users() {
     const [filters, setFilters] = useState('')
