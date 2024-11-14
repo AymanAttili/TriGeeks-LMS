@@ -2,7 +2,7 @@ import { Box, Chip, Dialog, DialogContent, DialogTitle, FormControl, Grid2 as Gr
 import { MuiTelInput } from 'mui-tel-input'
 import { Controller, useForm } from 'react-hook-form';
 import AddUserDialogStepper from '../../features/users/Admin/AddUserDialogStepper';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { levels } from '../../Enums/educationLevels';
 import { roles } from '../../Enums/roles';
 import { useMajors } from '../../features/departments/useMajors';
