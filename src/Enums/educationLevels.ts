@@ -12,3 +12,11 @@ export const levelNames = {
     [Level.Doctoral]: 'Doctoral',
     [Level.Associate]: 'Associate',
 };
+
+
+export const levels = [
+    {value: 1, label: 'Bachelor'},
+    {value: 2, label: 'Master'},
+    {value: 3, label: 'Doctoral'},
+    {value: 4, label: 'Associate'}
+]

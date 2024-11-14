@@ -15,7 +15,7 @@ import SpinnerLoader from '../../ui/SpinnerLoader';
 function Department() {
     const { departmentId } = useParams();
     const { department, departmentDispatch, isLoading: fetchingDep } = useDispatchDepartment()
-    const { majors, isLoading: fetchingMajors, refetch } = useMajors(departmentId)
+    const { majors, isLoading: fetchingMajors } = useMajors(departmentId)
     const { majorsDispatch, isLoading: dispatchingMajors } = useDispatchMajors();
 
     const dialogs = useDialogs();
@@ -45,15 +45,14 @@ function Department() {
     }
 
     useEffect(() => {
-        refetch();
         departmentDispatch({ action: 'get', payload: { id: departmentId } })
-    }, [departmentDispatch, departmentId, refetch])
+    }, [departmentDispatch, departmentId])
 
     if (fetchingDep || fetchingMajors || dispatchingMajors)
         return <SpinnerLoader />
 
     return (
-        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} m={2} spacing={5}>
+        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} spacing={5} flex={1}>
             <Grid container justifyContent={'space-between'} padding={1} sx={{
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center'
@@ -68,17 +67,20 @@ function Department() {
                     <TableHead sx={{ bgcolor: 'whiteSmoke' }}>
                         <TableRow >
                             <TableCell width={80} sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 ID
                             </TableCell>
                             <TableCell sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 Name
                             </TableCell>
                             <TableCell width={40} sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 Actions
                             </TableCell>
@@ -97,11 +99,9 @@ function Department() {
                                         fontSize: 16,
                                         fontWeight: 600
                                     }}>
-                                        <Tooltip title="Manage Department">
-                                            <Link underline='none'>
-                                                {major.name}
-                                            </Link>
-                                        </Tooltip>
+                                        <Link underline='none'>
+                                            {major.name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
                                         <ActionsMenu key={major.id}

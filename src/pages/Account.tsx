@@ -106,6 +106,7 @@ function Account() {
 
 
     const confirmed = await dialogs.confirm('Are you sure you want to update profile picture?', {
+      title: 'Update profile picture ✅',
       okText: 'Yes',
       cancelText: 'No',
     })

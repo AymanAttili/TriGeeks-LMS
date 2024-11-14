@@ -23,8 +23,8 @@ function AddMajorDialog({ payload, open, onClose }) {
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddDep)} fullWidth maxWidth={'xs'} open={open} onClose={() => onClose()}>
             <DialogTitle>
-                {payload.departmentId ? 'Edit ' : 'Add '}
-                new major
+                {payload.departmentId ? 'Edit ' : 'Add new '}
+                major
             </DialogTitle>
             <DialogContent>
                 <TextField label="Major name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name} {...register('name', { required: true })} />

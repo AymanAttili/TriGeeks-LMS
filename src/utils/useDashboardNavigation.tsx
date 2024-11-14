@@ -20,15 +20,17 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'departments',
                 title: 'Departments',
                 icon: <HomeWorkIcon />,
+                pattern: 'departments{/:departmentId}*',
             }, {
                 segment: 'courses',
                 title: 'Courses',
                 icon: <MenuBookIcon />,
+                pattern: 'courses{/:courseId}*',
             },
             {
                 segment: 'users',
                 title: 'Users',
-                icon: <PiUserBold size='24' />
+                icon: <PiUserBold size='24' />,
             },
             {
                 segment: 'certificates',
@@ -57,6 +59,7 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'courses',
                 title: 'Search courses',
                 icon: <SearchIcon />,
+                pattern: 'courses{/:courseId}*',
             }, {
                 segment: 'certificates',
                 title: 'Certificates',
@@ -89,6 +92,7 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'courses',
                 title: 'Search courses',
                 icon: <SearchIcon />,
+                pattern: 'courses{/:courseId}*',
             }, {
                 segment: 'my-certificates',
                 title: 'My Certificates',

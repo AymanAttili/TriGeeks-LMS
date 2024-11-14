@@ -38,7 +38,7 @@ function Departments() {
         return <SpinnerLoader />
 
     return (
-        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} m={2} spacing={5}>
+        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} spacing={5} flex={1}>
             <Grid container justifyContent={'space-between'} padding={1} sx={{
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center'
@@ -50,20 +50,23 @@ function Departments() {
             </Grid>
             <TableContainer sx={{ maxHeight: '65dvh', overflow: 'auto' }}>
                 <Table stickyHeader >
-                    <TableHead sx={{ bgcolor: 'whiteSmoke' }}>
+                    <TableHead>
                         <TableRow >
                             <TableCell width={80} sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 ID
                             </TableCell>
                             <TableCell sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 Name
                             </TableCell>
                             <TableCell width={40} sx={{
-                                fontSize: 18
+                                fontSize: 18,
+                                bgcolor: 'primary.light'
                             }}>
                                 Actions
                             </TableCell>

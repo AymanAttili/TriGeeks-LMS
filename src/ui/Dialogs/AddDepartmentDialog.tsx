@@ -23,8 +23,8 @@ function AddDepartmentDialog({ payload, open, onClose }) {
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddDep)} fullWidth maxWidth={'xs'} open={open} onClose={() => onClose()}>
             <DialogTitle>
-                {payload ? 'Edit ' : 'Add '}
-                new department
+                {payload ? 'Edit ' : 'Add new '}
+                department
             </DialogTitle>
             <DialogContent>
                 <TextField label="Department name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name} {...register('name', { required: true })} />

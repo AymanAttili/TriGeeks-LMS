@@ -29,7 +29,6 @@ function App() {
               </Suspense>
               <ReactQueryDevtools
                 initialIsOpen={false}
-                position="left"
                 buttonPosition="bottom-left"
               />
             </DialogsProvider>

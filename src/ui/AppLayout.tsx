@@ -53,8 +53,9 @@ const AppLayout = () => {
         <Suspense fallback={<SpinnerLoader />}>
           <Grid
             container
-            alignItems={"start"}
-            justifyContent={"center"}
+            flexDirection={'column'}
+            alignItems={"stretch"}
+            justifyContent={"stretch"}
             sx={{
               flex: 1,
               bgcolor: "whitesmoke",

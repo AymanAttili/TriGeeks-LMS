@@ -10,3 +10,8 @@ export const roleNames = {
     [Role.SubAdmin]: 'SubAdmin',
     [Role.Staff]: 'Staff'
 };
+
+export const roles = [
+    {value: 2, label: 'SubAdmin'},
+    {value: 3, label: 'Staff'},
+]

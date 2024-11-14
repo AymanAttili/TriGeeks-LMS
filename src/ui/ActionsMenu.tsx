@@ -37,8 +37,9 @@ const ActionsMenu: FC<ActionsMenuProps> = ({ items }) => {
                 onClose={handleClose}
             >
                 {
-                    items.map((item) =>
+                    items.map((item, ind) =>
                         <MenuItem
+                            key={ind}
                             onClick={
                                 () => {
                                     item.onClick();
