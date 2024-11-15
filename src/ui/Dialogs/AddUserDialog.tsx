@@ -98,6 +98,9 @@ function AddUserDialog({ payload, open, onClose }) {
                                     error={!!formErrors.birthDate}
                                     helperText={formErrors.birthDate?.message}
                                     {...register('birthDate', { required: "Birthdate is required", })}
+                                    sx={{
+                                        minWidth: '160px'
+                                    }}
                                     defaultValue={user?.birthDate}
                                 />
                                 <TextField select label="Educational level" margin='normal' disabled={isLoading}

@@ -80,7 +80,7 @@ function Users() {
         {
             field: 'department',
             valueGetter: (value) => {
-                return value.name
+                return value?.name
             },
             headerName: 'Department',
             width: 150,
@@ -89,7 +89,7 @@ function Users() {
         {
             field: 'major',
             valueGetter: (value) => {
-                return value.name
+                return value?.name
             },
             headerName: 'Major',
             width: 130,
