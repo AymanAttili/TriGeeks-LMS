@@ -1,7 +1,12 @@
 import React from 'react';
+import CertificateGenerator from '../features/certificates/CertificateTemplate';
 function Certificates() {
     return (
-        <div>Certificates</div>
+        <CertificateGenerator userDetails={{
+            name: 'John Doe',
+            course: 'ReactJS Development',
+            date: '2024-11-16',
+        }} />
     )
 }
 

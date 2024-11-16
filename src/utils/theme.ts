@@ -20,8 +20,8 @@ const theme = responsiveFontSizes(
         xs: 0,
         sm: 745,
         md: 900,
-        lg: 1200,
-        xl: 1536,
+        lg: 1300,
+        xl: 1820,
       },
     },
   })

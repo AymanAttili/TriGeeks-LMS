@@ -12,9 +12,8 @@ import SpinnerLoader from "./ui/SpinnerLoader.tsx"
 import theme from "./utils/theme.js"
 import store from './store.js'
 
-import '@fontsource/sora'
 import queryClient from "./cache/queryClient.js"
-import router from "./utils/router.tsx"
+import router from "./routes/router.tsx"
 
 function App() {
 
