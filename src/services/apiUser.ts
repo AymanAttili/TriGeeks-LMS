@@ -79,7 +79,7 @@ export async function updateProfilePicture(file, oldPic){
     )
     
 
-    axiosAPI.delete(`/files/${oldPic}`)
+    // axiosAPI.delete(`/files/${oldPic}`) TODO: implementing delete file func
 
 }
 

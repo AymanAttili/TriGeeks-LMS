@@ -16,14 +16,14 @@ import { useUser } from "./../features/users/useUser";
 import { roleNames } from '../Enums/roles';
 import VisuallyHiddenInput from '../ui/VisuallyHiddenInput'
 import { useForm } from 'react-hook-form';
-import { useUpdateUser } from '../features/users/useUpdateUser';
 import { useDialogs } from '@toolpad/core';
 import { levelNames } from '../Enums/educationLevels';
 import SpinnerLoader from '../ui/SpinnerLoader';
 import { AddAPhoto, NewReleases } from '@mui/icons-material';
+import { useDispatchUsers } from '../features/users/useDispatchUsers';
 function Account() {
   const { user, isLoading: fetchingUser } = useUser();
-  const { updateUser, isLoading: updatingUser } = useUpdateUser()
+  const { usersDispatch, isLoading: updatingUser } = useDispatchUsers()
   const { register, handleSubmit, watch } = useForm();
 
   const profileBtn = useRef(null)
@@ -112,7 +112,7 @@ function Account() {
     })
 
     if (confirmed)
-      updateUser(data.profilePicture[0], 'profile')
+      usersDispatch({ action: 'editProfilePic', payload: { file: data.profilePicture[0], oldPicID: 'none' } })
   }
 
   if (updatingUser || fetchingUser)

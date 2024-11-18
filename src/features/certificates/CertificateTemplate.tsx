@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Grid2 as Grid, Typography } from '@mui/material';
+import { Button, Grid2 as Grid, Paper, Typography } from '@mui/material';
 import logo from '../../images/logo.jpg'
 
 const CertificateGenerator = ({ userDetails }) => {
@@ -21,9 +21,9 @@ const CertificateGenerator = ({ userDetails }) => {
     };
 
     return (
-        <div>
+        <Grid container flexDirection={'column-reverse'} alignItems={'center'} padding={2}>
             {/* Certificate Template */}
-            <Grid container flexDirection={'column'}
+            <Grid container component={Paper} flexDirection={'column'} position={'absolute'} top={-10000}
                 alignItems='center'
                 justifyContent={'center'}
                 ref={certificateRef}
@@ -51,8 +51,8 @@ const CertificateGenerator = ({ userDetails }) => {
             </Grid>
 
             {/* Generate PDF Button */}
-            <button onClick={generatePDF}>Download PDF</button>
-        </div>
+            <Button variant='contained' onClick={generatePDF}>Try Certificate</Button>
+        </Grid>
     );
 };
 

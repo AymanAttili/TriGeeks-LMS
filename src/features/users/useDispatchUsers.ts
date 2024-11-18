@@ -1,11 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addUser, deleteUser, editUser, searchUsers, User } from "../../services/apiUser";
+import { addUser, deleteUser, editUser, searchUsers, updateProfilePicture, User } from "../../services/apiUser";
 
 type UserPayload = {
     id?: number
     user?: User
 }
+
+type UpdatePicturePayload = {
+    file: any
+    oldPicID: string
+}
+
 
 type searchPayload = {
     page: number,
@@ -13,7 +19,7 @@ type searchPayload = {
 }
 
 type data = {
-    payload: UserPayload | searchPayload,
+    payload: UserPayload | searchPayload | UpdatePicturePayload,
     action: string
 }
 
@@ -26,6 +32,11 @@ export function useDispatchUsers() {
             switch(action){
                 case 'add': await addUser(payload.user); break;
                 case 'edit': await editUser(payload.id, payload.user); break;
+                case 'editProfilePic': {
+                    await updateProfilePicture(payload.file, payload.oldPicId); 
+                    queryClient.invalidateQueries({ queryKey: ['user'] }); 
+                    break;
+                }
                 case 'delete': await deleteUser(payload.id); break;
                 case 'search': await searchUsers(payload); break;
                 default: throw new Error('Unknown action')

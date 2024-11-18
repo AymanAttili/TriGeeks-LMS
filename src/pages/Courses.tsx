@@ -1,4 +1,4 @@
-import { Box, Divider, Grid2, Typography } from "@mui/material";
+import { Divider, Grid2 as Grid, Typography } from "@mui/material";
 import SquaredCourseCard from "../ui/SquaredCourseCard";
 
 const courses = [
@@ -65,9 +65,9 @@ const courses = [
 ];
 function Courses() {
   return (
-    <>
+    <Grid>
       <Typography
-        variant="h3"
+        variant="h4"
         color="primary.main"
         sx={{
           width: "100%",
@@ -83,38 +83,26 @@ function Courses() {
         <Divider />
       </Typography>
 
-      <Box
-        sx={{
-          display: "flex",
-          // flexDirection: "column",
-          justifyContent: "center",
-          padding: 3,
-          margin: "0 auto",
 
-          flexWrap: "wrap",
-          maxWidth: "1900px",
-          width: { xs: "auto", lg: "66rem", xl: "auto" },
+      <Grid
+        container
+        padding={2}
+        spacing={3}
+        sx={{
+          justifyContent: { xs: "center", sm: "flex-start" },
         }}
       >
-        <Grid2
-          container
-          gap={5}
-          sx={{
-            justifyContent: { xs: "center", lg: "space-between" },
-          }}
-        >
-          {courses.map((course) => (
-            <SquaredCourseCard
-              key={course.courseId}
-              courseId={course.courseId}
-              courseName={course.courseName}
-              department={course.department}
-              progress={course.progress}
-            />
-          ))}
-        </Grid2>
-      </Box>
-    </>
+        {courses.map((course) => (
+          <SquaredCourseCard
+            key={course.courseId}
+            courseId={course.courseId}
+            courseName={course.courseName}
+            department={course.department}
+            progress={course.progress}
+          />
+        ))}
+      </Grid>
+    </Grid>
   );
 }
 

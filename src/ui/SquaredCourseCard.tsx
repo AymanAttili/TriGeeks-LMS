@@ -7,11 +7,11 @@ import {
   Box,
   Divider,
   Grid2 as Grid,
-  IconButton,
   Grid2,
 } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HorizIconOptions from "./HorizIconOptions";
+import logo from '../images/logo.jpg'
+
 interface CourseCardProps {
   courseId: string;
   courseName: string;
@@ -19,21 +19,24 @@ interface CourseCardProps {
   progress: number;
 }
 
+
 function CourseCard(props: CourseCardProps) {
   const { courseId, courseName, department, progress } = props; // todo implementing course hook (react query)
 
   return (
     <Grid2
       size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+      maxWidth={360}
       component={Card}
       variant="outlined"
       sx={{
         // width: { xs: "20rem", sm: "30rem" },
-        height: "26rem",
+        height: "20rem",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        cursor: 'pointer',
         "&:hover": {
-          transform: "scale(1.04)",
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
+          transform: "scale(1.015)",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
         },
 
         border: "1px #dddddd solid",
@@ -45,8 +48,8 @@ function CourseCard(props: CourseCardProps) {
     >
       <CardMedia
         component="img"
-        sx={{ height: "17.3rem", width: "100%", objectFit: "contain" }}
-        image="../logo.jpg"
+        sx={{ height: "10rem", width: "100%", objectFit: "contain" }}
+        image={logo}
         alt="Digital Literacy"
       />
 
@@ -62,7 +65,6 @@ function CourseCard(props: CourseCardProps) {
               flexDirection: "column",
 
               alignItems: "start",
-              width: "80%",
             }}
           >
             <Typography
@@ -72,14 +74,13 @@ function CourseCard(props: CourseCardProps) {
             >
               {courseId}
             </Typography>
-            <Typography variant="h6" color="text.primary">
+            <Typography color="text.primary" variant="h6">
               {courseName}
             </Typography>
-            <Typography variant="h5" color="text.primary">
+            <Typography color="text.secondary">
               {department}
             </Typography>
           </Grid>
-          <HorizIconOptions />
         </Grid>
         <Box
           sx={{
@@ -95,7 +96,7 @@ function CourseCard(props: CourseCardProps) {
             variant="determinate"
             value={progress}
             sx={{
-              height: 13,
+              height: 8,
               borderRadius: 5,
               width: "100%",
               "& .MuiLinearProgress-bar": {
@@ -108,6 +109,7 @@ function CourseCard(props: CourseCardProps) {
             variant="body2"
             color="text.secondary"
           >{`${progress}% `}</Typography>
+          <HorizIconOptions />
         </Box>
       </CardContent>
     </Grid2>

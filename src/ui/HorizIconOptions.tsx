@@ -6,7 +6,7 @@ interface HorizIconOptions {
   // Define props here
 }
 
-const HorizIconOptions: React.FC<HorizIconOptions> = ({}) => {
+const HorizIconOptions: React.FC<HorizIconOptions> = ({ }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -20,7 +20,7 @@ const HorizIconOptions: React.FC<HorizIconOptions> = ({}) => {
 
   return (
     <div>
-      <IconButton size="large" onClick={handleClick} aria-label="more options">
+      <IconButton size="small" onClick={handleClick} aria-label="more options">
         <MoreHorizIcon />
       </IconButton>
       <Menu
