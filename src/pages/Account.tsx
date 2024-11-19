@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 import {
   Avatar,
   Box,
@@ -13,21 +13,22 @@ import {
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import PalestineFlagIcon from "../ui/PalestineFlagIcon";
 import { useUser } from "./../features/users/useUser";
-import { roleNames } from '../Enums/roles';
-import VisuallyHiddenInput from '../ui/VisuallyHiddenInput'
-import { useForm } from 'react-hook-form';
-import { useDialogs } from '@toolpad/core';
-import { levelNames } from '../Enums/educationLevels';
-import SpinnerLoader from '../ui/SpinnerLoader';
-import { AddAPhoto, NewReleases } from '@mui/icons-material';
-import { useDispatchUsers } from '../features/users/useDispatchUsers';
+import { roleNames } from "../Enums/roles";
+import VisuallyHiddenInput from "../ui/VisuallyHiddenInput";
+import { useForm } from "react-hook-form";
+import { useDialogs } from "@toolpad/core";
+import { levelNames } from "../Enums/educationLevels";
+import SpinnerLoader from "../ui/SpinnerLoader";
+import { AddAPhoto, NewReleases } from "@mui/icons-material";
+import { useDispatchUsers } from "../features/users/useDispatchUsers";
+import { MuiTelInput } from "mui-tel-input";
 function Account() {
   const { user, isLoading: fetchingUser } = useUser();
-  const { usersDispatch, isLoading: updatingUser } = useDispatchUsers()
+  const { usersDispatch, isLoading: updatingUser } = useDispatchUsers();
   const { register, handleSubmit, watch } = useForm();
 
-  const profileBtn = useRef(null)
-  const selected = watch('profilePicture')
+  const profileBtn = useRef(null);
+  const selected = watch("profilePicture");
 
   const dialogs = useDialogs();
 
@@ -100,43 +101,59 @@ function Account() {
 
   const updateProfile = async (data) => {
     if (!data.profilePicture.length) {
-      profileBtn?.current.click()
+      profileBtn?.current.click();
       return;
     }
 
-
-    const confirmed = await dialogs.confirm('Are you sure you want to update profile picture?', {
-      title: 'Update profile picture ✅',
-      okText: 'Yes',
-      cancelText: 'No',
-    })
+    const confirmed = await dialogs.confirm(
+      "Are you sure you want to update profile picture?",
+      {
+        title: "Update profile picture ✅",
+        okText: "Yes",
+        cancelText: "No",
+      }
+    );
 
     if (confirmed)
-      usersDispatch({ action: 'editProfilePic', payload: { file: data.profilePicture[0], oldPicID: 'none' } })
-  }
+      usersDispatch({
+        action: "editProfilePic",
+        payload: { file: data.profilePicture[0], oldPicID: "none" },
+      });
+  };
 
-  if (updatingUser || fetchingUser)
-    return <SpinnerLoader />
+  if (updatingUser || fetchingUser) return <SpinnerLoader />;
 
   return (
-    <Grid container flexDirection={'column'} spacing={2}
+    <Grid
+      container
+      flexDirection={"column"}
+      spacing={2}
       sx={{
         flex: 1,
         bgcolor: "#fafafad2",
-        padding: 2
+        padding: 2,
       }}
     >
-      <Grid container flexDirection={{ xs: 'column', sm: 'row' }} justifyContent={"space-between"} alignItems={'center'} spacing={2}>
-        <Grid container flexDirection={'column'} size={{ xs: 12, sm: 8, lg: 9.5 }} spacing={2.5}>
-          <Grid container spacing={4} alignItems="center" >
+      <Grid
+        container
+        flexDirection={{ xs: "column", sm: "row" }}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        spacing={2}
+      >
+        <Grid
+          container
+          flexDirection={"column"}
+          size={{ xs: 12, sm: 8, lg: 9.5 }}
+          spacing={2.5}
+        >
+          <Grid container spacing={4} alignItems="center">
             <Typography variant="h5" sx={{ color: "primary.main" }}>
               User Information:
             </Typography>
 
             <Grid container alignItems="center" spacing={2}>
-              <Typography sx={{ color: "primary.main" }}>
-                WorkId:
-              </Typography>
+              <Typography sx={{ color: "primary.main" }}>WorkId:</Typography>
               <TextField
                 variant="outlined"
                 value={user.workId}
@@ -188,15 +205,8 @@ function Account() {
               }}
             />
           </Grid>
-          <Grid
-            container
-            spacing={2}
-            alignItems={"center"}
-          >
-            <Typography
-              alignItems={"center"}
-              sx={{ color: "primary.main" }}
-            >
+          <Grid container spacing={2} alignItems={"center"}>
+            <Typography alignItems={"center"} sx={{ color: "primary.main" }}>
               Educational level
             </Typography>
             <TextField
@@ -208,7 +218,8 @@ function Account() {
           </Grid>
         </Grid>
 
-        <Grid component="form"
+        <Grid
+          component="form"
           onSubmit={handleSubmit(updateProfile)}
           container
           direction={"column"}
@@ -217,10 +228,13 @@ function Account() {
           alignItems={"center"}
           spacing={2}
         >
-
-          <Tooltip title="Select new picture" placement='top' style={{
-            cursor: 'pointer'
-          }}>
+          <Tooltip
+            title="Select new picture"
+            placement="top"
+            style={{
+              cursor: "pointer",
+            }}
+          >
             <label>
               <Avatar
                 sx={{ width: 100, height: 100 }}
@@ -229,8 +243,8 @@ function Account() {
               />
               <VisuallyHiddenInput
                 type="file"
-                accept='.png, .jpg'
-                {...register('profilePicture')}
+                accept=".png, .jpg"
+                {...register("profilePicture")}
                 ref={(e) => {
                   register("profilePicture").ref(e);
                   profileBtn.current = e;
@@ -239,14 +253,13 @@ function Account() {
             </label>
           </Tooltip>
 
-
           <Button
-            type='submit'
-            size='small'
-            variant={selected ? 'contained' : 'outlined'}
+            type="submit"
+            size="small"
+            variant={selected ? "contained" : "outlined"}
             endIcon={selected ? <NewReleases /> : <AddAPhoto />}
           >
-            {selected ? 'Update ' : 'Change '}
+            {selected ? "Update " : "Change "}
             Picture
           </Button>
         </Grid>
@@ -256,13 +269,19 @@ function Account() {
         // ___________________________________________
       }
 
-      <Grid container flexDirection={'column'} alignItems={{ xs: 'center', sm: 'start' }} justifyContent={'space-between'} spacing={3} >
+      <Grid
+        container
+        flexDirection={"column"}
+        alignItems={{ xs: "center", sm: "start" }}
+        justifyContent={"space-between"}
+        spacing={3}
+      >
         <Typography variant="h5" sx={{ color: "primary.main" }}>
           Contact Information:
         </Typography>
 
-        <Grid container flexDirection={'column'} gap={3}>
-          <TextField
+        <Grid container flexDirection={"column"} gap={3}>
+          {/* <TextField
             label="Phone Number"
             variant="outlined"
             value={user.phoneNumber}
@@ -278,13 +297,25 @@ function Account() {
                 ),
               },
             }}
+          /> */}
+          <MuiTelInput
+            label="Phone number"
+            margin="dense"
+            focused
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }}
+            disableDropdown
+            value={user.phoneNumber}
           />
 
           <TextField
             label="Email Address"
             variant="outlined"
             value={user.email}
-            size='medium'
+            size="medium"
             sx={{ ...sx1, width: "18rem" }}
           />
         </Grid>
@@ -292,12 +323,17 @@ function Account() {
 
       <Divider />
 
-      <Grid container flexDirection={'column'} alignItems={{ xs: 'center', sm: 'start' }} justifyContent={'space-between'} spacing={3}
+      <Grid
+        container
+        flexDirection={"column"}
+        alignItems={{ xs: "center", sm: "start" }}
+        justifyContent={"space-between"}
+        spacing={3}
       >
         <Typography variant="h5" sx={{ color: "primary.main" }}>
           Job Information:
         </Typography>
-        <Grid container flexDirection={{ xs: 'column', sm: 'row' }} gap={3}>
+        <Grid container flexDirection={{ xs: "column", sm: "row" }} gap={3}>
           <TextField
             label="Department"
             variant="outlined"

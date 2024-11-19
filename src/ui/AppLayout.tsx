@@ -6,15 +6,15 @@ import { Grid2 as Grid } from "@mui/material";
 import { AppProvider } from "@toolpad/core/react-router-dom";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 
-import theme from "../utils/theme.js";
 import useDashboardNavigation from "../utils/useDashboardNavigation.tsx";
-import { useUser } from "../features/users/useUser.js";
-import { useLogout } from "../features/authentication/useLogout.js";
 
-import SpinnerLoader from "./SpinnerLoader.js";
 
 import logo from "../images/logo.jpg";
 import { roleNames } from '../Enums/roles.ts';
+import SpinnerLoader from './SpinnerLoader.tsx';
+import { useUser } from '../features/users/useUser.ts';
+import { useLogout } from '../features/authentication/useLogout.ts';
+import theme from '../utils/theme.ts';
 
 const AppLayout = () => {
   const { user } = useUser();
