@@ -145,7 +145,7 @@ function Account() {
           container
           flexDirection={"column"}
           size={{ xs: 12, sm: 8, lg: 9.5 }}
-          spacing={2.5}
+          spacing={2}
         >
           <Grid container spacing={4} alignItems="center">
             <Typography variant="h5" sx={{ color: "primary.main" }}>

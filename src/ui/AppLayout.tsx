@@ -15,6 +15,7 @@ import SpinnerLoader from './SpinnerLoader.tsx';
 import { useUser } from '../features/users/useUser.ts';
 import { useLogout } from '../features/authentication/useLogout.ts';
 import theme from '../utils/theme.ts';
+import NotificationsToolbarAction from './NotificationsToolbarAction.tsx';
 
 const AppLayout = () => {
   const { user } = useUser();
@@ -49,7 +50,9 @@ const AppLayout = () => {
         user: dashboardUser,
       }}
     >
-      <DashboardLayout sidebarExpandedWidth={"250px"}>
+      <DashboardLayout sidebarExpandedWidth={"250px"} slots={{
+        toolbarActions: NotificationsToolbarAction
+      }}>
         <Suspense fallback={<SpinnerLoader />}>
           <Grid
             container

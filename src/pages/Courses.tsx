@@ -1,5 +1,7 @@
-import { Divider, Grid2 as Grid, Typography } from "@mui/material";
+import { Button, Divider, Grid2 as Grid, Typography } from "@mui/material";
 import SquaredCourseCard from "../ui/SquaredCourseCard";
+import { useDialogs } from "@toolpad/core";
+import AddCourseDialog from "../ui/Dialogs/AddCourseDialog";
 
 const courses = [
   {
@@ -64,29 +66,23 @@ const courses = [
   },
 ];
 function Courses() {
+  const dialogs = useDialogs()
+
+  const openCoursesDialog = () => {
+    dialogs.open(AddCourseDialog);
+  }
   return (
-    <Grid>
-      <Typography
-        variant="h4"
-        color="primary.main"
-        sx={{
-          width: "100%",
-          mt: "2rem",
-          ml: "2rem",
-          mb: "2rem",
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-        }}
-      >
-        Courses Veiw
-        <Divider />
-      </Typography>
+    <Grid container flexDirection={'column'} padding={2} spacing={3}>
+      <Grid container justifyContent={'space-between'}>
+        <Typography variant="h4" color="primary.main">
+          Courses
+        </Typography>
+        <Button variant="contained" onClick={openCoursesDialog}>Add Course</Button>
+      </Grid>
 
-
+      <Divider />
       <Grid
         container
-        padding={2}
         spacing={3}
         sx={{
           justifyContent: { xs: "center", sm: "flex-start" },

@@ -5,7 +5,7 @@ export function useUsers(payload) {
 
     const { isFetching, data: users  } = useQuery({
       queryKey: ["users", payload],
-      queryFn: async() => {return await searchUsers(payload)},
+      queryFn: async() => await searchUsers(payload),
       throwOnError: true
     });
     

@@ -5,6 +5,7 @@ import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
 import ErrorBoundary from "../Error/ErrorBoundary.tsx";
 import TryingComponents from "../pages/Dashboard/TryingComponents.tsx";
+import NotificationPage from "../features/notifications/NotificationPage.tsx";
 
 const PageNotFound = lazy(() => import("../pages/PageNotFound"));
 const Login = lazy(() => import("../pages/Login"));
@@ -21,6 +22,7 @@ const Course = lazy(() => import("../features/courses/Course"));
 const Quiz = lazy(() => import("../features/quiz/Quiz"));
 const Departments = lazy(() => import("../pages/Departments"));
 const Department = lazy(() => import("../features/departments/Department"));
+const Notifications = lazy(() => import("../pages/Notifications.tsx"))
 
 const router = createBrowserRouter([
   {
@@ -45,7 +47,12 @@ const router = createBrowserRouter([
               { path: "dashboard", element: <Dashboard /> },
               { path: "account", element: <Account /> },
               { path: "courses", element: <Courses /> },
-              { path: "try", element: <TryingComponents /> },
+              {
+                path: "notifications", children: [
+                  { index: true, element: <Notifications /> },
+                  { path: ":notificationId", element: <NotificationPage /> },
+                ]
+              },
               {
                 path: "course",
                 children: [
