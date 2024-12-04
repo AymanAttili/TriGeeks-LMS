@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, MenuItem, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useMajors } from '../../features/departments/useMajors';
+import { useMajors } from '../../features/majors/useMajors';
 import { useDepartments } from '../../features/departments/useDepartments';
 
 function AddCourseDialog({ payload, open, onClose }) {
@@ -14,12 +14,6 @@ function AddCourseDialog({ payload, open, onClose }) {
         if (!data)
             return;
 
-        // if (payload)
-        //     departmentDispatch({ action: 'edit', payload: { name: data.name, id: payload.id } })
-
-        // else
-        //     departmentDispatch({ action: 'add', payload: { name: data.name } })
-
         onClose();
     }
     return (
@@ -28,11 +22,11 @@ function AddCourseDialog({ payload, open, onClose }) {
                 Add new course
             </DialogTitle>
             <DialogContent>
-                <TextField label="Department name" margin='dense' fullWidth
+                <TextField label="CCourse name" margin='dense' fullWidth
                     disabled={isLoading}
-                    error={!!formErrors.depName}
-                    helperText={formErrors.depName?.message}
-                    {...register('depName', { required: "Department Name is required", })}
+                    error={!!formErrors.courseName}
+                    helperText={formErrors.courseName?.message}
+                    {...register('courseName', { required: "Course Name is required", })}
                 />
                 <Grid container spacing={2}>
                     <TextField select label="Department" margin='normal' disabled={isLoading || fetchingDeps}

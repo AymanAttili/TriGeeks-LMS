@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getAccessToken, updateTokens } from '../utils/handleTokens';
 import { refreshToken } from '../services/apiAuth';
 const axiosAPI = axios.create({
@@ -17,15 +17,15 @@ axiosAPI.interceptors.request.use(
         }
         return config;
     },
-    (error) => Promise.reject(error.request)
 );
 // Handling 401 requests, so we have to decide if we have to logout or to refresh the token
 axiosAPI.interceptors.response.use(response => {
     return response;
 }, async (error) => {
     const request = error.request;
+    
     if (request.__URL__.includes('refresh-token')) {
-        throw new Error(error)
+        throw new AxiosError(error)
     }
     if (error.code === 'ERR_NETWORK') { // must be switched to Error.status === 401
         const response = await refreshToken();
@@ -37,6 +37,6 @@ axiosAPI.interceptors.response.use(response => {
         return await axiosAPI(request);
 
     }
-    throw new Error(error);
+    throw new AxiosError(error);
 });
 export default axiosAPI;

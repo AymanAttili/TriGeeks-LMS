@@ -5,7 +5,7 @@ export async function login({ workId, password, rememberUser }) {
     const response = await axiosAPI.post(`/identity/login`, {
         workId,
         password
-    }).catch(() => { throw new Error('Invalid credentials') })
+    })
 
     const data = response.data
     return { data, rememberUser };

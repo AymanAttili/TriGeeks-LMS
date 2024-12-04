@@ -11,7 +11,7 @@ export function useDispatchDepartment() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
-    const { mutate: departmentDispatch, isPending, data } = useMutation({
+    const { mutateAsync: departmentDispatch, isPending, data } = useMutation({
         mutationFn: async ({payload, action}: data) => {
             switch(action){
                 case 'add': await addDepartment(payload.name); break; 
@@ -27,13 +27,13 @@ export function useDispatchDepartment() {
                     severity: 'success',
                     autoHideDuration: 3000,
                 });
-                queryClient.invalidateQueries({ queryKey: ['departments'] });
+                queryClient.invalidateQueries();
             }
 
             return res;
         },
-        onError: (err) => {
-            notifications.show(err.message, {
+        onError: (err) => {            
+            notifications.show(err.message.response?.data?.title, {
                 severity: 'error',
                 autoHideDuration: 3000,
             });

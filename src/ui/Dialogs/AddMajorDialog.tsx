@@ -1,24 +1,25 @@
 import { Add } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useDispatchMajors } from '../../features/departments/useDispatchMajors';
+import { useDispatchMajors } from '../../features/majors/useDispatchMajors';
 
 function AddMajorDialog({ payload, open, onClose }) {
     const { register, handleSubmit } = useForm();
-    const { majorsDispatch, isLoading } = useDispatchMajors();
+    const { majorsDispatch, isLoading, isError } = useDispatchMajors();
 
 
-    const handleAddDep = (data) => {
+    const handleAddDep = async (data) => {
         if (!data)
             return;
 
         if (payload?.departmentId)
-            majorsDispatch({ action: 'edit', payload: { departmentId: payload.departmentId, majorId: payload.id, name: data.name } })
+            await majorsDispatch({ action: 'edit', payload: { departmentId: payload.departmentId, majorId: payload.id, name: data.name } })
 
         else
-            majorsDispatch({ action: 'add', payload: { departmentId: payload.id, name: data.name } })
+            await majorsDispatch({ action: 'add', payload: { departmentId: payload.id, name: data.name } })
 
-        onClose();
+        if (!isError)
+            onClose();
     }
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddDep)} fullWidth maxWidth={'xs'} open={open} onClose={() => onClose()}>

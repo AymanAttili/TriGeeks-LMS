@@ -46,19 +46,24 @@ const router = createBrowserRouter([
               { index: true, element: <Navigate to="dashboard" replace /> },
               { path: "dashboard", element: <Dashboard /> },
               { path: "account", element: <Account /> },
-              { path: "courses", element: <Courses /> },
+              {
+                path: "courses", children: [
+                  { index: true, element: <Courses /> },
+
+                  {
+                    path: ":courseId",
+                    children: [
+                      { index: true, element: <Course /> },
+                      { path: "quiz/:quizId", element: <Quiz /> },
+                    ],
+                  },
+                ]
+              },
               {
                 path: "notifications", children: [
                   { index: true, element: <Notifications /> },
                   { path: ":notificationId", element: <NotificationPage /> },
                 ]
-              },
-              {
-                path: "course",
-                children: [
-                  { index: true, element: <Course /> },
-                  { path: "quiz/:quizId", element: <Quiz /> },
-                ],
               },
               // Staff routes
               {

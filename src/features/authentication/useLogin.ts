@@ -11,7 +11,7 @@ export function useLogin() {
     const navigate = useNavigate();
 
 
-    const { mutate: login, isPending } = useMutation({
+    const { mutateAsync: login, isPending } = useMutation({
         mutationFn: ({ workId, password, rememberUser }) => loginApi({ workId, password, rememberUser }),
         onSuccess: ({ data, rememberUser }) => {
             updateTokens(data.accessToken, data.refreshToken, rememberUser);
@@ -21,10 +21,9 @@ export function useLogin() {
             });
 
             queryClient.invalidateQueries();
-            navigate('/dashboard', { replace: true });
         },
-        onError: (err) => {
-            notifications.show(err.message, {
+        onError: () => {      
+            notifications.show('Invalid credentials', {
                 severity: 'error',
                 autoHideDuration: 3000,
             });

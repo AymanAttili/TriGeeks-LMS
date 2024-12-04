@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addUser, deleteUser, editUser, searchUsers, updateProfilePicture, User } from "../../services/apiUser";
+import { addUser, changePassword, deleteUser, editUser, searchUsers, updateProfilePicture, User } from "../../services/apiUser";
+import axios, { AxiosError } from "axios";
 
 type UserPayload = {
     id?: number
@@ -18,8 +19,13 @@ type searchPayload = {
     pageSize: number
 }
 
+type changePasswordPayload = {
+    currentPassword: string,
+    newPassword: string
+}
+
 type data = {
-    payload: UserPayload | searchPayload | UpdatePicturePayload,
+    payload: UserPayload | searchPayload | UpdatePicturePayload | changePasswordPayload,
     action: string
 }
 
@@ -27,19 +33,23 @@ export function useDispatchUsers() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
-    const { mutate: usersDispatch, isPending } = useMutation({
+    const { mutateAsync: usersDispatch, isPending, isError, error } = useMutation({
         mutationFn: async ({payload, action}: data) => {
             switch(action){
-                case 'add': await addUser(payload.user); break;
-                case 'edit': await editUser(payload.id, payload.user); break;
+                case 'add': return await addUser(payload.user);
+                case 'edit': return await editUser(payload.id, payload.user);
                 case 'editProfilePic': {
-                    await updateProfilePicture(payload.file, payload.oldPicId); 
-                    queryClient.invalidateQueries({ queryKey: ['user'] }); 
-                    break;
+                    const res = await updateProfilePicture(payload.file, payload.oldPicId); 
+                    if(!axios.isAxiosError(res))
+                        queryClient.invalidateQueries({ queryKey: ['user'] }); 
+                    return res;
                 }
-                case 'delete': await deleteUser(payload.id); break;
-                case 'search': await searchUsers(payload); break;
-                default: throw new Error('Unknown action')
+                case 'changePassword':{
+                    return await changePassword(payload.currentPassword, payload.newPassword)
+                }
+                case 'delete': return await deleteUser(payload.id); 
+                case 'search': return await searchUsers(payload); 
+                default: throw new AxiosError('Unknown action')
             }
         },
         onSuccess: () => {
@@ -50,13 +60,18 @@ export function useDispatchUsers() {
             
             queryClient.invalidateQueries({ queryKey: ['users'] });
         },
-        onError: (err) => {
-            notifications.show(err.message, {
+
+        onError: (err) => {  
+            let msg = err.message.response?.data?.title
+            if(err.message.status === 400){
+                msg = err.message?.response?.data?.errors?.LessThanValidator[0]
+            }
+            notifications.show(msg, {
                 severity: 'error',
                 autoHideDuration: 3000,
             });
-        },
+        }
     });
 
-    return { usersDispatch, isLoading: isPending };
+    return { usersDispatch, isLoading: isPending, isError, error };
 }

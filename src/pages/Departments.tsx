@@ -31,7 +31,7 @@ function Departments() {
         })
 
         if (confirmed)
-            departmentDispatch({ action: 'delete', payload: { id } })
+            await departmentDispatch({ action: 'delete', payload: { id } })
     }
 
     if (fetchingDeps || dispatchingDeps)

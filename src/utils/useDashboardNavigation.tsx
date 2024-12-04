@@ -1,11 +1,9 @@
-import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { PiCertificateFill, PiUserBold } from "react-icons/pi";
-import { AccountBox, Dashboard, Domain } from '@mui/icons-material';
-import { useDepartments } from '../features/departments/useDepartments';
-import { Tooltip } from '@mui/material';
+import { AccountBox, Dashboard } from '@mui/icons-material';
+
 
 
 const useDashboardNavigation = (userRole) => {

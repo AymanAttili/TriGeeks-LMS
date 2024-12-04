@@ -1,11 +1,10 @@
-import React from 'react';
 import KeyIcon from "@mui/icons-material/Key";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useState } from "react"
 import { Navigate, Link as RouterLink } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 
-import { Box, Button, Checkbox, CircularProgress, FormControlLabel, Grid2 as Grid, Link, TextField, Typography } from "@mui/material"
+import { Box, Checkbox, FormControlLabel, Grid2 as Grid, Link, TextField, Typography } from "@mui/material"
 
 import InputPassword from "../ui/InputPassword";
 import { useLogin } from "../features/authentication/useLogin";
@@ -25,7 +24,7 @@ const Login = () => {
     };
 
     const onLogin = async (data) => {
-        login(data)
+        await login(data)
     };
 
     if (isAuthenticated) {
@@ -48,7 +47,7 @@ const Login = () => {
                 bgcolor='white'
                 justifyContent={'center'}>
 
-                <Grid component="form" onSubmit={handleSubmit(onLogin)} item container size={{ md: 9 }} sx={{
+                <Grid component="form" onSubmit={handleSubmit(onLogin)} container size={{ md: 9 }} sx={{
                     justifyContent: {
                         xs: 'flex-start',
                         md: 'center',

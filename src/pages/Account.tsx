@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import {
   Avatar,
-  Box,
   Button,
   Divider,
   Grid2 as Grid,
@@ -11,17 +10,16 @@ import {
   Typography,
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import PalestineFlagIcon from "../ui/PalestineFlagIcon";
 import { useUser } from "./../features/users/useUser";
 import { roleNames } from "../Enums/roles";
 import VisuallyHiddenInput from "../ui/VisuallyHiddenInput";
 import { useForm } from "react-hook-form";
 import { useDialogs } from "@toolpad/core";
 import { levelNames } from "../Enums/educationLevels";
-import SpinnerLoader from "../ui/SpinnerLoader";
-import { AddAPhoto, NewReleases } from "@mui/icons-material";
+import { AddAPhoto, Lock, NewReleases } from "@mui/icons-material";
 import { useDispatchUsers } from "../features/users/useDispatchUsers";
 import { MuiTelInput } from "mui-tel-input";
+import ChangePasswordDialog from "../ui/Dialogs/ChangePasswordDialog";
 function Account() {
   const { user, isLoading: fetchingUser } = useUser();
   const { usersDispatch, isLoading: updatingUser } = useDispatchUsers();
@@ -115,13 +113,16 @@ function Account() {
     );
 
     if (confirmed)
-      usersDispatch({
+      await usersDispatch({
         action: "editProfilePic",
         payload: { file: data.profilePicture[0], oldPicID: "none" },
       });
   };
 
-  if (updatingUser || fetchingUser) return <SpinnerLoader />;
+  const openChengePasswordDialog = async () => {
+    await dialogs.open(ChangePasswordDialog);
+  }
+
 
   return (
     <Grid
@@ -136,7 +137,7 @@ function Account() {
     >
       <Grid
         container
-        flexDirection={{ xs: "column", sm: "row" }}
+        flexDirection={{ xs: "column-reverse", sm: "row" }}
         justifyContent={"space-between"}
         alignItems={"center"}
         spacing={2}
@@ -262,6 +263,14 @@ function Account() {
             {selected ? "Update " : "Change "}
             Picture
           </Button>
+          <Button
+            size="small"
+            variant="contained"
+            endIcon={<Lock />}
+            onClick={openChengePasswordDialog}
+          >
+            Change password
+          </Button>
         </Grid>
       </Grid>
       <Divider />
@@ -281,23 +290,6 @@ function Account() {
         </Typography>
 
         <Grid container flexDirection={"column"} gap={3}>
-          {/* <TextField
-            label="Phone Number"
-            variant="outlined"
-            value={user.phoneNumber}
-            size="small"
-            sx={sx1}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PalestineFlagIcon />
-                    <span>+97</span>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          /> */}
           <MuiTelInput
             label="Phone number"
             margin="dense"

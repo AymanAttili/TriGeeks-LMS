@@ -11,7 +11,7 @@ export function useDispatchMajors() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
-    const { mutate: majorsDispatch, isPending } = useMutation({
+    const { mutateAsync: majorsDispatch, isPending, isError } = useMutation({
         mutationFn: async ({payload, action}: data) => {
             switch(action){
                 case 'add': await addMajor(payload.departmentId,payload.name); break;
@@ -26,15 +26,15 @@ export function useDispatchMajors() {
                 autoHideDuration: 3000,
             });
             
-            queryClient.invalidateQueries({ queryKey: ['majors'] });
+            queryClient.invalidateQueries();
         },
-        onError: (err) => {
-            notifications.show(err.message, {
+        onError: (err) => {            
+            notifications.show(err.message.response?.data?.title, {
                 severity: 'error',
                 autoHideDuration: 3000,
             });
         }
     });
 
-    return { majorsDispatch, isLoading: isPending };
+    return { majorsDispatch, isLoading: isPending, isError };
 }

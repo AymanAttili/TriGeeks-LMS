@@ -22,7 +22,6 @@ function Users() {
     })
     const { users, isLoading: fetchingUsers } = useUsers(paginationModel);
     const { usersDispatch, isLoading: dispatchingUser } = useDispatchUsers()
-    const navigate = useNavigate()
     const dialogs = useDialogs();
 
     const rowCountRef = useRef(users?.metadata.totalItems || 0);

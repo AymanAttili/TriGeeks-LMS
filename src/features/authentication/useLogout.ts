@@ -6,7 +6,7 @@ export function useLogout() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate: logout, isPending } = useMutation({
+  const { mutateAsync: logout, isPending } = useMutation({
     mutationFn: async () => {
       try{
         await revokeRefreshToken();

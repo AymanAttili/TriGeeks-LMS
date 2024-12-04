@@ -5,20 +5,21 @@ import { useDispatchDepartment } from '../../features/departments/useDispatchDep
 
 function AddDepartmentDialog({ payload, open, onClose }) {
     const { register, handleSubmit } = useForm();
-    const { departmentDispatch, isLoading } = useDispatchDepartment();
+    const { departmentDispatch, isLoading, isError } = useDispatchDepartment();
 
 
-    const handleAddDep = (data) => {
+    const handleAddDep = async (data) => {
         if (!data)
             return;
 
         if (payload)
-            departmentDispatch({ action: 'edit', payload: { name: data.name, id: payload.id } })
+            await departmentDispatch({ action: 'edit', payload: { name: data.name, id: payload.id } })
 
         else
-            departmentDispatch({ action: 'add', payload: { name: data.name } })
+            await departmentDispatch({ action: 'add', payload: { name: data.name } })
 
-        onClose();
+        if (!isError)
+            onClose();
     }
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddDep)} fullWidth maxWidth={'xs'} open={open} onClose={() => onClose()}>

@@ -5,14 +5,14 @@ import AddUserDialogStepper from '../../features/users/Admin/AddUserDialogSteppe
 import { useState } from 'react';
 import { levels } from '../../Enums/educationLevels';
 import { roles } from '../../Enums/roles';
-import { useMajors } from '../../features/departments/useMajors';
+import { useMajors } from '../../features/majors/useMajors';
 import { useDepartments } from '../../features/departments/useDepartments';
 import { useDispatchUsers } from '../../features/users/useDispatchUsers';
 import { gender } from '../../Enums/gender';
 
 function AddUserDialog({ payload, open, onClose }) {
-    const { usersDispatch } = useDispatchUsers();
-    const { register, handleSubmit, watch, control, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
+    const { usersDispatch, isError } = useDispatchUsers();
+    const { register, handleSubmit, watch, control, setError, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
     const [activeStep, setActiveStep] = useState(0);
     const { majors, isLoading: fetchingMajors } = useMajors(watch('departmentId'))
     const { departments, isLoading: fetchingDeps } = useDepartments();
@@ -24,12 +24,13 @@ function AddUserDialog({ payload, open, onClose }) {
             return;
 
         if (user)
-            usersDispatch({ action: 'edit', payload: { id: user.id, user: data } })
+            await usersDispatch({ action: 'edit', payload: { id: user.id, user: data } })
 
         else
-            usersDispatch({ action: 'add', payload: { user: data } })
+            await usersDispatch({ action: 'add', payload: { user: data } })
 
-        onClose();
+        if (!isError)
+            onClose();
     }
 
 

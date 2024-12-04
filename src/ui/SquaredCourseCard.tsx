@@ -7,10 +7,11 @@ import {
   Box,
   Divider,
   Grid2 as Grid,
-  Grid2,
+
 } from "@mui/material";
 import HorizIconOptions from "./HorizIconOptions";
 import logo from '../images/logo.jpg'
+import { useNavigate } from "react-router-dom";
 
 interface CourseCardProps {
   courseId: string;
@@ -23,8 +24,10 @@ interface CourseCardProps {
 function CourseCard(props: CourseCardProps) {
   const { courseId, courseName, department, progress } = props; // todo implementing course hook (react query)
 
+  const navigate = useNavigate();
+
   return (
-    <Grid2
+    <Grid
       size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
       maxWidth={360}
       component={Card}
@@ -45,6 +48,8 @@ function CourseCard(props: CourseCardProps) {
         justifyContent: "flex-end",
         borderRadius: "4%",
       }}
+
+      onClick={() => navigate(`${courseId}`)}
     >
       <CardMedia
         component="img"
@@ -112,7 +117,7 @@ function CourseCard(props: CourseCardProps) {
           <HorizIconOptions />
         </Box>
       </CardContent>
-    </Grid2>
+    </Grid>
   );
 }
 
