@@ -123,7 +123,6 @@ function Account() {
     await dialogs.open(ChangePasswordDialog);
   }
 
-
   return (
     <Grid
       container
@@ -329,7 +328,7 @@ function Account() {
           <TextField
             label="Department"
             variant="outlined"
-            value={user.department.name}
+            value={user.department?.name || '---'}
             readOnly
             size="small"
             sx={{ ...sx1 }}
@@ -337,7 +336,7 @@ function Account() {
           <TextField
             label="Major"
             variant="outlined"
-            value={user.major.name}
+            value={user.major?.name || '---'}
             readOnly
             size="small"
             sx={{ ...sx1 }}
