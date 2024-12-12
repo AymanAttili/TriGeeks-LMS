@@ -185,7 +185,6 @@ function AddUserDialog({ payload, open, onClose }) {
                                     error={!!formErrors.role}
                                     helperText={formErrors.role?.message}
                                     {...register('role', { required: "Role is required", })}
-                                    defaultValue=''
                                     sx={{
                                         maxWidth: '200px'
                                     }}
@@ -206,7 +205,7 @@ function AddUserDialog({ payload, open, onClose }) {
                                     sx={{
                                         minWidth: '200px'
                                     }}
-                                    defaultValue={user?.department.id}
+                                    defaultValue={user?.department?.id}
                                 >
                                     {departments?.map((option) => (
                                         <MenuItem key={option.id} value={option.id}>
@@ -222,7 +221,7 @@ function AddUserDialog({ payload, open, onClose }) {
                                     sx={{
                                         minWidth: '200px',
                                     }}
-                                    defaultValue={user?.major.id}
+                                    defaultValue={majors.length > 0 ? user?.major?.id : ''}
                                 >
                                     {majors?.map((option) => (
                                         <MenuItem key={option.id} value={option.id}>

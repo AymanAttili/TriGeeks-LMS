@@ -1,14 +1,11 @@
 import { Add } from '@mui/icons-material';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, MenuItem, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useMajors } from '../../features/majors/useMajors';
-import { useDepartments } from '../../features/departments/useDepartments';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function AddCourseDialog({ payload, open, onClose }) {
     const { register, handleSubmit, watch, formState: { isLoading, errors: formErrors } } = useForm();
-    const { majors, isLoading: fetchingMajors } = useMajors(watch('departmentId'))
-    const { departments, isLoading: fetchingDeps } = useDepartments();
-
 
     const handleAddCourse = (data) => {
         if (!data)
@@ -22,42 +19,39 @@ function AddCourseDialog({ payload, open, onClose }) {
                 Add new course
             </DialogTitle>
             <DialogContent>
-                <TextField label="CCourse name" margin='dense' fullWidth
+                <TextField label="Course name" margin='dense' fullWidth
                     disabled={isLoading}
                     error={!!formErrors.courseName}
                     helperText={formErrors.courseName?.message}
                     {...register('courseName', { required: "Course Name is required", })}
                 />
-                <Grid container spacing={2}>
-                    <TextField select label="Department" margin='normal' disabled={isLoading || fetchingDeps}
-                        error={!!formErrors.departmentId}
-                        helperText={formErrors.departmentId?.message}
-                        {...register('departmentId', { required: "Department is required", })}
-                        sx={{
-                            minWidth: '200px'
+
+                <Grid container spacing={2} pt={2}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateTimePicker
+                            disabled={isLoading}
+                            sx={{ marginTop: 1 }}
+                            label="Expiration"
+                            {...register('expiration')}
+                        />
+                    </LocalizationProvider>
+
+                    <TextField label="Expected time to finish" margin='dense'
+                        type={'number'}
+                        slotProps={{
+                            input: {
+                                endAdornment: <InputAdornment position="end">Days</InputAdornment>,
+                            },
                         }}
-                    >
-                        {departments?.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <TextField select label="Major" margin='normal'
-                        disabled={isLoading || fetchingMajors || fetchingDeps || !watch('departmentId')}
-                        error={!!formErrors.majorId}
-                        helperText={formErrors.majorId?.message}
-                        {...register('majorId', { required: "Major is required", })}
-                        sx={{
-                            minWidth: '200px',
-                        }}
-                    >
-                        {majors?.map((option) => (
-                            <MenuItem key={option.id} value={option.id}>
-                                {option.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                        defaultValue={90}
+                        disabled={isLoading}
+                        error={!!formErrors.expectedTimeToFinish}
+                        helperText={formErrors.expectedTimeToFinish?.message}
+                        {...register('expectedTimeToFinish', {
+                            required: "Expected time to finish is required",
+                            min: { value: 1, message: "Number of days should be more than 0" }
+                        })}
+                    />
                 </Grid>
             </DialogContent>
             <DialogActions>

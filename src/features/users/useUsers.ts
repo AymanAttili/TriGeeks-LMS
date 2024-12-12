@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchUsers } from "../../services/apiUser";
+import { searchPayload, searchUsers } from "../../services/apiUser";
 
-export function useUsers(payload) {
+const initialPayload: searchPayload = {
+  page: 1,
+  pageSize: 8
+}
 
+export function useUsers(payload = initialPayload) {
     const { isFetching, data: users  } = useQuery({
       queryKey: ["users", payload],
       queryFn: async() => await searchUsers(payload),

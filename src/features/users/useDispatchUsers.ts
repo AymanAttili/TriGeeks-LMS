@@ -10,7 +10,6 @@ type UserPayload = {
 
 type UpdatePicturePayload = {
     file: any
-    oldPicID: string
 }
 
 
@@ -39,7 +38,7 @@ export function useDispatchUsers() {
                 case 'add': return await addUser(payload.user);
                 case 'edit': return await editUser(payload.id, payload.user);
                 case 'editProfilePic': {
-                    const res = await updateProfilePicture(payload.file, payload.oldPicId); 
+                    const res = await updateProfilePicture(payload.file); 
                     if(!axios.isAxiosError(res))
                         queryClient.invalidateQueries({ queryKey: ['user'] }); 
                     return res;

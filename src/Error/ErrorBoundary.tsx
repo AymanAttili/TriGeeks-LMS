@@ -5,14 +5,16 @@ import {
 } from "react-error-boundary";
 import UnexpectedError from "../pages/UnexpectedError";
 import { useLogout } from "../features/authentication/useLogout";
+import { useNavigate } from "react-router-dom";
 
 const ErrorBoundary: FC<PropsWithChildren> = ({ children }) => {
     const [someKey, setSomeKey] = useState(null);
-    const { logout } = useLogout()
+    const navigate = useNavigate()
 
     const resetErrorBoundary: ErrorBoundaryComponentProps["onReset"] = () => {
-        logout()
+        // logout()
         setSomeKey(null);
+        navigate(-1)
     }
 
     const logErrorToService: ErrorBoundaryComponentProps["onError"] = (

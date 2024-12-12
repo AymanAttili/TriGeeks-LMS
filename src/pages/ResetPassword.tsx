@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from "react"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -7,14 +7,17 @@ import { Button, Grid2 as Grid, IconButton, InputLabel, Typography } from "@mui/
 import { useNotifications } from "@toolpad/core";
 import InputPassword from "../ui/InputPassword";
 
-import { resetPassword } from "../services/apiAuth";
+import { resetPassword, resetPasswordTokenValidation } from "../services/apiAuth";
 
 import logo from '../images/logo.jpg'
 import LoginIcon from '@mui/icons-material/Login'
 import { useUser } from "../features/users/useUser";
+import SpinnerLoader from '../ui/SpinnerLoader';
 
 const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [isValid, setIsValid] = useState(true);
+    const [isChecking, setIsChecking] = useState(true);
 
     const { isAuthenticated } = useUser();
     const navigate = useNavigate();
@@ -28,10 +31,7 @@ const ResetPassword = () => {
 
 
     let token = searchParams.get('token');
-    if (!searchParams.get('token'))
-        return <Navigate replace to='/' />
-
-    token = token.replaceAll(' ', '+');
+    token = token?.replaceAll(' ', '+');
     const workId = searchParams.get('workId');
 
     const handleClickShowPassword = () => {
@@ -54,9 +54,30 @@ const ResetPassword = () => {
                 });
             })
     }
+    useEffect(() => {
+        async function ValidateToken(workId, token) {
+            try {
+                setIsValid(true);
+                setIsChecking(true)
+                const res = await resetPasswordTokenValidation(workId, token);
+                setIsValid(res.data.isValid)
+            }
+            catch {
+                setIsValid(false);
+            }
+            finally {
+                setIsChecking(false);
+            }
+        }
 
-    if (isAuthenticated)
+        ValidateToken(workId, token);
+    }, [])
+
+    if (isAuthenticated || (!isChecking && !isValid))
         return <Navigate replace to='/' />
+
+    if (isChecking)
+        return <SpinnerLoader />
 
     return (
         <>

@@ -8,7 +8,6 @@ import { updateTokens } from '../../utils/handleTokens';
 export function useLogin() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
-    const navigate = useNavigate();
 
 
     const { mutateAsync: login, isPending } = useMutation({

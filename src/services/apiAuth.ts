@@ -21,7 +21,14 @@ export async function revokeRefreshToken() {
     return response;
 }
 
-export async function resetPassword(workId, token, newPassword) {
+export async function resetPasswordTokenValidation(workId: string, token: string){
+    return await axiosAPI.post('identity/reset-password-token-validation', {
+        workId,
+        token
+    })
+}
+
+export async function resetPassword(workId: string, token: string, newPassword: string) {
     return await axiosAPI.post(`/identity/reset-forgotten-password`, {
         workId,
         token,
@@ -29,7 +36,7 @@ export async function resetPassword(workId, token, newPassword) {
     })
 }
 
-export async function forgotPassword(workId) {
+export async function forgotPassword(workId: string) {
     return await axiosAPI.post(`/identity/forgot-password`, { workId })
 }
 

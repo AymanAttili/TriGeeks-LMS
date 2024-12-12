@@ -23,16 +23,16 @@ import ChangePasswordDialog from "../ui/Dialogs/ChangePasswordDialog";
 function Account() {
   const { user, isLoading: fetchingUser } = useUser();
   const { usersDispatch, isLoading: updatingUser } = useDispatchUsers();
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch, reset, formState: { errors: formErrors } } = useForm();
 
   const profileBtn = useRef(null);
-  const selected = watch("profilePicture");
+  const selected = watch("profilePicture")?.length > 0;
 
   const dialogs = useDialogs();
 
   const sx = {
     // styling text field
-    width: "7.5rem",
+
     "& .MuiOutlinedInput-notchedOutline": {
       borderColor: "primary.main", // Outline color
       borderRadius: "8px",
@@ -97,9 +97,22 @@ function Account() {
     },
   };
 
+  const isvalidFile = (profilePicture) => {
+    const allowedExtensions = ["jpg", "png"];
+    const fileExtension = profilePicture[0]?.name.split(".").pop().toLowerCase();
+    return allowedExtensions.includes(fileExtension)
+  }
+
   const updateProfile = async (data) => {
+    console.log(data);
+
     if (!data.profilePicture.length) {
       profileBtn?.current.click();
+      return;
+    }
+    if (!isvalidFile(data.profilePicture)) {
+      await dialogs.alert('Please upload a valid profile picture. (.jpg, .png)')
+      reset();
       return;
     }
 
@@ -112,11 +125,12 @@ function Account() {
       }
     );
 
-    if (confirmed)
+    if (confirmed) {
       await usersDispatch({
         action: "editProfilePic",
-        payload: { file: data.profilePicture[0], oldPicID: "none" },
+        payload: { file: data.profilePicture[0] },
       });
+    }
   };
 
   const openChengePasswordDialog = async () => {
@@ -159,6 +173,7 @@ function Account() {
                 value={user.workId}
                 size="small"
                 sx={sx}
+                focused
               />
             </Grid>
           </Grid>
@@ -167,7 +182,7 @@ function Account() {
               label="First name"
               variant="outlined"
               value={user.firstName}
-              readOnly
+              focused
               size="small"
               sx={sx1}
             />
@@ -175,7 +190,7 @@ function Account() {
               label="Middle name"
               variant="outlined"
               value={user.middleName}
-              readOnly
+              focused
               size="small"
               sx={sx1}
             />
@@ -185,6 +200,7 @@ function Account() {
               value={user.lastName}
               size="small"
               sx={sx1}
+              focused
             />
           </Grid>
           <Grid container>
@@ -194,6 +210,7 @@ function Account() {
               value={user.birthDate}
               size="small"
               sx={sx1}
+              focused
               slotProps={{
                 input: {
                   endAdornment: (
@@ -214,6 +231,7 @@ function Account() {
               value={levelNames[user.educationalLevel]}
               size="small"
               sx={eduS}
+              focused
             />
           </Grid>
         </Grid>
@@ -252,7 +270,6 @@ function Account() {
               />
             </label>
           </Tooltip>
-
           <Button
             type="submit"
             size="small"
@@ -307,7 +324,8 @@ function Account() {
             variant="outlined"
             value={user.email}
             size="medium"
-            sx={{ ...sx1, width: "18rem" }}
+            focused
+            sx={{ ...sx1, width: "20rem" }}
           />
         </Grid>
       </Grid>
@@ -329,7 +347,7 @@ function Account() {
             label="Department"
             variant="outlined"
             value={user.department?.name || '---'}
-            readOnly
+            focused
             size="small"
             sx={{ ...sx1 }}
           />
@@ -337,7 +355,7 @@ function Account() {
             label="Major"
             variant="outlined"
             value={user.major?.name || '---'}
-            readOnly
+            focused
             size="small"
             sx={{ ...sx1 }}
           />
@@ -345,7 +363,7 @@ function Account() {
             label="Role"
             variant="outlined"
             value={roleNames[user.role]}
-            readOnly
+            focused
             size="small"
             sx={{ ...sx1 }}
           />

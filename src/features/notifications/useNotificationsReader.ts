@@ -1,18 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { changeNotificationStatus } from "../../services/apiNotifications";
 import { useNotifications } from "@toolpad/core";
+import { markAllNotificationsAsRead, readNotification } from "../../services/apiNotifications";
+import { AxiosError } from "axios";
 
-type readNotificationType = {
-    ids: string[],
-    newStatus: 0|1
-}
 
 export function useNotificationsReader() {
     const notifications = useNotifications()
     const queryClient = useQueryClient();
     const { mutateAsync: notificationsReader, isPending } = useMutation({
-        mutationFn: async ({ids, newStatus}: readNotificationType) => {
-            await changeNotificationStatus(ids, newStatus)
+        mutationFn: async ({action, payload}) => {
+            switch(action){
+                case 'readOne': await readNotification(payload.id); break; 
+                case 'readAll': await markAllNotificationsAsRead(); break; 
+                default: throw new AxiosError('Unknown action')
+            }
             queryClient.invalidateQueries({ queryKey:['notifications'] })
         },
         onError: (err) => {            

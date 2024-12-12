@@ -4,24 +4,23 @@ import PrivateRoute from "../ui/PrivateRoute";
 import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
 import ErrorBoundary from "../Error/ErrorBoundary.tsx";
-import TryingComponents from "../pages/Dashboard/TryingComponents.tsx";
 import NotificationPage from "../features/notifications/NotificationPage.tsx";
 
-const PageNotFound = lazy(() => import("../pages/PageNotFound"));
-const Login = lazy(() => import("../pages/Login"));
-const Account = lazy(() => import("../pages/Account"));
-const Users = lazy(() => import("../pages/Users"));
-const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
-const Courses = lazy(() => import("../pages/Courses"));
+const PageNotFound = lazy(() => import("../pages/PageNotFound.tsx"));
+const Login = lazy(() => import("../pages/Login.tsx"));
+const Account = lazy(() => import("../pages/Account.tsx"));
+const Users = lazy(() => import("../pages/Users.tsx"));
+const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard.tsx"));
+const Courses = lazy(() => import("../pages/Courses.tsx"));
 const MyCourses = lazy(() => import("../pages/MyCourses.tsx"));
-const Certificates = lazy(() => import("../pages/Certificates"));
-const MyCertificates = lazy(() => import("../pages/MyCertificates"));
-const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
-const ResetPassword = lazy(() => import("../pages/ResetPassword"));
-const Course = lazy(() => import("../features/courses/Course"));
-const Quiz = lazy(() => import("../features/quiz/Quiz"));
-const Departments = lazy(() => import("../pages/Departments"));
-const Department = lazy(() => import("../features/departments/Department"));
+const Certificates = lazy(() => import("../pages/Certificates.tsx"));
+const MyCertificates = lazy(() => import("../pages/MyCertificates.tsx"));
+const ForgotPassword = lazy(() => import("../pages/ForgotPassword.tsx"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword.tsx"));
+const Course = lazy(() => import("../features/courses/Course.tsx"));
+const Quiz = lazy(() => import("../features/quiz/Quiz.tsx"));
+const Departments = lazy(() => import("../pages/Departments.tsx"));
+const Department = lazy(() => import("../features/departments/Department.tsx"));
 const Notifications = lazy(() => import("../pages/Notifications.tsx"))
 
 const router = createBrowserRouter([

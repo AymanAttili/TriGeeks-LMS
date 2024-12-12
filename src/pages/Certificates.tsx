@@ -1,4 +1,3 @@
-import React from 'react';
 import CertificateGenerator from '../features/certificates/CertificateTemplate';
 function Certificates() {
     return (

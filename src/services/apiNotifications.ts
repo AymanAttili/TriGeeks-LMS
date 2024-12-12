@@ -1,3 +1,5 @@
+import axiosAPI from "../API/axiosAPI";
+
 let data = [
     { id: 1, title: "Introduction to Programming", courseName: "Computer Science 101", read: 1, date: "2024-12-01T00:00:00Z", link: "101" },
     { id: 2, title: "Data Structures Basics", courseName: "Algorithms 201", read: 0, date: "2024-12-02T00:00:00Z", link: "201" },
@@ -6,14 +8,25 @@ let data = [
     { id: 5, title: "Networking Essentials", courseName: "Networking Basics", read: 1, date: "2024-12-05T00:00:00Z", link: "501" },
 ];
 
-export async function getNotifications(){
-    return data
+type getNotificationsPayload = {
+    filters?: string,
+    sorts?: string,
+    page: number,
+    pageSize: number
 }
 
-export async function getNotification(){
-    return data[0]
+export async function getNotifications(payload: getNotificationsPayload){
+    return await axiosAPI.post('user/notifications', payload)
 }
 
-export async function changeNotificationStatus(ids: string[], status: number){
-    data.filter((val) => val.link == ids[0])[0].read = status
+export async function getUnreadNotificationsCount(){
+    return await axiosAPI.get('user/notifications/unread/count')
+}
+
+export async function readNotification(id: string){
+    return await axiosAPI.patch(`user/notifications/${id}/is-read`);
+}
+
+export async function markAllNotificationsAsRead(){
+    return await axiosAPI.patch('user/notifications/is-read')
 }

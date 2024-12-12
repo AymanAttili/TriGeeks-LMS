@@ -11,7 +11,7 @@ function PrivateRoute({ children, allowedRoles, checkAuth = false }) {
         return <SpinnerLoader />
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" />;
+        return <Navigate replace to="/login" />;
     }
 
     if (checkAuth)
