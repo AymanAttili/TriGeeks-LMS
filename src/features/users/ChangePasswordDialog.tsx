@@ -3,6 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useDispatchUsers } from '../../features/users/useDispatchUsers';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function ChangePasswordDialog({ payload, open, onClose }) {
     const [showPassword, setShowPassword] = useState(false)
@@ -11,7 +12,7 @@ function ChangePasswordDialog({ payload, open, onClose }) {
     const currentPassword = watch('currentPassword')
     const newPassword = watch('newPassword')
 
-    const { usersDispatch, isError } = useDispatchUsers();
+    const { usersDispatch, isError, isLoading: dispatchingUser } = useDispatchUsers();
 
 
     const handleAddDep = async (data) => {
@@ -112,10 +113,10 @@ function ChangePasswordDialog({ payload, open, onClose }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>
-                <Button type='submit' variant='outlined' disabled={isLoading} endIcon={<Edit />} >
+                <Button color='error' variant='outlined' disabled={isLoading || dispatchingUser} onClick={() => onClose()}>Cancel</Button>
+                <LoadingButton type='submit' variant='outlined' loading={dispatchingUser} disabled={isLoading || dispatchingUser} loadingPosition='end' endIcon={<Edit />} >
                     Change
-                </Button>
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

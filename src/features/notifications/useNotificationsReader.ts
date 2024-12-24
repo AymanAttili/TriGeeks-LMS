@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 export function useNotificationsReader() {
     const notifications = useNotifications()
     const queryClient = useQueryClient();
-    const { mutateAsync: notificationsReader, isPending } = useMutation({
+    const { mutateAsync: notificationsReader, isPending, error, isError } = useMutation({
         mutationFn: async ({action, payload}) => {
             switch(action){
                 case 'readOne': await readNotification(payload.id); break; 
@@ -24,5 +24,5 @@ export function useNotificationsReader() {
         }
     });
 
-    return { notificationsReader, isLoading: isPending };
+    return { notificationsReader, isLoading: isPending, error, isError };
 }

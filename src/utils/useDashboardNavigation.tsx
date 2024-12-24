@@ -2,7 +2,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { PiCertificateFill, PiUserBold } from "react-icons/pi";
-import { AccountBox, Dashboard } from '@mui/icons-material';
+import { AccountBox, Dashboard, Notifications } from '@mui/icons-material';
 
 
 
@@ -42,6 +42,11 @@ const useDashboardNavigation = (userRole) => {
                 title: 'My Account',
                 icon: <AccountBox />
             },
+            {
+                segment: 'notifications',
+                title: 'Notifications',
+                icon: <Notifications />
+            }
         ],
         SubAdmin: [
             {
@@ -54,11 +59,6 @@ const useDashboardNavigation = (userRole) => {
                 icon: <MenuBookIcon />,
             },
             {
-                segment: 'courses',
-                title: 'Search courses',
-                icon: <SearchIcon />,
-                pattern: 'courses{/:courseId}*',
-            }, {
                 segment: 'certificates',
                 title: 'Certificates',
                 icon: <PiCertificateFill size='24' />
@@ -69,12 +69,12 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'account',
                 title: 'My Account',
                 icon: <AccountBox />
+            },
+            {
+                segment: 'notifications',
+                title: 'Notifications',
+                icon: <Notifications />
             }
-            // {
-            //     segment: 'chats',
-            //     title: 'Chats',
-            //     icon: <ChatRoundedIcon />,
-            // },
         ],
         Staff: [
             {
@@ -87,11 +87,6 @@ const useDashboardNavigation = (userRole) => {
                 icon: <MenuBookIcon />,
             },
             {
-                segment: 'courses',
-                title: 'Search courses',
-                icon: <SearchIcon />,
-                pattern: 'courses{/:courseId}*',
-            }, {
                 segment: 'my-certificates',
                 title: 'My Certificates',
                 icon: <PiCertificateFill size='24' />
@@ -102,17 +97,12 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'account',
                 title: 'My Account',
                 icon: <AccountBox />
+            },
+            {
+                segment: 'notifications',
+                title: 'Notifications',
+                icon: <Notifications />
             }
-            // {
-            //     segment: 'chats',
-            //     title: 'Chats',
-            //     icon: <ChatRoundedIcon />,
-            // },
-            // {
-            //     segment: 'favourite-courses',
-            //     title: 'Favourite courses',
-            //     icon: <StarRoundedIcon />,
-            // },
         ]
     }
 

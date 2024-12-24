@@ -3,7 +3,7 @@ import { Button, Card, CardContent, Divider, Grid2 as Grid, Typography } from '@
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { Unpublished } from '@mui/icons-material';
 import { useDialogs } from '@toolpad/core';
-import AddCourseDialog from '../../ui/Dialogs/AddCourseDialog';
+import AddCourseDialog from '../../features/courses/AddCourseDialog';
 
 
 function SubAdminDashboard() {
@@ -20,7 +20,6 @@ function SubAdminDashboard() {
             component={Card}
             sx={{
                 width: "100%",
-                margin: 1,
                 padding: 2,
                 borderRadius: 2,
                 alignSelf: "center",

@@ -4,7 +4,7 @@ import { refreshToken } from '../services/apiAuth';
 const axiosAPI = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json-patch+json'
     }
 });
 

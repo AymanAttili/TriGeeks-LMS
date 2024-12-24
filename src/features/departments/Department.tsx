@@ -1,15 +1,16 @@
 import { Add } from '@mui/icons-material';
-import { Button, Grid2 as Grid, Link, major, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
+import { Button, Grid2 as Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 import { useDialogs } from '@toolpad/core';
 import ActionsMenu from '../../ui/ActionsMenu';
 import { useParams } from "react-router-dom"
 import { useMajors } from '../majors/useMajors';
-import AddMajorDialog from '../../ui/Dialogs/AddMajorDialog';
+
 import { useDispatchMajors } from '../majors/useDispatchMajors';
 import { useDispatchDepartment } from './useDispatchDepartment';
 import { useEffect } from 'react';
 import SpinnerLoader from '../../ui/SpinnerLoader';
+import AddMajorDialog from '../majors/AddMajorDialog';
 
 function Department() {
     const { departmentId } = useParams();

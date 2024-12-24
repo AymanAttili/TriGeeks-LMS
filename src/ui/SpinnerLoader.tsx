@@ -1,4 +1,3 @@
-import React from 'react';
 import { CircularProgress, Grid2 as Grid } from '@mui/material';
 function SpinnerLoader() {
     return (

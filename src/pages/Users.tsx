@@ -3,15 +3,14 @@ import { DataGrid, } from '@mui/x-data-grid';
 import { roleNames } from '../Enums/roles';
 import { levelNames } from '../Enums/educationLevels';
 import { useUsers } from '../features/users/useUsers';
-import { useNavigate } from 'react-router-dom';
 import { useDialogs } from '@toolpad/core';
 import ActionsMenu from '../ui/ActionsMenu';
 import { useDispatchUsers } from '../features/users/useDispatchUsers';
 import { Add } from '@mui/icons-material';
 import { useMemo, useRef, useState } from 'react';
 import { filterOperators } from '../Enums/filterOperators';
-import ShowUserDetails from '../ui/Dialogs/ShowUserDetails';
-import AddUserDialog from '../ui/Dialogs/AddUserDialog';
+import ShowUserDetails from '../features/users/ShowUserDetails';
+import AddUserDialog from '../features/users/AddUserDialog';
 
 function Users() {
     const [filters, setFilters] = useState('')
@@ -133,16 +132,18 @@ function Users() {
     }
 
     return (
-        <Grid component={Paper} container alignSelf={'center'} flexDirection={'column'} height={'90dvh'} spacing={2} sx={{
-            padding: 2,
-            width: {
-                xs: '100dvw',
-                sm: '90dvw',
-                md: '75dvw',
-                lg: '81dvw',
-                xl: '84dvw'
-            }
-        }}
+        <Grid component={Paper} container alignSelf={'center'} flexDirection={'column'}
+            spacing={2} sx={{
+                height: 'calc(100vh - 85px)',
+                padding: 2,
+                width: {
+                    xs: '100dvw',
+                    sm: '90dvw',
+                    md: '75dvw',
+                    lg: '81dvw',
+                    xl: '84dvw'
+                }
+            }}
         >
             <Grid container justifyContent={'space-between'} padding={1} sx={{
                 flexDirection: { xs: 'column', sm: 'row' },

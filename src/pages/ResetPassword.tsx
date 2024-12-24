@@ -1,31 +1,33 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from "react"
-import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { Button, Grid2 as Grid, IconButton, InputLabel, Typography } from "@mui/material"
-import { useNotifications } from "@toolpad/core";
-import InputPassword from "../ui/InputPassword";
+import { Grid2 as Grid, IconButton, InputAdornment, InputLabel, TextField, Typography } from "@mui/material"
 
-import { resetPassword, resetPasswordTokenValidation } from "../services/apiAuth";
+import { resetPasswordTokenValidation } from "../services/apiAuth";
 
 import logo from '../images/logo.jpg'
 import LoginIcon from '@mui/icons-material/Login'
 import { useUser } from "../features/users/useUser";
 import SpinnerLoader from '../ui/SpinnerLoader';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Key, Visibility, VisibilityOff } from '@mui/icons-material';
+import { useResetPassword } from '../features/authentication/useResetPassword';
 
 const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isValid, setIsValid] = useState(true);
     const [isChecking, setIsChecking] = useState(true);
 
+    const { resetPassword, isLoading } = useResetPassword();
+
     const { isAuthenticated } = useUser();
-    const navigate = useNavigate();
-    const notifications = useNotifications();
     const
         { register,
             handleSubmit,
-            //  formState: { errors: formErrors }
+            watch,
+            formState: { errors: formErrors }
         } = useForm();
     const [searchParams] = useSearchParams();
 
@@ -38,21 +40,11 @@ const ResetPassword = () => {
         setShowPassword((prev) => !prev);
     };
 
-    const onReset = async ({ password }) => {
-        resetPassword(workId, token, password)
-            .then(() => {
-                notifications.show('Password updaed successfully ✅', {
-                    severity: 'success',
-                    autoHideDuration: 3000,
-                });
-                navigate('/login', { replace: true });
-            })
-            .catch(() => {
-                notifications.show('Something went wrong! 😕', {
-                    severity: 'error',
-                    autoHideDuration: 3000,
-                });
-            })
+    const onReset = async (data) => {
+        if (!data)
+            return
+
+        await resetPassword({ workId, token, newPassword: data.newPassword })
     }
     useEffect(() => {
         async function ValidateToken(workId, token) {
@@ -108,25 +100,81 @@ const ResetPassword = () => {
                             <InputLabel htmlFor="password" >
                                 New password
                             </InputLabel>
-                            <InputPassword id='password' size="small" showPassword={showPassword} handleClickShowPassword={handleClickShowPassword} register={register} />
+                            <TextField id='password' margin='dense' fullWidth
+                                type={showPassword ? 'text' : 'password'}
+                                disabled={isLoading}
+                                error={!!formErrors.newPassword}
+                                helperText={formErrors.newPassword?.message}
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
+                                {...register('newPassword', {
+                                    required: "New password is required",
+                                    pattern: {
+                                        value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                                        message:
+                                            "Password must be at least 8 characters, include one letter, one number, and one special character",
+                                    },
+                                })}
+                            />
                         </Grid>
 
                         <Grid size={{ xs: 12 }}>
                             <InputLabel htmlFor="confirmPassword" >
                                 Confirm new Password
                             </InputLabel>
-                            <InputPassword id='confirmPassword' size="small" showPassword={showPassword} handleClickShowPassword={handleClickShowPassword} register={register} />
 
+                            <TextField id='confirmPassword' margin='dense' fullWidth
+                                type={showPassword ? 'text' : 'password'}
+                                disabled={isLoading}
+                                error={!!formErrors.confrimNewPassword}
+                                helperText={formErrors.confrimNewPassword?.message}
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }
+                                }}
+                                {...register('confrimNewPassword', {
+                                    required: "Confirm new password is required",
+                                    validate: (val) => val === watch('newPassword') || "New password and its confirm must be equal."
+                                })}
+                            />
                         </Grid>
-                        {/* <FormHelperText error>{formErrors}</FormHelperText> */}
                     </Grid>
 
-                    <Button variant="contained"
+                    <LoadingButton
+                        type="submit"
+                        disabled={isLoading}
                         fullWidth
-                        type='submit'
+                        variant="contained"
+                        startIcon={<Key />}
+                        aria-label="Login"
+                        loading={isLoading}
+                        loadingPosition="start"
                     >
                         Set new password
-                    </Button>
+                    </LoadingButton>
+
                 </Grid>
             </Grid>
         </>

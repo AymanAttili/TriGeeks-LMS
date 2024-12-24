@@ -1,7 +1,8 @@
 import { Add } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useDispatchDepartment } from '../../features/departments/useDispatchDepartment';
+import { useDispatchDepartment } from './useDispatchDepartment';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function AddDepartmentDialog({ payload, open, onClose }) {
     const { register, handleSubmit } = useForm();
@@ -32,9 +33,9 @@ function AddDepartmentDialog({ payload, open, onClose }) {
             </DialogContent>
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>
-                <Button type='submit' variant='outlined' disabled={isLoading} endIcon={<Add />} >
+                <LoadingButton type='submit' variant='outlined' loading={isLoading} disabled={isLoading} loadingPosition='end' endIcon={<Add />} >
                     {payload ? 'Edit' : 'Add'}
-                </Button>
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

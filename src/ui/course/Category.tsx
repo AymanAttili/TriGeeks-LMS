@@ -18,7 +18,7 @@ import MaterialListItem from "../../ui/course/MaterialListItem";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useState } from "react";
 import { useDialogs } from "@toolpad/core";
-import AddMaterialDialog from "../Dialogs/AddMaterialDialog";
+import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
 
 const Category: React.FC = () => {
   const dialogs = useDialogs();
@@ -45,21 +45,21 @@ const Category: React.FC = () => {
           },
           expanded
             ? {
-                [`& .${accordionClasses.region}`]: {
-                  height: "auto",
-                },
-                [`& .${accordionDetailsClasses.root}`]: {
-                  display: "block",
-                },
-              }
-            : {
-                [`& .${accordionClasses.region}`]: {
-                  height: 0,
-                },
-                [`& .${accordionDetailsClasses.root}`]: {
-                  display: "none",
-                },
+              [`& .${accordionClasses.region}`]: {
+                height: "auto",
               },
+              [`& .${accordionDetailsClasses.root}`]: {
+                display: "block",
+              },
+            }
+            : {
+              [`& .${accordionClasses.region}`]: {
+                height: 0,
+              },
+              [`& .${accordionDetailsClasses.root}`]: {
+                display: "none",
+              },
+            },
         ]}
       >
         <Box

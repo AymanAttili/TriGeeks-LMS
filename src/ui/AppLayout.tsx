@@ -63,6 +63,7 @@ const AppLayout = () => {
               flex: 1,
               bgcolor: "whitesmoke",
             }}
+            padding={{ sm: 1 }}
           >
             <Outlet />
           </Grid>

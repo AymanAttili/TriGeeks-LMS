@@ -7,12 +7,12 @@ const initialPayload: searchPayload = {
 }
 
 export function useUsers(payload = initialPayload) {
-    const { isFetching, data: users  } = useQuery({
+    const { isFetching, data: users, error, isError } = useQuery({
       queryKey: ["users", payload],
       queryFn: async() => await searchUsers(payload),
       throwOnError: true
     });
     
-    return { isLoading: isFetching, users };
+    return { isLoading: isFetching, users, error, isError };
   }
   

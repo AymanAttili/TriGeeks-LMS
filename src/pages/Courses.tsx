@@ -1,7 +1,7 @@
-import { Button, Divider, Grid2 as Grid, Typography } from "@mui/material";
+import { Button, Divider, Grid2 as Grid, Paper, Typography } from "@mui/material";
 import SquaredCourseCard from "../ui/SquaredCourseCard";
-import { PageContainer, useDialogs } from "@toolpad/core";
-import AddCourseDialog from "../ui/Dialogs/AddCourseDialog";
+import { useDialogs } from "@toolpad/core";
+import AddCourseDialog from "../features/courses/AddCourseDialog";
 
 const courses = [
   {
@@ -72,8 +72,7 @@ function Courses() {
     dialogs.open(AddCourseDialog);
   }
   return (
-
-    <Grid container flexDirection={'column'} padding={2} spacing={3}>
+    <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3}>
       <Grid container justifyContent={'space-between'}>
         <Typography variant="h4" color="primary.main">
           Courses

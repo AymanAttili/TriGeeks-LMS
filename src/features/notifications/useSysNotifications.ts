@@ -9,7 +9,7 @@ const initialPayload = {
 }
 
 export function useSysNotifications(payload = initialPayload) {
-    const { isFetching, data: notifications  } = useQuery({
+    const { isFetching, data: notifications, error, isError } = useQuery({
         queryKey: ["notifications", payload],
         queryFn: async() => {
             const res = await getNotifications(payload)
@@ -18,5 +18,5 @@ export function useSysNotifications(payload = initialPayload) {
         throwOnError: true
     });
     
-    return { isLoading: isFetching, notifications };
+    return { isLoading: isFetching, notifications, error, isError };
 }

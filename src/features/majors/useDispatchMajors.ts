@@ -11,7 +11,7 @@ export function useDispatchMajors() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
-    const { mutateAsync: majorsDispatch, isPending, isError } = useMutation({
+    const { mutateAsync: majorsDispatch, isPending, error, isError } = useMutation({
         mutationFn: async ({payload, action}: data) => {
             switch(action){
                 case 'add': await addMajor(payload.departmentId,payload.name); break;
@@ -36,5 +36,5 @@ export function useDispatchMajors() {
         }
     });
 
-    return { majorsDispatch, isLoading: isPending, isError };
+    return { majorsDispatch, isLoading: isPending, error, isError };
 }

@@ -1,18 +1,18 @@
-import { Box, Chip, Dialog, DialogContent, DialogTitle, FormControl, Grid2 as Grid, List, ListItem, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Chip, Dialog, DialogContent, DialogTitle, Grid2 as Grid, MenuItem, TextField, Typography } from '@mui/material';
 import { MuiTelInput } from 'mui-tel-input'
 import { Controller, useForm } from 'react-hook-form';
-import AddUserDialogStepper from '../../features/users/Admin/AddUserDialogStepper';
+import AddUserDialogStepper from './Admin/AddUserDialogStepper';
 import { useState } from 'react';
 import { levels } from '../../Enums/educationLevels';
 import { roles } from '../../Enums/roles';
-import { useMajors } from '../../features/majors/useMajors';
-import { useDepartments } from '../../features/departments/useDepartments';
-import { useDispatchUsers } from '../../features/users/useDispatchUsers';
+import { useMajors } from '../majors/useMajors';
+import { useDepartments } from '../departments/useDepartments';
+import { useDispatchUsers } from './useDispatchUsers';
 import { gender } from '../../Enums/gender';
 
 function AddUserDialog({ payload, open, onClose }) {
-    const { usersDispatch, isError } = useDispatchUsers();
-    const { register, handleSubmit, watch, control, setError, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
+    const { usersDispatch, isError, isLoading: dispatchingUser } = useDispatchUsers();
+    const { register, handleSubmit, watch, control, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
     const [activeStep, setActiveStep] = useState(0);
     const { majors, isLoading: fetchingMajors } = useMajors(watch('departmentId'))
     const { departments, isLoading: fetchingDeps } = useDepartments();
@@ -41,7 +41,7 @@ function AddUserDialog({ payload, open, onClose }) {
                 user
             </DialogTitle>
             <DialogContent>
-                <AddUserDialogStepper activeStep={activeStep} setActiveStep={setActiveStep} isValid={isValid} isEdit={!!user}>
+                <AddUserDialogStepper activeStep={activeStep} setActiveStep={setActiveStep} isValid={isValid} isEdit={!!user} isLoading={dispatchingUser || isValidating}>
                     <Box display={activeStep === 0 ? 'box' : 'none'} sx={{ justifySelf: 'start' }}>
                         <Typography variant='h5' mt={3} mb={1} >
                             User Information
@@ -221,7 +221,7 @@ function AddUserDialog({ payload, open, onClose }) {
                                     sx={{
                                         minWidth: '200px',
                                     }}
-                                    defaultValue={majors.length > 0 ? user?.major?.id : ''}
+                                    defaultValue={majors?.length > 0 ? user?.major?.id : ''}
                                 >
                                     {majors?.map((option) => (
                                         <MenuItem key={option.id} value={option.id}>

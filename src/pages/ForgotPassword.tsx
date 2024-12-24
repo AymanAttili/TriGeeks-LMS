@@ -1,19 +1,18 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
-import { Button, FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
-import { useNotifications } from '@toolpad/core'
+import { FormHelperText, Grid2 as Grid, IconButton, InputLabel, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 import { useDialogs } from '@toolpad/core/useDialogs';
 
-import { forgotPassword } from '../services/apiAuth'
 
 import logo from '../images/logo.jpg'
+import { useForgotPassword } from '../features/authentication/useForgotPassword';
+import LoadingButton from '@mui/lab/LoadingButton'
 
 
 const ForgotPassword = () => {
-    const notifications = useNotifications();
+    const { forgotPassword, isLoading, isError } = useForgotPassword()
 
     const {
         register,
@@ -24,28 +23,21 @@ const ForgotPassword = () => {
     const navigate = useNavigate();
 
     const onSending = async ({ workId }) => {
-        forgotPassword(workId)
-            .then(async () => {
-                const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
-                    okText: `I didn't recieve the link.`,
-                    cancelText: `Recieved`,
-                    title: 'Link sent'
-                });
-                if (confirmed) {
-                    notifications.show('Please verify if the work ID is correct', {
-                        severity: 'warning',
-                        autoHideDuration: 3000,
-                    });
-                    return;
-                }
-                navigate('/login')
-            })
-            .catch(() => {
-                notifications.show('Please verify if the work ID is correct', {
-                    severity: 'warning',
-                    autoHideDuration: 3000,
-                });
-            })
+        await forgotPassword(workId)
+        console.log(isError);
+
+
+        const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
+            okText: `I didn't recieve the link.`,
+            cancelText: `Recieved`,
+            title: 'Link sent'
+        });
+        if (confirmed) {
+            await forgotPassword(workId)
+            await dialogs.alert(`The reset link sent again, if you didn't recieve the link, please check spam box.`)
+            return;
+        }
+        navigate('/login')
     }
 
 
@@ -83,14 +75,26 @@ const ForgotPassword = () => {
                                 aria-describedby="id-helper-text"
                                 size='small'
                                 fullWidth
+                                disabled={isLoading}
                             ></TextField>
                             <FormHelperText id="id-helper-text" >
                                 Use your registered workId to receive the link to reset your password.
                             </FormHelperText>
                         </Grid>
 
-                        <Button type='submit' variant="contained" fullWidth
-                        >Send link</Button>
+
+
+                        <LoadingButton
+                            type="submit"
+                            disabled={isLoading}
+                            fullWidth
+                            variant="contained"
+                            aria-label="Login"
+                            loading={isLoading}
+                            loadingPosition="start"
+                        >
+                            Send link
+                        </LoadingButton>
                     </Grid>
                 </Grid>
             </Grid>

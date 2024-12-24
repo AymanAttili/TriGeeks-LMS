@@ -11,13 +11,13 @@ export function useDispatchDepartment() {
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
-    const { mutateAsync: departmentDispatch, isPending, data } = useMutation({
+    const { mutateAsync: departmentDispatch, isPending, data, error, isError } = useMutation({
         mutationFn: async ({payload, action}: data) => {
             switch(action){
                 case 'add': await addDepartment(payload.name); break; 
                 case 'edit': await editDepartment(payload.id, payload.name); break; 
                 case 'delete': await deleteDepartment(payload.id); break;
-                case 'get': return await getDepartment(payload.id)
+                case 'get': return await getDepartment(payload.id);
                 default: throw new Error('Unknown action')
             }
         },
@@ -40,5 +40,5 @@ export function useDispatchDepartment() {
         }
     });
 
-    return { departmentDispatch, isLoading: isPending, department: data };
+    return { departmentDispatch, isLoading: isPending, department: data, error, isError };
 }

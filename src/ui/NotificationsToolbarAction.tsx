@@ -88,6 +88,12 @@ function NotificationsToolbarAction() {
                             </Grid>
                         )
                     }
+                    {
+                        notifications?.items.length === 0 &&
+                        <Typography padding={2} textAlign={'center'}>
+                            You don't have any notification yet.😎
+                        </Typography>
+                    }
 
                     <Button fullWidth onClick={
                         () => {

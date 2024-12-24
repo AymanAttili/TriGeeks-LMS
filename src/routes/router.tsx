@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     children: [
       {
         element: (
-          <PrivateRoute checkAuth="true">
+          <PrivateRoute checkAuth={true}>
             <Outlet />
           </PrivateRoute>
         ),
@@ -45,19 +45,6 @@ const router = createBrowserRouter([
               { index: true, element: <Navigate to="dashboard" replace /> },
               { path: "dashboard", element: <Dashboard /> },
               { path: "account", element: <Account /> },
-              {
-                path: "courses", children: [
-                  { index: true, element: <Courses /> },
-
-                  {
-                    path: ":courseId",
-                    children: [
-                      { index: true, element: <Course /> },
-                      { path: "quiz/:quizId", element: <Quiz /> },
-                    ],
-                  },
-                ]
-              },
               {
                 path: "notifications", children: [
                   { index: true, element: <Notifications /> },
@@ -91,6 +78,19 @@ const router = createBrowserRouter([
                       { path: ":departmentId", element: <Department /> },
                     ],
                   },
+                  {
+                    path: "courses", children: [
+                      { index: true, element: <Courses /> },
+
+                      {
+                        path: ":courseId",
+                        children: [
+                          { index: true, element: <Course /> },
+                          { path: "quiz/:quizId", element: <Quiz /> },
+                        ],
+                      },
+                    ]
+                  },
                 ],
               },
               // SubAdmin & Staff routes
@@ -100,7 +100,21 @@ const router = createBrowserRouter([
                     <Outlet />
                   </PrivateRoute>
                 ),
-                children: [{ path: "my-courses", element: <MyCourses /> }],
+                children: [
+                  {
+                    path: "my-courses", children: [
+                      { index: true, element: <MyCourses /> },
+
+                      {
+                        path: ":courseId",
+                        children: [
+                          { index: true, element: <Course /> },
+                          { path: "quiz/:quizId", element: <Quiz /> },
+                        ],
+                      },
+                    ]
+                  },
+                ],
               },
               // SubAdmin & Admin routes
               {
@@ -109,7 +123,9 @@ const router = createBrowserRouter([
                     <Outlet />
                   </PrivateRoute>
                 ),
-                children: [{ path: "certificates", element: <Certificates /> }],
+                children: [
+                  { path: "certificates", element: <Certificates /> }
+                ],
               },
             ],
           },

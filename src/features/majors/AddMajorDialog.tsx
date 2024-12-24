@@ -1,7 +1,8 @@
 import { Add } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useDispatchMajors } from '../../features/majors/useDispatchMajors';
+import { useDispatchMajors } from './useDispatchMajors';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function AddMajorDialog({ payload, open, onClose }) {
     const { register, handleSubmit } = useForm();
@@ -32,9 +33,9 @@ function AddMajorDialog({ payload, open, onClose }) {
             </DialogContent>
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>
-                <Button type='submit' variant='outlined' disabled={isLoading} endIcon={<Add />} >
-                    {payload.departmentId ? 'Edit' : 'Add'}
-                </Button>
+                <LoadingButton type='submit' variant='outlined' loading={isLoading} disabled={isLoading} loadingPosition='end' endIcon={<Add />} >
+                    {payload ? 'Edit' : 'Add'}
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

@@ -1,8 +1,7 @@
-import { AxiosError } from "axios";
 import axiosAPI from "../API/axiosAPI";
-import { clearTokens, getAccessToken, getRefreshToken } from "../utils/handleTokens";
+import { clearTokens, getAccessToken } from "../utils/handleTokens";
 import { convertToJson } from "../utils/helpers";
-import { refreshToken, revokeRefreshToken } from "./apiAuth";
+import { refreshToken } from "./apiAuth";
 
 export type User = {
     workId: string,

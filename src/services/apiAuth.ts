@@ -28,16 +28,13 @@ export async function resetPasswordTokenValidation(workId: string, token: string
     })
 }
 
-export async function resetPassword(workId: string, token: string, newPassword: string) {
-    return await axiosAPI.post(`/identity/reset-forgotten-password`, {
-        workId,
-        token,
-        newPassword
-    })
+export async function resetPassword(payload: ResetPasswordPayload) {
+    return await axiosAPI.post(`/identity/reset-forgotten-password`, payload)
 }
 
 export async function forgotPassword(workId: string) {
-    return await axiosAPI.post(`/identity/forgot-password`, { workId })
+    await axiosAPI.post(`/identity/forgot-password`, { workId })
+    return workId;
 }
 
 
@@ -53,4 +50,11 @@ export async function refreshToken() {
     axiosAPI.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
     return response;
+}
+
+
+type ResetPasswordPayload = {
+    workId: string,
+    token: string,
+    newPassword: string
 }

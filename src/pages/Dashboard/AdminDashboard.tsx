@@ -20,7 +20,6 @@ function AdminDashboard() {
             component={Card}
             sx={{
                 width: "100%",
-                margin: 1,
                 padding: 2,
                 borderRadius: 2,
                 alignSelf: "center",

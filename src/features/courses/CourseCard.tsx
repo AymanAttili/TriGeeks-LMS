@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from "prop-types";
 import {
   Avatar,
@@ -12,6 +11,7 @@ import {
 } from "@mui/material";
 import theme from "../../utils/theme";
 import GreenCheckIcon from "../../ui/GreenCheckIcon";
+import logo from '../../images/logo.jpg'
 
 function CourseCard({ course }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -29,7 +29,7 @@ function CourseCard({ course }) {
         }}
       >
         <Avatar
-          src={"./logo.jpg"}
+          src={logo}
           style={{
             width: "9rem",
             height: "9rem",
@@ -46,7 +46,7 @@ function CourseCard({ course }) {
             alignItems: isSmallScreen ? "center" : "",
             gap: 2,
           }}
-          // height={150}
+        // height={150}
         >
           <Typography variant="h6">{course.title}</Typography>
           <Typography variant="body2" color="textSecondary">

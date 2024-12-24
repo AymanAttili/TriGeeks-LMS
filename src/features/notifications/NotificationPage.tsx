@@ -26,7 +26,10 @@ function NotificationPage() {
         return <Navigate replace to='/' />
 
     return (
-        <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3} flex={1} margin={{ md: 2 }}>
+        <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3} flex={1}>
+            <Link component={RouterLink} to={'/notifications'} >
+                ⇠ To all notifications
+            </Link>
             <Grid container justifyContent={'space-between'}>
                 <Typography variant="h4" color="primary.main">
                     Notification: {notificationId}
@@ -49,7 +52,7 @@ function NotificationPage() {
                     <Link component={RouterLink} to={notification?.link} underline={'none'}>Go to material</Link>
                 </Button>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
 

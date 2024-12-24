@@ -5,10 +5,11 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import { Done } from '@mui/icons-material';
 import { Grid2 as Grid } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const steps = ['User inforamtion', 'Contact information', 'Job information'];
 
-export default function AddUserDialogStepper({ children, activeStep, setActiveStep, isValid, isEdit }) {
+export default function AddUserDialogStepper({ children, activeStep, setActiveStep, isValid, isEdit, isLoading }) {
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -45,16 +46,22 @@ export default function AddUserDialogStepper({ children, activeStep, setActiveSt
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
                 {activeStep === steps.length ? (
-                    <Button key='submit' type='submit' variant='contained' endIcon={<Done />}>
+                    <LoadingButton key='submit' type='submit' variant='contained'
+                        loading={isLoading}
+                        disabled={isLoading}
+                        loadingPosition='end'
+                        endIcon={<Done />}>
                         {
                             isValid ?
                                 isEdit ? 'Save'
                                     : 'Add'
                                 : 'Validate'
                         }
-                    </Button>
+                    </LoadingButton>
                 ) : (
-                    <Button key='next' onClick={handleNext} >
+                    <Button
+                        key='next' onClick={handleNext}
+                    >
                         {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                     </Button>
                 )}

@@ -3,7 +3,7 @@ import { getUnreadNotificationsCount } from "../../services/apiNotifications";
 
 
 export function useUnreadSysNotifications() {
-    const { isFetching, data: unreadCount } = useQuery({
+    const { isFetching, data: unreadCount, error, isError } = useQuery({
         queryKey: ["notifications"],
         queryFn: async () => {
             const res = await getUnreadNotificationsCount();
@@ -12,5 +12,5 @@ export function useUnreadSysNotifications() {
         throwOnError: true
     });
 
-    return { isLoading: isFetching, unreadCount };
+    return { isLoading: isFetching, unreadCount, error, isError };
 }

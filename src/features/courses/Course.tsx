@@ -1,7 +1,10 @@
 import React from "react";
-import { Box, Button, Grid2, LinearProgress, Typography } from "@mui/material";
+import { Box, Button, Grid2 as Grid, LinearProgress, Paper, Typography } from "@mui/material";
 
 import Category from "../../ui/course/Category";
+import { Add } from "@mui/icons-material";
+import { useDialogs } from "@toolpad/core";
+import AddSectionDialog from "./AddSectionDialog";
 
 interface Material {
   id: string;
@@ -16,33 +19,38 @@ interface Category {
 }
 
 const Course: React.FC = () => {
+  const dialogs = useDialogs();
+  const openAddSection = async () => {
+    await dialogs.open(AddSectionDialog);
+  }
+
   return (
-    <Grid2
+    <Grid
+      flex={1}
       container
+      flexDirection={'column'}
+      component={Paper}
       spacing={2}
       sx={{
-        height: "fit-content",
         alignItems: "center", // Vertically align content
-        justifyContent: "center", // Horizontally center content
       }}
     >
-      <Grid2
+      <Grid
         spacing={2}
         container
         sx={{
           width: "100%",
-          backgroundColor: "#f5f5f5",
+
           borderRadius: 2,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Grid2
+        <Grid
           spacing={2}
           sx={{
             width: "90%",
-            backgroundColor: "#f5f5f5",
             padding: 2,
             borderRadius: 2,
             display: "flex",
@@ -63,7 +71,7 @@ const Course: React.FC = () => {
             </Typography>
 
             {/* Progress Bar */}
-            <Grid2
+            <Grid
               container
               sx={{ width: "40%", maxWidth: "250px" }}
               alignItems={"center"}
@@ -84,7 +92,7 @@ const Course: React.FC = () => {
               <Typography sx={{ marginLeft: 1, fontSize: 12 }}>
                 {60}%
               </Typography>
-            </Grid2>
+            </Grid>
 
             {/*TODO : add grade here*/}
             <Typography variant="body1" fontWeight="bold" sx={{ marginTop: 2 }}>
@@ -111,7 +119,7 @@ const Course: React.FC = () => {
               Download Certificate
             </Button>
           </Box>
-        </Grid2>
+        </Grid>
         {/* {Categories} */}
         <Box
           sx={{
@@ -123,14 +131,33 @@ const Course: React.FC = () => {
             borderRaduis: "20%",
           }}
         >
-          <Grid2 container spacing={1} flexDirection={"column"}>
+          <Grid container spacing={1} flexDirection={"column"}>
             <Category />
             <Category />
             <Category />
-          </Grid2>
+            <Grid container paddingTop={2}>
+              <Button
+                onClick={openAddSection}
+                variant="outlined"
+                startIcon={<Add />}
+                sx={{
+                  borderColor: "#008080",
+                  color: "#008080",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: "#E0F7F7",
+                    borderColor: "#008080",
+                  },
+                }}
+              >
+                Add new section
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 

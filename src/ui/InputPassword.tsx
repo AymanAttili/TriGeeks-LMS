@@ -2,9 +2,11 @@ import React from 'react';
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { IconButton, InputAdornment, TextField } from "@mui/material"
 
-function InputPassword({ id, label, showPassword, handleClickShowPassword, register, size = 'normal' }) {
+function InputPassword({ id, label, showPassword, handleClickShowPassword, register, size = 'normal', isLoading = false }) {
     return (
-        <TextField id={id} label={label} fullWidth variant="outlined" size={size} type={showPassword ? 'text' : 'password'}
+        <TextField id={id} label={label} fullWidth variant="outlined" size={size}
+            disabled={isLoading}
+            type={showPassword ? 'text' : 'password'}
             {...register(id, { required: true })}
             slotProps={{
                 input: {

@@ -2,9 +2,8 @@ import { Add, AttachFile, Link } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import CloudUpload from '@mui/icons-material/CloudUpload';
-import { useDispatchFiles } from '../../features/courses/useDispatchFiles';
-import VisuallyHiddenInput from '../VisuallyHiddenInput';
+import VisuallyHiddenInput from '../../ui/VisuallyHiddenInput';
+import { useDispatchFiles } from './useDispatchFiles';
 
 
 function AddMaterialDialog({ payload, open, onClose }) {

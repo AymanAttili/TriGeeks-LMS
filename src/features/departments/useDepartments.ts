@@ -3,7 +3,7 @@ import { getDepartments } from "../../services/apiDepartments";
 
 export function useDepartments() {
 
-    const { isFetching, data: departments } = useQuery({
+    const { isFetching, data: departments, error, isError } = useQuery({
         queryKey: ["departments"],
         queryFn: async () => {
             return await getDepartments()
@@ -12,5 +12,5 @@ export function useDepartments() {
         throwOnError: true
     });
 
-    return { isLoading: isFetching, departments };
+    return { isLoading: isFetching, departments, error, isError };
 }

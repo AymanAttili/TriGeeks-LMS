@@ -3,7 +3,7 @@ import { getMajors } from "../../services/apiMajors";
 
 export function useMajors(departmentId: number) {
 
-    const { isFetching, data: majors } = useQuery({
+    const { isFetching, data: majors, error, isError } = useQuery({
         queryKey: ["majors", departmentId],
         queryFn: async () => {   
             if(departmentId)             
@@ -12,5 +12,5 @@ export function useMajors(departmentId: number) {
         },
     });
 
-    return { isLoading: isFetching, majors };
+    return { isLoading: isFetching, majors, error, isError };
 }
