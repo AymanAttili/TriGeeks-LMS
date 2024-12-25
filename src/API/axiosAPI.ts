@@ -23,7 +23,7 @@ axiosAPI.interceptors.response.use(response => {
     return response;
 }, async (error) => {
     const request = error.request;
-    
+
     if (request.__URL__.includes('refresh-token')) {
         throw new AxiosError(error)
     }
@@ -35,7 +35,6 @@ axiosAPI.interceptors.response.use(response => {
         axiosAPI.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
         return await axiosAPI(request);
-
     }
     throw new AxiosError(error);
 });

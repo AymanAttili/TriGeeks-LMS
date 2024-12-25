@@ -101,7 +101,7 @@ function Account() {
     },
   };
 
-  const isvalidFile = (profilePicture) => {
+  const isValidFile = (profilePicture) => {
     const allowedExtensions = ["jpg", "png"];
     const fileExtension = profilePicture[0]?.name.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension)
@@ -120,17 +120,16 @@ function Account() {
     };
 
     handleFileChange(watch('profilePicture'))
-  }, [watch])
+  }, [watch('profilePicture')])
 
 
   const updateProfile = async (data) => {
-    console.log(data);
 
     if (!data.profilePicture.length) {
       profileBtn?.current.click();
       return;
     }
-    if (!isvalidFile(data.profilePicture)) {
+    if (!isValidFile(data.profilePicture)) {
       await dialogs.alert('Please upload a valid profile picture. (.jpg, .png)')
       reset();
       return;

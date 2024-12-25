@@ -6,7 +6,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 function AddMajorDialog({ payload, open, onClose }) {
     const { register, handleSubmit } = useForm();
-    const { majorsDispatch, isLoading, isError } = useDispatchMajors();
+    const { majorsDispatch, isLoading } = useDispatchMajors();
 
 
     const handleAddDep = async (data) => {
@@ -14,13 +14,14 @@ function AddMajorDialog({ payload, open, onClose }) {
             return;
 
         if (payload?.departmentId)
-            await majorsDispatch({ action: 'edit', payload: { departmentId: payload.departmentId, majorId: payload.id, name: data.name } })
+            await majorsDispatch({
+                action: 'edit', payload: { departmentId: payload.departmentId, majorId: payload.id, name: data.name }
+            }).then(() => onClose());
 
         else
-            await majorsDispatch({ action: 'add', payload: { departmentId: payload.id, name: data.name } })
-
-        if (!isError)
-            onClose();
+            await majorsDispatch({
+                action: 'add', payload: { departmentId: payload.id, name: data.name }
+            }).then(() => onClose());
     }
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddDep)} fullWidth maxWidth={'xs'} open={open} onClose={() => onClose()}>

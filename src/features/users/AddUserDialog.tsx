@@ -9,6 +9,7 @@ import { useMajors } from '../majors/useMajors';
 import { useDepartments } from '../departments/useDepartments';
 import { useDispatchUsers } from './useDispatchUsers';
 import { gender } from '../../Enums/gender';
+import SpinnerLoader from '../../ui/SpinnerLoader';
 
 function AddUserDialog({ payload, open, onClose }) {
     const { usersDispatch, isError, isLoading: dispatchingUser } = useDispatchUsers();
@@ -24,13 +25,10 @@ function AddUserDialog({ payload, open, onClose }) {
             return;
 
         if (user)
-            await usersDispatch({ action: 'edit', payload: { id: user.id, user: data } })
+            await usersDispatch({ action: 'edit', payload: { id: user.id, user: data } }).then(() => onClose());
 
         else
-            await usersDispatch({ action: 'add', payload: { user: data } })
-
-        if (!isError)
-            onClose();
+            await usersDispatch({ action: 'add', payload: { user: data } }).then(() => onClose());
     }
 
 
@@ -198,37 +196,44 @@ function AddUserDialog({ payload, open, onClose }) {
                             }
 
                             <Grid container>
-                                <TextField select label="Department" margin='normal' disabled={isLoading || fetchingDeps}
-                                    error={!!formErrors.departmentId}
-                                    helperText={formErrors.departmentId?.message}
-                                    {...register('departmentId', { required: "Department is required", })}
-                                    sx={{
-                                        minWidth: '200px'
-                                    }}
-                                    defaultValue={user?.department?.id}
-                                >
-                                    {departments?.map((option) => (
-                                        <MenuItem key={option.id} value={option.id}>
-                                            {option.name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                                <TextField select label="Major" margin='normal'
-                                    disabled={isLoading || fetchingMajors || fetchingDeps || !watch('departmentId')}
-                                    error={!!formErrors.majorId}
-                                    helperText={formErrors.majorId?.message}
-                                    {...register('majorId', { required: "Major is required", })}
-                                    sx={{
-                                        minWidth: '200px',
-                                    }}
-                                    defaultValue={majors?.length > 0 ? user?.major?.id : ''}
-                                >
-                                    {majors?.map((option) => (
-                                        <MenuItem key={option.id} value={option.id}>
-                                            {option.name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                {
+                                    !fetchingDeps &&
+                                    <TextField select label="Department" margin='normal' disabled={isLoading || fetchingDeps}
+                                        error={!!formErrors.departmentId}
+                                        helperText={formErrors.departmentId?.message}
+                                        {...register('departmentId', { required: "Department is required", })}
+                                        sx={{
+                                            minWidth: '200px'
+                                        }}
+                                        defaultValue={user?.department?.id}
+                                    >
+                                        {departments?.map((option) => (
+                                            <MenuItem key={option.id} value={option.id}>
+                                                {option.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+
+                                {
+                                    (!fetchingMajors && !fetchingDeps) &&
+                                    <TextField select label="Major" margin='normal'
+                                        error={!!formErrors.majorId}
+                                        helperText={formErrors.majorId?.message}
+                                        {...register('majorId', { required: "Major is required", })}
+                                        sx={{
+                                            minWidth: '200px',
+                                        }}
+                                        defaultValue={user?.major?.id}
+                                    >
+                                        {majors?.map((option) => (
+                                            <MenuItem key={option.id} value={option.id}>
+                                                {option.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+
                             </Grid>
                         </Grid>
                     </Box>

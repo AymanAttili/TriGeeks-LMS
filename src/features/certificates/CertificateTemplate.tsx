@@ -3,8 +3,9 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Button, Grid2 as Grid, Paper, Typography } from '@mui/material';
 import logo from '../../images/logo.jpg'
+import { Task } from '@mui/icons-material';
 
-const CertificateGenerator = ({ userDetails }) => {
+const CertificateGenerator = ({ userDetails, sx = {} }) => {
     const certificateRef = useRef();
 
     const generatePDF = async () => {
@@ -51,7 +52,7 @@ const CertificateGenerator = ({ userDetails }) => {
             </Grid>
 
             {/* Generate PDF Button */}
-            <Button variant='contained' onClick={generatePDF}>Try Certificate</Button>
+            <Button variant='contained' onClick={generatePDF} sx={sx} endIcon={<Task />}>Certificate</Button>
         </Grid>
     );
 };

@@ -3,13 +3,12 @@ import {
   accordionClasses,
   AccordionDetails,
   accordionDetailsClasses,
-  AccordionSlots,
   AccordionSummary,
-  Box,
   Button,
-  Grid2,
-  Grow,
+  Grid2 as Grid,
+  IconButton,
   List,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -19,28 +18,65 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useState } from "react";
 import { useDialogs } from "@toolpad/core";
 import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
+import { useUser } from "../../features/users/useUser";
+import { roleNames } from "../../Enums/roles";
+import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
+import { Delete, Edit } from "@mui/icons-material";
+import AddSectionDialog from "../../features/courses/AddSectionDialog";
 
-const Category: React.FC = () => {
+interface CategoryProps {
+  section: {
+    id: number,
+    title: string
+    index: number,
+    sectionParts: []
+  },
+  courseId: string
+}
+
+
+const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
   const dialogs = useDialogs();
-  const [expanded, setExpanded] = useState(false);
+
+  const { user } = useUser();
+  const { courseDispatch, isLoading } = useDispatchCourse();
+
+  const [expanded, setExpanded] = useState(true);
 
   const handleExpansion = () => {
     setExpanded((prevExpanded) => !prevExpanded);
   };
-  const openAddMaterial = () => {
-    dialogs.open(AddMaterialDialog);
+  const openAddMaterial = async () => {
+    await dialogs.open(AddMaterialDialog, { sectionId: section.id });
   };
+
+  const handleEdit = async () => {
+    await dialogs.open(AddSectionDialog, { section, courseId });
+  };
+
+  const handleDelete = async () => {
+    const ok = await dialogs.confirm('Are you sure you want to delete this Course?', {
+      severity: "error",
+      okText: 'Delete',
+      title: 'Delete Course',
+    }
+    )
+
+    if (ok) {
+      await courseDispatch({ action: 'deleteSection', payload: { courseId, sectionId: section.id } })
+    }
+  }
   return (
-    <>
+    <Grid container flexDirection={'column'} padding={1.5} border={2} borderRadius={2} borderColor={'primary.light'}>
       <Accordion
         expanded={expanded}
         onChange={handleExpansion}
-        slots={{ transition: Grow as AccordionSlots["transition"] }}
-        slotProps={{ transition: { timeout: 400 } }}
+        // slots={{ transition: Grow as AccordionSlots["transition"] }}
+        slotProps={{ transition: { timeout: 600 } }}
         sx={[
           {
+            borderRadius: 5,
             // Curved corners on the overall Accordion component
-            borderRadius: 1,
             overflow: "hidden", // Ensures that contents respect the rounded corners
           },
           expanded
@@ -62,13 +98,13 @@ const Category: React.FC = () => {
             },
         ]}
       >
-        <Box
+        <Grid
+          container
+          flexDirection={{ sx: 'column', sm: 'row' }}
           sx={{
-            backgroundColor: "primary.main",
-            // padding: 1,
-            display: "flex",
+            backgroundColor: "primary.light",
             alignItems: "center",
-            justifyContent: "",
+            justifyContent: "space-between",
             // mb: 1,
           }}
         >
@@ -81,7 +117,6 @@ const Category: React.FC = () => {
                 sx={{
                   width: "26px",
                   height: "26px",
-                  backgroundColor: "white",
                   borderRadius: "50%",
                 }}
               />
@@ -89,70 +124,80 @@ const Category: React.FC = () => {
             aria-controls="panel2-content"
             id="panel2-header"
           >
-            <Typography
-              sx={{ ml: 1 }}
-              fontWeight="bold"
-              color="white"
-              fontSize={18}
-            >
-              Category 1
-            </Typography>
+            <Grid container size={12} alignItems={'center'} justifyContent={'space-between'}>
+              <Typography
+                variant="h6"
+                sx={{ ml: 1 }}
+                fontWeight="bold"
+                color="primary.main"
+              >
+                {section.title}
+              </Typography>
+              { //TODO: fixing view
+                roleNames[user?.role] !== 'Staff' &&
+                <Grid container spacing={1}>
+                  <Tooltip title={'Edit'}>
+                    <IconButton onClick={handleEdit} disabled={isLoading} >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title={'Delete'}>
+                    <IconButton color="error" onClick={handleDelete} disabled={isLoading} >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              }
+            </Grid>
           </AccordionSummary>
-        </Box>
+
+        </Grid>
         <AccordionDetails>
           {/* Materials : )  */}
           <List sx={{ padding: 0 }}>
-            <MaterialListItem isLink={true} isFile={false} />
-            <MaterialListItem isLink={false} isFile={true} />
-            <MaterialListItem isLink={true} isFile={false} />
+            {
+              section.sectionParts?.sort((it1, it2) => it1.index - it2.index).map((sectionPart) => <MaterialListItem key={sectionPart.id} sectionPart={sectionPart} />)
+            }
+
           </List>
 
-          <Grid2
-            container
-            spacing={1}
-            sx={{
-              padding: 2,
-
-              borderTop: "1px solid #E0E0E0",
-            }}
-          >
-            <Button
-              variant="outlined"
-              startIcon={<AddCircleOutlineIcon />}
+          {
+            roleNames[user?.role] !== 'Staff' &&
+            <Grid
+              container
+              spacing={1}
+              flexDirection={{ xs: 'column', sm: 'row' }}
               sx={{
-                borderColor: "#008080",
-                color: "#008080",
-                textTransform: "none",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: "#E0F7F7",
-                  borderColor: "#008080",
-                },
-              }}
-              onClick={openAddMaterial}
-            >
-              Add new material
-            </Button>
-            <Button
-              variant="outlined"
-              startIcon={<QuizIcon />}
-              sx={{
-                borderColor: "#008080",
-                color: "#008080",
-                textTransform: "none",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: "#E0F7F7",
-                  borderColor: "#008080",
-                },
+                padding: 2,
+                borderTop: "1px solid #E0E0E0",
               }}
             >
-              Add new Quiz
-            </Button>
-          </Grid2>
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleOutlineIcon />}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: "bold",
+                }}
+                onClick={openAddMaterial}
+              >
+                Add new material
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<QuizIcon />}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                Add new Quiz
+              </Button>
+            </Grid>
+          }
         </AccordionDetails>
-      </Accordion>
-    </>
+      </Accordion >
+    </Grid>
   );
 };
 

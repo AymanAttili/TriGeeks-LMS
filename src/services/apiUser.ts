@@ -2,6 +2,7 @@ import axiosAPI from "../API/axiosAPI";
 import { clearTokens, getAccessToken } from "../utils/handleTokens";
 import { convertToJson } from "../utils/helpers";
 import { refreshToken } from "./apiAuth";
+import { addFile } from "./apiFiles";
 
 export type User = {
     workId: string,
@@ -51,15 +52,8 @@ export async function fetchUser() {
 }
 
 export async function updateProfilePicture(file){
-    const formData = new FormData();
-    formData.append('file', file);
-    const response = await axiosAPI.post('/files', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    })
+    const fileId : string =  (await addFile(file)).data.fileId
 
-    const fileId : string = response.data.fileId
     return await axiosAPI.patch('/user/profile-picture',
         [
             {

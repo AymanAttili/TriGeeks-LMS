@@ -3,6 +3,7 @@ import { Button, Card, Grid2 as Grid, Link, Paper, Typography } from "@mui/mater
 import { useNotificationsReader } from "./useNotificationsReader";
 import { useEffect, useMemo } from "react";
 import { useSysNotifications } from "./useSysNotifications";
+import { convertDate } from "../../utils/helpers";
 
 function NotificationPage() {
     const { notificationId } = useParams();
@@ -32,16 +33,16 @@ function NotificationPage() {
             </Link>
             <Grid container justifyContent={'space-between'}>
                 <Typography variant="h4" color="primary.main">
-                    Notification: {notificationId}
+                    {notification?.title}
                 </Typography>
             </Grid>
             <Grid component={Card} container flexDirection={'column'} alignItems={'start'} justifyContent={'space-between'} padding={2} minHeight={'50%'}>
-                <Grid container flexDirection={'column'}>
+                <Grid container flexDirection={'column'} >
                     <Typography variant="h5">
                         {notification?.title}
                     </Typography>
-                    <Typography>
-                        {notification?.content}
+                    <Typography fontSize={16} color="grey" marginTop={2} >
+                        {convertDate(notification?.createdAtUtc)}
                     </Typography>
                 </Grid>
 

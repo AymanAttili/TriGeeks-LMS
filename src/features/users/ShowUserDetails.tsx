@@ -141,7 +141,7 @@ function ShowUserDetails({ payload, open, onClose }) {
                   readOnly: true,
                 },
               }}
-              value={user.department.name}
+              value={user.department?.name || '--'}
             />
             <TextField
               label="Major"
@@ -152,7 +152,7 @@ function ShowUserDetails({ payload, open, onClose }) {
                   readOnly: true,
                 },
               }}
-              value={user.major.name}
+              value={user.major?.name || '--'}
             />
             <TextField
               label="Role"

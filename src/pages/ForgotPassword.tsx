@@ -24,8 +24,6 @@ const ForgotPassword = () => {
 
     const onSending = async ({ workId }) => {
         await forgotPassword(workId)
-        console.log(isError);
-
 
         const confirmed = await dialogs.confirm('The Reset Link has been sent successfully to your e-mail✅!', {
             okText: `I didn't recieve the link.`,

@@ -6,13 +6,13 @@ const initialQuery = {
     pageSize: 9999
 }
 
-export function useCourse(query = initialQuery) {
+export function useCourses(query = initialQuery) {
 
-    const { isFetching, data: course, error, isError } = useQuery({
-        queryKey: ["course", query],
-        queryFn: async () => await searchCourses(query),
+    const { isFetching, data: courses, error, isError } = useQuery({
+        queryKey: ["courses", query],
+        queryFn: async () => (await searchCourses(query)).data.items,
         throwOnError: true
     });
 
-    return { isLoading: isFetching, course, error, isError };
+    return { isLoading: isFetching, courses, error, isError };
 }

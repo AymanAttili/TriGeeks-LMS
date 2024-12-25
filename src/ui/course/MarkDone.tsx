@@ -1,22 +1,29 @@
+import { Done } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import React from "react";
+interface MarkDoneAttributes {
+  done: boolean
+}
 
-const MarkDone: React.FC = () => {
+const MarkDone: React.FC<MarkDoneAttributes> = ({ done = false }) => {
+  // const { course } = useCourse();
+
+  // const toggleSectionPartDone
   return (
     <Button
-      variant="contained"
+      variant={"outlined"}
+      color={done ? 'primary' : 'inherit'}
+      startIcon={done ? <Done /> : ''}
+      size={'small'}
       sx={{
-        backgroundColor: "##3ba3a0d8",
-        color: "primary",
-        textTransform: "none",
-        fontWeight: "bold",
         borderRadius: 5,
-        "&:hover": {
-          backgroundColor: "#016c6cd2",
-        },
+        border: 2
       }}
+
+    // onClick={toggleSectionPartDone}
     >
-      Mark as done
+      {!done && 'Mark as '}
+      Done
     </Button>
   );
 };

@@ -159,6 +159,7 @@ function Users() {
             <DataGrid
                 loading={fetchingUsers || dispatchingUser}
                 rows={users?.items}
+                isCellEditable={() => false}
                 columns={columns}
                 rowCount={rowCount}
                 editMode="row"
@@ -179,7 +180,7 @@ function Users() {
                         bgcolor: 'primary.light'
                     }
                 }}
-                pageSizeOptions={[5, 10, 25, 50]}
+                pageSizeOptions={[5, 10, 15, 25, 50]}
                 paginationMode='server'
                 paginationModel={{
                     ...paginationModel,
@@ -219,7 +220,6 @@ function Users() {
                     }
                 }
 
-                // disableColumnFilter
                 disableColumnSorting
             />
         </Grid>

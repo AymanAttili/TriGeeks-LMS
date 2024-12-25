@@ -1,4 +1,4 @@
-import { Badge, Button, FormHelperText, Grid2 as Grid, Paper, Typography } from "@mui/material"
+import { Badge, Button, Grid2 as Grid, Paper, Typography } from "@mui/material"
 import { useSysNotifications } from "../features/notifications/useSysNotifications"
 import { useNavigate } from "react-router-dom";
 import { convertDate } from "../utils/helpers";
@@ -6,7 +6,7 @@ import { useNotificationsReader } from "../features/notifications/useNotificatio
 import { useDialogs } from "@toolpad/core";
 
 function Notifications() {
-    const { notifications } = useSysNotifications();
+    const { notifications } = useSysNotifications(); //TODO: adding pagination
     const { notificationsReader } = useNotificationsReader();
 
     const navigate = useNavigate();

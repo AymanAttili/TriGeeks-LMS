@@ -31,11 +31,6 @@ const useDashboardNavigation = (userRole) => {
                 icon: <PiUserBold size='24' />,
             },
             {
-                segment: 'certificates',
-                title: 'Certificates',
-                icon: <PiCertificateFill size='24' />
-            },
-            {
                 kind: 'divider'
             }, {
                 segment: 'account',
@@ -50,18 +45,9 @@ const useDashboardNavigation = (userRole) => {
         ],
         SubAdmin: [
             {
-                segment: 'dashboard',
-                title: 'Dashboard',
-                icon: <Dashboard />,
-            }, {
                 segment: 'my-courses',
                 title: 'My Courses',
                 icon: <MenuBookIcon />,
-            },
-            {
-                segment: 'certificates',
-                title: 'Certificates',
-                icon: <PiCertificateFill size='24' />
             },
             {
                 kind: 'divider'
@@ -85,11 +71,6 @@ const useDashboardNavigation = (userRole) => {
                 segment: 'my-courses',
                 title: 'My Courses',
                 icon: <MenuBookIcon />,
-            },
-            {
-                segment: 'my-certificates',
-                title: 'My Certificates',
-                icon: <PiCertificateFill size='24' />
             },
             {
                 kind: 'divider'

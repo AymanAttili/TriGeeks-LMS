@@ -12,17 +12,16 @@ function ChangePasswordDialog({ payload, open, onClose }) {
     const currentPassword = watch('currentPassword')
     const newPassword = watch('newPassword')
 
-    const { usersDispatch, isError, isLoading: dispatchingUser } = useDispatchUsers();
+    const { usersDispatch, isLoading: dispatchingUser } = useDispatchUsers();
 
 
     const handleAddDep = async (data) => {
         if (!data)
             return;
 
-        await usersDispatch({ action: 'changePassword', payload: { currentPassword: data.currentPassword, newPassword: data.newPassword } })
-
-        if (!isError)
-            return onClose();
+        await usersDispatch({
+            action: 'changePassword', payload: { currentPassword: data.currentPassword, newPassword: data.newPassword }
+        }).then(() => onClose());
     }
 
     const handleClickShowPassword = () => {

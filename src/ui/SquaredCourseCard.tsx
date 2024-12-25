@@ -12,17 +12,23 @@ import {
 import HorizIconOptions from "./HorizIconOptions";
 import logo from '../images/logo.jpg'
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../features/users/useUser";
+import { roleNames } from "../Enums/roles";
 
 interface CourseCardProps {
   courseId: string;
   courseName: string;
-  department: string;
   progress: number;
+  createdBy: {
+    name: string,
+    id: number
+  }
 }
 
 
 function CourseCard(props: CourseCardProps) {
-  const { courseId, courseName, department, progress } = props; // todo implementing course hook (react query)
+  const { courseId, courseName, progress = 0, createdBy = '' } = props; // todo implementing course hook (react query)
+  const { user } = useUser();
 
   const navigate = useNavigate();
 
@@ -83,39 +89,43 @@ function CourseCard(props: CourseCardProps) {
               {courseName}
             </Typography>
             <Typography color="text.secondary">
-              {department}
+              {createdBy.name}
             </Typography>
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            mt: 2,
-            justifyContent: "space-between",
-            gap: 3,
-            width: "100%",
-          }}
-        >
-          <LinearProgress
-            variant="determinate"
-            value={progress}
+        {
+          roleNames[user.role] === 'Staff' &&
+          <Box
             sx={{
-              height: 8,
-              borderRadius: 5,
+              display: "flex",
+              alignItems: "center",
+              mt: 2,
+              justifyContent: "space-between",
+              gap: 3,
               width: "100%",
-              "& .MuiLinearProgress-bar": {
-                borderRadius: 4,
-              },
             }}
-          />
-          <Typography
-            sx={{ width: "fit-content" }}
-            variant="body2"
-            color="text.secondary"
-          >{`${progress}% `}</Typography>
-          <HorizIconOptions />
-        </Box>
+          >
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              sx={{
+                height: 8,
+                borderRadius: 5,
+                width: "100%",
+                "& .MuiLinearProgress-bar": {
+                  borderRadius: 4,
+                },
+              }}
+            />
+            <Typography
+              sx={{ width: "fit-content" }}
+              variant="body2"
+              color="text.secondary"
+            >{`${progress}% `}</Typography>
+            <HorizIconOptions />
+          </Box>
+        }
+
       </CardContent>
     </Grid>
   );

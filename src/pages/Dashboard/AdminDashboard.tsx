@@ -2,16 +2,17 @@ import AnalysisCard from '../../ui/AnalysisCard';
 import { Card, CardContent, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { PiCertificateFill } from 'react-icons/pi';
 import { AccountBox } from '@mui/icons-material';
 import { useDepartments } from '../../features/departments/useDepartments';
 import { useUsers } from '../../features/users/useUsers';
+import { useCourses } from '../../features/courses/useCourses';
 
 
 function AdminDashboard() {
     // const {courses} = useCourses()
     const { departments } = useDepartments();
     const { users } = useUsers();
+    const { courses } = useCourses();
 
     return (
         <Grid
@@ -39,9 +40,9 @@ function AdminDashboard() {
                     height={"100%"}
                 >
                     <AnalysisCard
-                        title={"#Active Courses"}
+                        title={"#Courses"}
                         filter={"courses"}
-                        num={6}
+                        num={courses?.length}
                         icon={<MenuBookIcon />}
                         key={"courses"}
                     />
@@ -58,13 +59,6 @@ function AdminDashboard() {
                         icon={<HomeWorkIcon />}
                         num={departments?.length}
                         key={"departments"}
-                    />
-                    <AnalysisCard
-                        title={"#Certificates"}
-                        filter={"certificates"}
-                        num={8}
-                        icon={<PiCertificateFill size='24' />}
-                        key={"certificates"}
                     />
                 </Grid>
             </Grid>

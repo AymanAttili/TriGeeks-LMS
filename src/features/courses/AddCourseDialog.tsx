@@ -1,17 +1,27 @@
 import { Add } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, InputAdornment, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { useDispatchCourse } from './useDispatchCourse';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function AddCourseDialog({ payload, open, onClose }) {
-    const { register, handleSubmit, watch, formState: { isLoading, errors: formErrors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { isLoading, errors: formErrors } } = useForm();
+    const { courseDispatch, isLoading: dispatchingCourse } = useDispatchCourse();
 
-    const handleAddCourse = (data) => {
+    const handleAddCourse = async (data) => {
         if (!data)
             return;
 
-        onClose();
+        await courseDispatch({
+            action: 'add', payload: {
+                data:
+                {
+                    name: data.courseName,
+                    expectedTimeToFinishHours: data.expectedTimeToFinish,
+                    expirationMonths: data.expiration
+                }
+            }
+        }).then(() => onClose());
     }
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddCourse)} fullWidth maxWidth={'sm'} open={open} onClose={() => onClose()}>
@@ -27,38 +37,47 @@ function AddCourseDialog({ payload, open, onClose }) {
                 />
 
                 <Grid container spacing={2} pt={2}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
-                            disabled={isLoading}
-                            sx={{ marginTop: 1 }}
-                            label="Expiration"
-                            {...register('expiration')}
-                        />
-                    </LocalizationProvider>
+
+                    <TextField label="Expiration" margin='dense'
+                        type={'number'}
+                        slotProps={{
+                            input: {
+                                endAdornment: <InputAdornment position="end">Months</InputAdornment>,
+                            },
+                        }}
+                        defaultValue={12}
+                        disabled={isLoading || dispatchingCourse}
+                        error={!!formErrors.expiration}
+                        helperText={formErrors.expiration?.message}
+                        {...register('expiration', {
+                            required: "Expiration months is required",
+                            min: { value: 1, message: "Number of months should be more than 0" }
+                        })}
+                    />
 
                     <TextField label="Expected time to finish" margin='dense'
                         type={'number'}
                         slotProps={{
                             input: {
-                                endAdornment: <InputAdornment position="end">Days</InputAdornment>,
+                                endAdornment: <InputAdornment position="end">Hours</InputAdornment>,
                             },
                         }}
                         defaultValue={90}
-                        disabled={isLoading}
+                        disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.expectedTimeToFinish}
                         helperText={formErrors.expectedTimeToFinish?.message}
                         {...register('expectedTimeToFinish', {
                             required: "Expected time to finish is required",
-                            min: { value: 1, message: "Number of days should be more than 0" }
+                            min: { value: 1, message: "Number of hours should be more than 0" }
                         })}
                     />
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>
-                <Button type='submit' variant='outlined' disabled={isLoading} endIcon={<Add />} >
+                <Button color='error' variant='outlined' disabled={isLoading || dispatchingCourse} onClick={() => onClose()}>Cancel</Button>
+                <LoadingButton type='submit' variant='outlined' disabled={isLoading || dispatchingCourse} loading={dispatchingCourse} loadingPosition='end' endIcon={<Add />} >
                     Add
-                </Button>
+                </LoadingButton>
             </DialogActions>
         </Dialog >
     );
