@@ -15,7 +15,7 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MaterialListItem from "../../ui/course/MaterialListItem";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDialogs } from "@toolpad/core";
 import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
 import { useUser } from "../../features/users/useUser";
@@ -23,6 +23,7 @@ import { roleNames } from "../../Enums/roles";
 import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
 import { Delete, Edit } from "@mui/icons-material";
 import AddSectionDialog from "../../features/courses/AddSectionDialog";
+import CreateQuizDialog from "../../features/quiz/CreateQuizDialog";
 
 interface CategoryProps {
   section: {
@@ -38,6 +39,8 @@ interface CategoryProps {
 const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
   const dialogs = useDialogs();
 
+  const accordion = useRef(null);
+
   const { user } = useUser();
   const { courseDispatch, isLoading } = useDispatchCourse();
 
@@ -50,11 +53,15 @@ const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
     await dialogs.open(AddMaterialDialog, { sectionId: section.id });
   };
 
-  const handleEdit = async () => {
+  const handleEdit = async (e) => {
+    e.stopPropagation()
+
     await dialogs.open(AddSectionDialog, { section, courseId });
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.stopPropagation()
+
     const ok = await dialogs.confirm('Are you sure you want to delete this Course?', {
       severity: "error",
       okText: 'Delete',
@@ -65,6 +72,10 @@ const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
     if (ok) {
       await courseDispatch({ action: 'deleteSection', payload: { courseId, sectionId: section.id } })
     }
+  }
+
+  const handleAddQuiz = async () => {
+    await dialogs.open(CreateQuizDialog, { sectionId: section.id })
   }
   return (
     <Grid container flexDirection={'column'} padding={1.5} border={2} borderRadius={2} borderColor={'primary.light'}>
@@ -109,6 +120,7 @@ const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
           }}
         >
           <AccordionSummary
+            ref={accordion}
             sx={{
               flexDirection: "row-reverse", // Moves the expand icon to the left
             }}
@@ -190,6 +202,7 @@ const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
                   textTransform: "none",
                   fontWeight: "bold",
                 }}
+                onClick={handleAddQuiz}
               >
                 Add new Quiz
               </Button>

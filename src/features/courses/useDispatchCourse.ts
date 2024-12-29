@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addDepartment, deleteDepartment, editDepartment, getDepartment } from "../../services/apiDepartments";
 import { addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editSection, editSectionPart, finishCourse, getCourse, startCourse, submitExam, toggleSectionPartStatus } from "../../services/apiCourses";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type data = {
