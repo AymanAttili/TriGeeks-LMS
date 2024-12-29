@@ -3,7 +3,7 @@ import axiosAPI from "../API/axiosAPI";
 import { addFile } from "./apiFiles";
 
 export async function getCourse(courseId: string){
-    return await axiosAPI.get(`/courses/${courseId}`)
+    return await axiosAPI.get(`/courses/${courseId}`).catch((err) => new AxiosError(err))
 }
 
 export async function searchCourses(query){
@@ -38,6 +38,9 @@ export async function finishCourse(courseId: string){
     return await axiosAPI.post(`/courses/${courseId}/finish`);
 }
 
+export async function getCoursesOverview() {
+    return await axiosAPI.get('/user/courses-status');
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Section

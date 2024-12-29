@@ -13,6 +13,7 @@ import { useUser } from "../users/useUser";
 import { roleNames } from "../../Enums/roles";
 import { useDispatchCourse } from "./useDispatchCourse";
 import SpinnerLoader from "../../ui/SpinnerLoader";
+import AddCourseDialog from "./AddCourseDialog";
 
 interface Material {
   id: string;
@@ -56,11 +57,11 @@ const Course: React.FC = () => {
   }
 
   const handleEdit = async () => {
-
+    await dialogs.open(AddCourseDialog, { course })
   }
 
   if (isError)
-    return <Navigate replace to={'/courses'} />
+    return <Navigate to='/404' />
 
   if (fetchingCourse)
     return <SpinnerLoader />

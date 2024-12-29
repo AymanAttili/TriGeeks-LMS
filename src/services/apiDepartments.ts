@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import axiosAPI from "../API/axiosAPI";
 
 export async function getDepartment(id: number) {

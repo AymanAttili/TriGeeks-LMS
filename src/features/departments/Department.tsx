@@ -3,7 +3,7 @@ import { Button, Grid2 as Grid, Link, Paper, Table, TableBody, TableCell, TableC
 
 import { useDialogs } from '@toolpad/core';
 import ActionsMenu from '../../ui/ActionsMenu';
-import { useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { useMajors } from '../majors/useMajors';
 
 import { useDispatchMajors } from '../majors/useDispatchMajors';
@@ -11,6 +11,7 @@ import { useDispatchDepartment } from './useDispatchDepartment';
 import { useEffect } from 'react';
 import SpinnerLoader from '../../ui/SpinnerLoader';
 import AddMajorDialog from '../majors/AddMajorDialog';
+import PageNotFound from '../../pages/PageNotFound';
 
 function Department() {
     const { departmentId } = useParams();
@@ -50,6 +51,9 @@ function Department() {
 
     if (fetchingDep || fetchingMajors || dispatchingMajors)
         return <SpinnerLoader />
+
+    if (!department)
+        return <Navigate to='/404' />
 
     return (
         <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} spacing={5} flex={1}>

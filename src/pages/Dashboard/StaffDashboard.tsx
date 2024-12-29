@@ -9,8 +9,10 @@ import DataPieChart from "../../ui/DataPieChart";
 
 import CoursesStatusCard from "../../ui/CoursesStatusCard";
 import { Refresh } from "@mui/icons-material";
+import { useCoursesOverview } from "../../features/courses/useCoursesOverview";
 
 function StaffDashboard() {
+  // const { coursesOverview } = useCoursesOverview(); // TODO: after fixing it in BE, 
   return (
     <Grid
       container

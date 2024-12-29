@@ -15,6 +15,15 @@ type getNotificationsPayload = {
     pageSize: number
 }
 
+export async function getNotification(id: string){
+    const payload:getNotificationsPayload = {
+        filters: `id==${id}`,
+        page: 1,
+        pageSize: 1
+    }    
+    return await getNotifications(payload)
+}
+
 export async function getNotifications(payload: getNotificationsPayload){
     return await axiosAPI.post('user/notifications', payload)
 }

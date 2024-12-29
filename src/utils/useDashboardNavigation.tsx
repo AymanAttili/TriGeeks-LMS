@@ -45,7 +45,7 @@ const useDashboardNavigation = (userRole) => {
         ],
         SubAdmin: [
             {
-                segment: 'my-courses',
+                segment: 'courses',
                 title: 'My Courses',
                 icon: <MenuBookIcon />,
             },
@@ -68,7 +68,7 @@ const useDashboardNavigation = (userRole) => {
                 title: 'Dashboard',
                 icon: <Dashboard />,
             }, {
-                segment: 'my-courses',
+                segment: 'courses',
                 title: 'My Courses',
                 icon: <MenuBookIcon />,
             },

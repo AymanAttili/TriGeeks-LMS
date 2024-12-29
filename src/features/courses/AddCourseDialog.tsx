@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material';
+import { Add, Edit } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, InputAdornment, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useDispatchCourse } from './useDispatchCourse';
@@ -12,27 +12,45 @@ function AddCourseDialog({ payload, open, onClose }) {
         if (!data)
             return;
 
-        await courseDispatch({
-            action: 'add', payload: {
-                data:
-                {
-                    name: data.courseName,
-                    expectedTimeToFinishHours: data.expectedTimeToFinish,
-                    expirationMonths: data.expiration
+        if (payload) {
+            await courseDispatch({
+                action: 'edit', payload: {
+                    courseId: payload.course.id,
+                    data:
+                    {
+                        name: data.courseName,
+                        expectedTimeToFinishHours: data.expectedTimeToFinish,
+                        expirationMonths: data.expiration
+                    }
                 }
-            }
-        }).then(() => onClose());
+            }).then(() => onClose());
+        }
+
+        else {
+            await courseDispatch({
+                action: 'add', payload: {
+                    data:
+                    {
+                        name: data.courseName,
+                        expectedTimeToFinishHours: data.expectedTimeToFinish,
+                        expirationMonths: data.expiration
+                    }
+                }
+            }).then(() => onClose());
+        }
     }
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddCourse)} fullWidth maxWidth={'sm'} open={open} onClose={() => onClose()}>
             <DialogTitle>
-                Add new course
+                {payload ? 'Edit ' : 'Add new '}
+                course
             </DialogTitle>
             <DialogContent>
                 <TextField label="Course name" margin='dense' fullWidth
                     disabled={isLoading}
                     error={!!formErrors.courseName}
                     helperText={formErrors.courseName?.message}
+                    defaultValue={payload?.course.name}
                     {...register('courseName', { required: "Course Name is required", })}
                 />
 
@@ -45,7 +63,7 @@ function AddCourseDialog({ payload, open, onClose }) {
                                 endAdornment: <InputAdornment position="end">Months</InputAdornment>,
                             },
                         }}
-                        defaultValue={12}
+                        defaultValue={payload?.course.expirationMonths || 12}
                         disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.expiration}
                         helperText={formErrors.expiration?.message}
@@ -62,7 +80,7 @@ function AddCourseDialog({ payload, open, onClose }) {
                                 endAdornment: <InputAdornment position="end">Hours</InputAdornment>,
                             },
                         }}
-                        defaultValue={90}
+                        defaultValue={payload?.course.expectedTimeToFinishHours || 90}
                         disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.expectedTimeToFinish}
                         helperText={formErrors.expectedTimeToFinish?.message}
@@ -75,8 +93,8 @@ function AddCourseDialog({ payload, open, onClose }) {
             </DialogContent>
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading || dispatchingCourse} onClick={() => onClose()}>Cancel</Button>
-                <LoadingButton type='submit' variant='outlined' disabled={isLoading || dispatchingCourse} loading={dispatchingCourse} loadingPosition='end' endIcon={<Add />} >
-                    Add
+                <LoadingButton type='submit' variant='outlined' disabled={isLoading || dispatchingCourse} loading={dispatchingCourse} loadingPosition='end' endIcon={payload ? <Edit /> : <Add />} >
+                    {payload ? 'Edit' : 'Add'}
                 </LoadingButton>
             </DialogActions>
         </Dialog >

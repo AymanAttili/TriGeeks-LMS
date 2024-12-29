@@ -49,6 +49,20 @@ const router = createBrowserRouter([
                   { path: ":notificationId", element: <NotificationPage /> },
                 ],
               },
+              {
+                path: "courses",
+                children: [
+                  { index: true, element: <Courses /> },
+
+                  {
+                    path: ":courseId",
+                    children: [
+                      { index: true, element: <Course /> },
+                      { path: "quiz/:quizId", element: <Quiz /> },
+                    ],
+                  },
+                ],
+              },
               // Staff routes
               // {
               //   element: (
@@ -76,47 +90,20 @@ const router = createBrowserRouter([
                       { path: ":departmentId", element: <Department /> },
                     ],
                   },
-                  {
-                    path: "courses",
-                    children: [
-                      { index: true, element: <Courses /> },
 
-                      {
-                        path: ":courseId",
-                        children: [
-                          { index: true, element: <Course /> },
-                          { path: "quiz/:quizId", element: <Quiz /> },
-                        ],
-                      },
-                    ],
-                  },
                 ],
               },
               // SubAdmin & Staff routes
-              {
-                element: (
-                  <PrivateRoute allowedRoles={["SubAdmin", "Staff"]}>
-                    <Outlet />
-                  </PrivateRoute>
-                ),
-                children: [
-                  {
+              // {
+              //   element: (
+              //     <PrivateRoute allowedRoles={["SubAdmin", "Staff"]}>
+              //       <Outlet />
+              //     </PrivateRoute>
+              //   ),
+              //   children: [
 
-                    path: "my-courses", children: [
-                      { index: true, element: <Courses /> },
-
-
-                      {
-                        path: ":courseId",
-                        children: [
-                          { index: true, element: <Course /> },
-                          { path: "quiz/:quizId", element: <Quiz /> },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
+              //   ],
+              // },
 
               // // SubAdmin & Admin routes
               // {
