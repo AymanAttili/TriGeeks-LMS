@@ -107,7 +107,7 @@ function CourseCard(props: CourseCardProps) {
           >
             <LinearProgress
               variant="determinate"
-              value={progress}
+              value={Math.floor(progress * 100)}
               sx={{
                 height: 8,
                 borderRadius: 5,
@@ -121,8 +121,7 @@ function CourseCard(props: CourseCardProps) {
               sx={{ width: "fit-content" }}
               variant="body2"
               color="text.secondary"
-            >{`${progress}% `}</Typography>
-            <HorizIconOptions />
+            >{`${Math.floor(progress * 100)}% `}</Typography>
           </Box>
         }
 

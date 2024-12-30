@@ -12,7 +12,10 @@ import { Refresh } from "@mui/icons-material";
 import { useCoursesOverview } from "../../features/courses/useCoursesOverview";
 
 function StaffDashboard() {
-  // const { coursesOverview } = useCoursesOverview(); // TODO: after fixing it in BE, 
+  const { coursesOverview, refetch } = useCoursesOverview();
+  const totalCourses = Object.values(coursesOverview || {}).reduce((sum, val) => sum += val, 0)
+  console.log(totalCourses);
+
   return (
     <Grid
       container
@@ -25,7 +28,7 @@ function StaffDashboard() {
     >
       <Grid container component={CardContent} spacing={2} width={"100%"}>
         <Grid container justifyContent={"end"} size={{ xs: 12 }}>
-          <Button startIcon={<Refresh />} variant="contained">
+          <Button startIcon={<Refresh />} variant="contained" onClick={() => refetch()}>
             Refresh Data
           </Button>
         </Grid>
@@ -39,37 +42,37 @@ function StaffDashboard() {
             <CoursesStatusCard
               title={"Completed"}
               filter={"completed"}
-              num={6}
+              num={coursesOverview?.Finished}
               key={"completed"}
             />
             <CoursesStatusCard
               title={"In Progress"}
               filter={"inProgress"}
-              num={5}
+              num={coursesOverview?.InProgress}
               key={"inProgress"}
             />
             <CoursesStatusCard
               title={"Failed"}
               filter={"failed"}
-              num={2}
+              num={coursesOverview?.Failed}
               key={"failed"}
             />
             <CoursesStatusCard
               title={"Not Started"}
               filter={"notStarted"}
-              num={8}
+              num={coursesOverview?.NotStarted}
               key={"notStarted"}
             />
             <CoursesStatusCard
               title={"Overall courses"}
-              filter={"overall"}
-              num={20}
+              filter={""}
+              num={totalCourses}
               key={"overall"}
             />
             <CoursesStatusCard
               title={"Expired"}
               filter={"expired"}
-              num={3}
+              num={coursesOverview?.Expired}
               key={"expired"}
             />
           </Grid>

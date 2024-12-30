@@ -23,23 +23,27 @@ export function useDispatchCourse() {
                 case 'assignStaffToCourse': await assignStaffToCourse(payload.courseId, payload.assignments); break;
                 case 'startCourse': await startCourse(payload.courseId); break;
                 case 'finishCourse': await finishCourse(payload.courseId); break;
-                case 'addSection': await addSection(payload.courseId, payload.data); break;
-                case 'editSection': await editSection(payload.courseId, payload.sectionId, payload.data); break;
-                case 'deleteSection': await deleteSection(payload.courseId, payload.sectionId); break;
-                case 'addSectionPart': await addSectionPart(payload.sectionId, payload.data); break;
-                case 'editSectionPart': await editSectionPart(payload.sectionId, payload.sectionPartId, payload.data); break;
-                case 'deleteSectionPart': await deleteSectionPart(payload.sectionId, payload.sectionPartId); break;
-                case 'toggleSectionPartStatus': await toggleSectionPartStatus(payload.sectionId, payload.sectionPartId); break;
+                case 'addSection': return await addSection(payload.courseId, payload.data); 
+                case 'editSection': return await editSection(payload.courseId, payload.sectionId, payload.data);
+                case 'deleteSection': return await deleteSection(payload.courseId, payload.sectionId);
+                case 'addSectionPart': return await addSectionPart(payload.sectionId, payload.data);
+                case 'editSectionPart': return await editSectionPart(payload.sectionId, payload.sectionPartId, payload.data);
+                case 'deleteSectionPart': return await deleteSectionPart(payload.sectionId, payload.sectionPartId);
+                case 'toggleSectionPartStatus': return await toggleSectionPartStatus(payload.sectionId, payload.sectionPartId);
                 case 'submitExam': await submitExam(payload.sectionId, payload.sectionPartId, payload.data); break;
                 default: throw new Error('Unknown action')
             }
         },
         onSuccess: (res) => {
+            if(res?.action === 'startCourse')
+                return ;
             notifications.show('Successful courses action', {
                 severity: 'success',
                 autoHideDuration: 3000,
             });
+
             queryClient.invalidateQueries({queryKey: ['course']}) // TODO: invalidate just the edited course by courseId
+            queryClient.invalidateQueries({queryKey: ['courseAssignments']}) // TODO: invalidate just the edited course by courseId
 
             if(res) // for edit, add, delete operations
                 queryClient.invalidateQueries({queryKey: ['courses']})

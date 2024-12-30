@@ -63,7 +63,7 @@ function NotificationsToolbarAction() {
                             >
                                 <Grid container width={'100%'} justifyContent={'space-between'} alignItems={'center'} gap={3}>
                                     <Grid container flexDirection={'column'} mr={5}>
-                                        <Typography fontWeight={500}>
+                                        <Typography fontWeight={500} width={{ xs: 300, sm: 400, md: 450 }} overflow={'hidden'} textOverflow={'ellipsis'} noWrap>
                                             {item.title} - <small>{item.content}</small>
                                         </Typography>
 

@@ -26,7 +26,8 @@ interface MaterialListItemProps {
     },
     link?: string,
     passThresholdPoints?: number,
-    questions?: []
+    questions?: [],
+    isDone: boolean
   }
 }
 
@@ -88,7 +89,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
       {
         (roleNames[user?.role] === 'Staff' && sectionPart.materialType !== 3) &&
 
-        <MarkDone done={false} />
+        <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
       }
 
       {

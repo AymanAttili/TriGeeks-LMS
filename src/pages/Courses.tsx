@@ -5,6 +5,7 @@ import AddCourseDialog from "../features/courses/AddCourseDialog";
 import { useCourses } from "../features/courses/useCourses";
 import { useUser } from "../features/users/useUser";
 import { roleNames } from "../Enums/roles";
+import SpinnerLoader from "../ui/SpinnerLoader";
 
 function Courses() {
   const dialogs = useDialogs()
@@ -14,6 +15,7 @@ function Courses() {
   const openCoursesDialog = () => {
     dialogs.open(AddCourseDialog);
   }
+
 
   return (
     <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3} flex={1}>
@@ -27,32 +29,37 @@ function Courses() {
       </Grid>
 
       <Divider />
-      <Grid
-        container
-        spacing={3}
-        sx={{
-          justifyContent: { xs: "center", sm: "flex-start" },
-        }}
-      >
-        {courses?.map((course) => (
-          <SquaredCourseCard
-            key={course.id}
-            courseId={course.id}
-            courseName={course.name}
-            progress={course.progress}
-            createdBy={{
-              id: course.createdBy,
-              name: course.createdByName
+      {
+        fetchingCourses ? <SpinnerLoader />
+          :
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              justifyContent: { xs: "center", sm: "flex-start" },
             }}
-          />
-        ))}
+          >
+            {courses?.map((course) => (
+              <SquaredCourseCard
+                key={course.id}
+                courseId={course.id}
+                courseName={course.name}
+                progress={course.progress}
+                createdBy={{
+                  id: course.createdBy,
+                  name: course.createdByName
+                }}
+              />
+            ))}
 
-        {
-          courses?.length === 0 && <Typography variant="h6">
-            No courses yet!🤌
-          </Typography>
-        }
-      </Grid>
+            {
+              courses?.length === 0 && <Typography variant="h6">
+                No courses yet!🤌
+              </Typography>
+            }
+          </Grid>
+      }
+
     </Grid>
   );
 }

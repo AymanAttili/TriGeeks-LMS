@@ -1,17 +1,24 @@
 import { Done } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import React from "react";
+import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
 interface MarkDoneAttributes {
-  done: boolean
+  done: boolean,
+  sectionId: number,
+  sectionPartId: number
 }
 
-const MarkDone: React.FC<MarkDoneAttributes> = ({ done = false }) => {
-  // const { course } = useCourse();
+const MarkDone: React.FC<MarkDoneAttributes> = ({ done = false, sectionId, sectionPartId }) => {
+  const { courseDispatch, isLoading } = useDispatchCourse();
 
-  // const toggleSectionPartDone
+  const toggleDone = async () => {
+    await courseDispatch({ action: 'toggleSectionPartStatus', payload: { sectionId, sectionPartId } })
+  }
+
   return (
     <Button
       variant={"outlined"}
+      disabled={isLoading}
       color={done ? 'primary' : 'inherit'}
       startIcon={done ? <Done /> : ''}
       size={'small'}
@@ -20,7 +27,7 @@ const MarkDone: React.FC<MarkDoneAttributes> = ({ done = false }) => {
         border: 2
       }}
 
-    // onClick={toggleSectionPartDone}
+      onClick={toggleDone}
     >
       {!done && 'Mark as '}
       Done

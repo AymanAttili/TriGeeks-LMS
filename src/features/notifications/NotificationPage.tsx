@@ -6,7 +6,7 @@ import { convertDate } from "../../utils/helpers";
 import SpinnerLoader from "../../ui/SpinnerLoader";
 import { useSysNotification } from "./useSysNotification";
 
-function NotificationPage() {
+function NotificationPage() { // TODO: add notifications pagination
     const { notificationId } = useParams();
     console.log(notificationId);
 

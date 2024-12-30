@@ -17,7 +17,7 @@ function CoursesStatusCard({ title, filter, num }) {
                 <Grid component={Typography} sx={{ fontWeight: 'bold', fontSize: 32 }}>
                     {num}
                 </Grid>
-                <Link component={RouterLink} to={`/my-courses?filter=${filter}`} sx={{
+                <Link component={RouterLink} to={`/courses`} sx={{
                     textDecoration: 'none',
                     fontWeight: 600
                 }}>

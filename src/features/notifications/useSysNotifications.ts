@@ -3,7 +3,7 @@ import { getNotifications } from "../../services/apiNotifications";
 
 const initialPayload = {
     filters: "",
-    sorts: "",
+    sorts: "-CreatedAtUtc",
     page: 1,
     pageSize: 6
 }

@@ -11,6 +11,7 @@ const HorizIconOptions: React.FC<HorizIconOptions> = ({ }) => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 

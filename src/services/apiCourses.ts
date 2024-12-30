@@ -29,9 +29,15 @@ export async function deleteCourse(courseId: string){
 export async function assignStaffToCourse(courseId: string, assignments: number[]){
     return await axiosAPI.put(`/courses/${courseId}/assignments`, {assignments});
 }
+export async function getCourseAssigns(courseId: string){
+    return await axiosAPI.get(`/courses/${courseId}/assignments`);
+}
+
 
 export async function startCourse(courseId: string){
-    return await axiosAPI.post(`/courses/${courseId}/start`);
+    await axiosAPI.post(`/courses/${courseId}/start`);
+
+    return {action: 'startCourse'}
 }
 
 export async function finishCourse(courseId: string){
@@ -148,7 +154,9 @@ export async function deleteSectionPart(sectionId: string, sectionPartId: string
 }
 
 export async function toggleSectionPartStatus(sectionId: string, sectionPartId: string){
-    return await axiosAPI.patch(`/sections/${sectionId}/parts/${sectionPartId}/current-user/done`);
+    await axiosAPI.patch(`/sections/${sectionId}/parts/${sectionPartId}/current-user/done`);
+
+    return {action: 'toggleSectionPartStatus'}
 }
 
 export async function submitExam(sectionId: string, sectionPartId: string, payload){

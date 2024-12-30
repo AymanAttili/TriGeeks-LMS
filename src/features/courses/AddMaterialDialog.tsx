@@ -37,7 +37,7 @@ function AddMaterialDialog({ payload, open, onClose }) {
                     }
                 }
 
-            else if (payload.sectionPart.materialType === '1', data.file > 0) {
+            else if (data.file.length > 0) {
                 newPayload = {
                     ...newPayload,
                     data: {
@@ -46,6 +46,8 @@ function AddMaterialDialog({ payload, open, onClose }) {
                     }
                 }
             }
+            console.log(newPayload);
+
             await courseDispatch({
                 action: 'editSectionPart', payload: newPayload
             }
