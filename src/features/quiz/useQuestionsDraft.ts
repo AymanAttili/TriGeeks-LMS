@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
-export function useQuestionsLocalStorage() {
+export function useQuestionsDraft() {
     const { isFetching, data: questionsDraft, error, isError, refetch } = useQuery({
         queryKey: ["questionsDraft"],
-        queryFn: () => {
-            return JSON.parse(localStorage.getItem('questionsDraft') || '') || []
-        },
+        queryFn: () => [],
         throwOnError: true
     });
     
     return { isLoading: isFetching, questionsDraft, error, isError, refetch };
 }
+

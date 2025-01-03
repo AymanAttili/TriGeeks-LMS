@@ -1,6 +1,6 @@
 import { MoreVert } from '@mui/icons-material'
 import { IconButton, Menu, MenuItem } from '@mui/material'
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 
 type Item = {
     title: string,

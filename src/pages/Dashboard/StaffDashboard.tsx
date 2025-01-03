@@ -100,9 +100,9 @@ function StaffDashboard() {
             </Grid>
             <DataPieChart
               data={[
-                { label: "Not Started", value: 8, color: "#bdbdbd" },
-                { label: "In Progress", value: 5, color: "#e0efef" },
-                { label: "Completed", value: 6, color: "#027e7b" },
+                { label: "Not Started", value: coursesOverview?.NotStarted, color: "#bdbdbd" },
+                { label: "In Progress", value: coursesOverview?.InProgress, color: "#e0efef" },
+                { label: "Completed", value: coursesOverview?.Finished, color: "#027e7b" },
               ]}
             />
           </Grid>

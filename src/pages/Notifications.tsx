@@ -1,13 +1,17 @@
-import { Badge, Button, Grid2 as Grid, Paper, Typography } from "@mui/material"
+import { Badge, Button, Grid2 as Grid, Pagination, Paper, Typography } from "@mui/material"
 import { useSysNotifications } from "../features/notifications/useSysNotifications"
 import { useNavigate } from "react-router-dom";
 import { convertDate } from "../utils/helpers";
 import { useNotificationsReader } from "../features/notifications/useNotificationsReader";
 import { useDialogs } from "@toolpad/core";
+import { useState } from "react";
+import SpinnerLoader from "../ui/SpinnerLoader";
 
 function Notifications() {
-    const { notifications } = useSysNotifications(); //TODO: adding pagination
+    const [page, setPage] = useState(1)
+    const { notifications, isLoading } = useSysNotifications(page);
     const { notificationsReader } = useNotificationsReader();
+
 
     const navigate = useNavigate();
     const dialogs = useDialogs();
@@ -25,14 +29,18 @@ function Notifications() {
 
     return (
         <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3} flex={1}>
-            <Grid container justifyContent={'space-between'}>
+            <Grid container justifyContent={'space-between'} alignItems={'center'}>
                 <Typography variant="h4" color="primary.main">
                     Notifications
                 </Typography>
+                <Pagination count={notifications?.metadata.totalPages} disabled={isLoading} page={page} onChange={(e, val) => setPage(val)} variant="outlined" color="primary" />
                 <Button variant="contained" size={'small'} onClick={markAllAsRead}>Mark all as read</Button>
             </Grid>
 
             <Grid container flexDirection={'column'} spacing={0} borderTop={2} borderColor={'primary.main'} paddingTop={2}>
+                {
+                    isLoading && <SpinnerLoader />
+                }
                 {
                     notifications?.items.map((item, ind) =>
                         <Grid container flexDirection={'column'}
@@ -86,6 +94,8 @@ function Notifications() {
                     </Typography>
                 }
             </Grid>
+
+
         </Grid>
     )
 }

@@ -21,6 +21,10 @@ export const convertToJson = (token) => {
     }
 }
 
+export const toText = (html) => {
+    return html.replace(/(<([^>]+)>)/ig, '');
+}
+
 export const convertDate = (val) => {
     const date = new Date(val);
 

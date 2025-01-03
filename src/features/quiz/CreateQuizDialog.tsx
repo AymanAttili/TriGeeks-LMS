@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material';
+import { Add, Save } from '@mui/icons-material';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Grid, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -6,11 +6,16 @@ import { useEffect, useState } from 'react';
 import ActionsMenu from '../../ui/ActionsMenu';
 import { useDialogs } from '@toolpad/core';
 import AddQuestionDialog from './AddQuestionDialog';
-import { useQuestionsLocalStorage } from './useQuestionsLocalStorage';
+import { useQuestionsDraft, } from './useQuestionsDraft';
+import { useDispatchQuestions } from './useDispatchQuestions';
+import { useDispatchCourse } from '../courses/useDispatchCourse';
+import { toText } from '../../utils/helpers';
 
 function CreateQuizDialog({ payload, open, onClose }) {
     const [totalMarks, setTotalMarks] = useState(0);
-    const { questionsDraft, refetch } = useQuestionsLocalStorage();
+    const { questionsDraft } = useQuestionsDraft();
+    const { questionsDispatch } = useDispatchQuestions();
+    const { courseDispatch, isLoading: dispatchingCourse } = useDispatchCourse()
 
     const dialogs = useDialogs();
 
@@ -18,19 +23,95 @@ function CreateQuizDialog({ payload, open, onClose }) {
         setTotalMarks(() => questionsDraft?.reduce((sum, cur) => sum += cur.points, 0))
     }, [setTotalMarks, questionsDraft])
 
-    const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
+    const { register, handleSubmit, formState: { errors: formErrors, isLoading } } = useForm();
+
+    const handleEditQuiz = async (data) => {
+        const questions = questionsDraft?.map((question) => {
+            return {
+                text: question.text,
+                points: question.points,
+                file: question.file ? question.file[0] : null,
+                choices: question.choices,
+                id: question.id
+            }
+        })
+
+        await courseDispatch({
+            action: 'editQuiz', payload:
+            {
+                data: {
+                    title: data.title,
+                    materialType: "Exam",
+                    exam: {
+                        id: payload.data.id,
+                        durationMinutes: data.durationMinutes,
+                        passThresholdPoints: data.passThresholdPoints,
+                        questions
+                    }
+                },
+                sectionId: payload.sectionPart.sectionId,
+                sectionPartId: payload.sectionPart.id
+            }
+        }).then(() => {
+            questionsDispatch({ action: 'clear' })
+            onClose();
+        })
+    }
+
 
     const handleAddQuiz = async (data) => {
-        console.log(data);
+        if (payload.data?.id)
+            return handleEditQuiz(data)
 
+        const questions = questionsDraft?.map((question) => {
+            return {
+                text: question.text,
+                points: question.points,
+                file: question.file ? question.file[0] : null,
+                choices: question.choices
+            }
+        })
+
+        await courseDispatch({
+            action: 'addQuiz', payload:
+            {
+                data: {
+                    title: data.title,
+                    materialType: "Exam",
+                    exam: {
+                        durationMinutes: data.durationMinutes,
+                        passThresholdPoints: data.passThresholdPoints,
+                        questions
+                    }
+                },
+                sectionId: payload.sectionId
+            }
+        }).then(() => {
+            questionsDispatch({ action: 'clear' })
+            onClose();
+        })
+    }
+
+    const handleDiscard = async () => {
+        const confirm = await dialogs.confirm('Are you sure you want to discard this quiz?\n All questions will be deleted permanently.', {
+            title: 'Discard quiz❌',
+            okText: 'Yes',
+            cancelText: 'No',
+            severity: 'error'
+        })
+
+        if (confirm) {
+            questionsDispatch({ action: 'clear' })
+            onClose();
+        }
     }
 
     const handleAddQuestion = async () => {
         await dialogs.open(AddQuestionDialog);
     }
 
-    const handleEditQuestion = async () => {
-
+    const handleEditQuestion = async (question, index) => {
+        await dialogs.open(AddQuestionDialog, { question, index });
     }
 
     const handleDeleteQuestion = async (index) => {
@@ -42,11 +123,10 @@ function CreateQuizDialog({ payload, open, onClose }) {
         })
 
         if (confirm) {
-            const newQuestions = questionsDraft.filter((item, ind) => ind !== index)
-            localStorage.setItem('questionsDraft', JSON.stringify(newQuestions))
-            refetch();
+            questionsDispatch({ action: 'delete', payload: { index } })
         }
     }
+
 
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddQuiz)} fullWidth maxWidth={'lg'} open={open} >
@@ -55,7 +135,7 @@ function CreateQuizDialog({ payload, open, onClose }) {
                     Add questions
                 </Button>
                 <Typography variant='h4' color='primary.main' fontWeight={600}>
-                    {payload.quiz ? 'EDIT ' : 'ADD NEW '}
+                    {payload.sectionPart ? 'EDIT ' : 'ADD NEW '}
                     QUIZ
                 </Typography>
 
@@ -70,8 +150,9 @@ function CreateQuizDialog({ payload, open, onClose }) {
                         // disabled={isLoading}
                         error={!!formErrors.title}
                         helperText={formErrors.title?.message}
+                        disabled={isLoading || dispatchingCourse}
                         {...register('title', { required: "Title is required", })}
-                        defaultValue={payload.quiz?.title}
+                        defaultValue={payload.sectionPart?.title}
                     />
                     <TextField label="Duration" margin='dense'
                         type={'number'}
@@ -80,10 +161,11 @@ function CreateQuizDialog({ payload, open, onClose }) {
                                 endAdornment: <InputAdornment position="end">Minutes</InputAdornment>,
                             },
                         }}
-                        defaultValue={payload.quiz?.durationMinutes || 30}
+                        defaultValue={payload.data?.durationMinutes || 30}
                         // disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.durationMinutes}
                         helperText={formErrors.durationMinutes?.message}
+                        disabled={isLoading || dispatchingCourse}
                         {...register('durationMinutes', {
                             required: "Quiz duration in minutes is required",
                             min: { value: 1, message: "Number of minutes should be more than 0" }
@@ -97,12 +179,15 @@ function CreateQuizDialog({ payload, open, onClose }) {
                                 endAdornment: <InputAdornment position="end">Points</InputAdornment>,
                             },
                         }}
-                        defaultValue={payload.quiz?.passThresholdPoints || 0}
-                        // disabled={isLoading || dispatchingCourse}
+                        defaultValue={payload.data?.passThresholdPoints || 0}
+                        disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.passThresholdPoints}
                         helperText={formErrors.passThresholdPoints?.message}
                         {...register('passThresholdPoints', {
                             required: "Pass mark is required",
+                            min: { value: 1, message: "Pass mark should be greater than 0" },
+                            max: { value: totalMarks, message: "Pass mark shouldn't be greater than Total Marks" }
+
                         })}
                     />
                     <TextField label="Total points" margin='dense'
@@ -136,10 +221,10 @@ function CreateQuizDialog({ payload, open, onClose }) {
                                     questionsDraft?.map((question, ind) =>
                                         <TableRow key={ind}>
                                             <TableCell sx={{ maxWidth: 200, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                {question.text}
+                                                {question.preview || toText(question.text)}
                                             </TableCell>
                                             <TableCell >
-                                                {question.type}
+                                                {question.choices[0].text === 'False' ? 'True or False' : 'Multiple Choices'}
                                             </TableCell>
                                             <TableCell sx={{ textAlign: 'center' }}>
                                                 {question.points}
@@ -149,7 +234,7 @@ function CreateQuizDialog({ payload, open, onClose }) {
                                                     items={[
                                                         {
                                                             title: 'Edit',
-                                                            onClick: () => handleEditQuestion(ind)
+                                                            onClick: () => handleEditQuestion(question, ind)
                                                         },
                                                         {
                                                             title: 'Delete',
@@ -168,12 +253,12 @@ function CreateQuizDialog({ payload, open, onClose }) {
             </Grid>
             <DialogActions>
                 <Button color='error' variant='outlined'
-                    // disabled={isLoading}
-                    onClick={() => onClose()}>Cancel</Button>
+                    disabled={dispatchingCourse}
+                    onClick={handleDiscard}>Discard</Button>
                 <LoadingButton type='submit' variant='outlined'
-                    // loading={isLoading} disabled={isLoading} 
-                    loadingPosition='end' endIcon={<Add />} >
-                    Add
+                    loading={isLoading || dispatchingCourse} disabled={isLoading || dispatchingCourse}
+                    loadingPosition='end' endIcon={<Save />} >
+                    Save
                 </LoadingButton>
             </DialogActions>
         </Dialog>

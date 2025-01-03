@@ -1,6 +1,5 @@
-import React from 'react';
 import { Suspense, useMemo } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 
 import { Grid2 as Grid } from "@mui/material";
 import { AppProvider } from "@toolpad/core/react-router-dom";
@@ -20,6 +19,9 @@ import NotificationsToolbarAction from './NotificationsToolbarAction.tsx';
 const AppLayout = () => {
   const { user } = useUser();
   const { logout } = useLogout();
+  const { quizId } = useParams();
+  const isQuizPage = quizId !== undefined;
+
   const navigation = useDashboardNavigation(roleNames[user.role]);
   const authentication = useMemo(() => {
     return {
@@ -39,10 +41,18 @@ const AppLayout = () => {
 
   return (
     <AppProvider
-      branding={{
-        logo: <img src={logo} alt="Makassed LMS" />,
-        title: "Makassed LMS",
-      }}
+      branding={
+        !isQuizPage ?
+          {
+            logo: <img src={logo} alt="Makassed LMS" />,
+            title: "Makassed LMS",
+          }
+          :
+          {
+            logo: '',
+            title: "",
+          }
+      }
       navigation={navigation}
       authentication={authentication}
       theme={theme}
@@ -50,9 +60,11 @@ const AppLayout = () => {
         user: dashboardUser,
       }}
     >
-      <DashboardLayout sidebarExpandedWidth={"250px"} slots={{
-        toolbarActions: NotificationsToolbarAction
-      }}>
+      <DashboardLayout sidebarExpandedWidth={"250px"}
+        hideNavigation={isQuizPage}
+        slots={{
+          toolbarActions: NotificationsToolbarAction
+        }}>
         <Suspense fallback={<SpinnerLoader />}>
           <Grid
             container

@@ -1,21 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getNotifications } from "../../services/apiNotifications";
 
-const initialPayload = {
-    filters: "",
-    sorts: "-CreatedAtUtc",
-    page: 1,
-    pageSize: 6
-}
 
-export function useSysNotifications(payload = initialPayload) {
+export function useSysNotifications(page = 1) {
     const { isFetching, data: notifications, error, isError } = useQuery({
-        queryKey: ["notifications", payload],
+        queryKey: ["notifications", page],
         queryFn: async() => {
-            const res = await getNotifications(payload)
-            return res.data;
+            return (await getNotifications(page)).data
         },
-        throwOnError: true
+        throwOnError: true,
+        refetchInterval: 1000 * 60 * 10
     });
     
     return { isLoading: isFetching, notifications, error, isError };

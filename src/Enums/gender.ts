@@ -3,7 +3,6 @@ enum Gender {
     Female = 2,
 }
 
-// Access role names with a map or separate object
 export const genderNames = {
     [Gender.Male]: 'Male',
     [Gender.Female]: 'Female',

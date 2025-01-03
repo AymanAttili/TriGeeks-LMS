@@ -15,6 +15,7 @@ import { useDispatchCourse } from "./useDispatchCourse";
 import SpinnerLoader from "../../ui/SpinnerLoader";
 import AddCourseDialog from "./AddCourseDialog";
 import AssignToCourseDialog from "./AssignToCourseDialog";
+import { courseStatuses } from "../../Enums/courseStatuses";
 
 interface Material {
   id: string;
@@ -65,11 +66,15 @@ const Course: React.FC = () => {
     await dialogs.open(AddCourseDialog, { course })
   }
 
+  const handleFinishCourse = async () => {
+    await courseDispatch({ action: 'finishCourse', payload: { courseId } })
+  }
+
   useEffect(() => {
     const startCourse = async () => {
       await courseDispatch({ action: 'startCourse', payload: { courseId } })
     }
-    if (roleNames[user?.role] === 'Staff' && course?.status === 1)
+    if (roleNames[user?.role] === 'Staff' && courseStatuses[course?.status] === 'NotStarted')
       startCourse();
 
   }, [user, courseDispatch, courseId, course])
@@ -106,13 +111,21 @@ const Course: React.FC = () => {
                   </Typography>
 
                   {
-                    course?.status === 'completed' &&
+                    courseStatuses[course?.status] === 'Finished' &&
 
                     <CertificateGenerator sx={{ display: { sm: 'none' } }} userDetails={{
                       name: `${user.firstName} ${user.lastName}`,
                       course: course?.name,
-                      date: new Date()
+                      date: course.finishedAtUtc
                     }} />
+                  }
+                  {
+                    (roleNames[user?.role] === 'Staff' && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
+                    <Grid sx={{ display: { sm: 'none' } }}>
+                      <Button variant="contained" onClick={handleFinishCourse}>
+                        Finish Course
+                      </Button>
+                    </Grid>
                   }
                 </Grid>
               </>
@@ -123,13 +136,21 @@ const Course: React.FC = () => {
 
         </Grid>
         {
-          (roleNames[user?.role] === 'Staff' && course?.status === 'completed') &&
+          (roleNames[user?.role] === 'Staff' && courseStatuses[course?.status] === 'Finished') &&
           <Grid sx={{ display: { xs: 'none', sm: 'flex' } }}>
             <CertificateGenerator userDetails={{
               name: `${user.firstName} ${user.lastName}`,
               course: course.name,
-              date: new Date()
+              date: course.finishedAtUtc
             }} />
+          </Grid>
+        }
+        {
+          (roleNames[user?.role] === 'Staff' && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
+          <Grid sx={{ display: { xs: 'none', sm: 'flex' } }}>
+            <Button variant="contained" onClick={handleFinishCourse}>
+              Finish Course
+            </Button>
           </Grid>
         }
         {

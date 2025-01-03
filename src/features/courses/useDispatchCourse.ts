@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editSection, editSectionPart, finishCourse, getCourse, startCourse, submitExam, toggleSectionPartStatus } from "../../services/apiCourses";
+import { addQuiz, addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, submitExam, toggleSectionPartStatus } from "../../services/apiCourses";
 import { useNavigate } from "react-router-dom";
 
 type data = {
@@ -27,6 +27,8 @@ export function useDispatchCourse() {
                 case 'editSection': return await editSection(payload.courseId, payload.sectionId, payload.data);
                 case 'deleteSection': return await deleteSection(payload.courseId, payload.sectionId);
                 case 'addSectionPart': return await addSectionPart(payload.sectionId, payload.data);
+                case 'addQuiz': return await addQuiz(payload.sectionId, payload.data);
+                case 'editQuiz': return await editQuiz(payload.sectionId, payload.sectionPartId, payload.data);
                 case 'editSectionPart': return await editSectionPart(payload.sectionId, payload.sectionPartId, payload.data);
                 case 'deleteSectionPart': return await deleteSectionPart(payload.sectionId, payload.sectionPartId);
                 case 'toggleSectionPartStatus': return await toggleSectionPartStatus(payload.sectionId, payload.sectionPartId);

@@ -9,7 +9,6 @@ import {
   Grid2 as Grid,
 
 } from "@mui/material";
-import HorizIconOptions from "./HorizIconOptions";
 import logo from '../images/logo.jpg'
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/users/useUser";
@@ -27,7 +26,7 @@ interface CourseCardProps {
 
 
 function CourseCard(props: CourseCardProps) {
-  const { courseId, courseName, progress = 0, createdBy = '' } = props; // todo implementing course hook (react query)
+  const { courseId, courseName, progress = 0, createdBy = '' } = props;
   const { user } = useUser();
 
   const navigate = useNavigate();

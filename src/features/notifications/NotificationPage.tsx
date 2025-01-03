@@ -1,14 +1,13 @@
 import { Navigate, useParams, Link as RouterLink } from "react-router-dom";
 import { Button, Card, Grid2 as Grid, Link, Paper, Typography } from "@mui/material";
 import { useNotificationsReader } from "./useNotificationsReader";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { convertDate } from "../../utils/helpers";
 import SpinnerLoader from "../../ui/SpinnerLoader";
 import { useSysNotification } from "./useSysNotification";
 
-function NotificationPage() { // TODO: add notifications pagination
+function NotificationPage() {
     const { notificationId } = useParams();
-    console.log(notificationId);
 
     const { notification, isLoading } = useSysNotification(notificationId)
     const { notificationsReader } = useNotificationsReader();

@@ -5,6 +5,7 @@ import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
 import ErrorBoundary from "../Error/ErrorBoundary.tsx";
 import NotificationPage from "../features/notifications/NotificationPage.tsx";
+import Unauthorized from "../pages/Unauthorized.tsx";
 
 const PageNotFound = lazy(() => import("../pages/PageNotFound.tsx"));
 const Login = lazy(() => import("../pages/Login.tsx"));
@@ -130,7 +131,11 @@ const router = createBrowserRouter([
         ],
       },
       {
-        element: <PageNotFound />, //TODO: implement 404 page, unauthorized pages
+        element: <Unauthorized />, //TODO: implement (unauthorized) pages
+        path: "unauthorized",
+      },
+      {
+        element: <PageNotFound />,
         path: "*",
       },
     ],

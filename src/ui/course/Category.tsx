@@ -145,7 +145,7 @@ const Category: React.FC<CategoryProps> = ({ section, courseId }) => {
               >
                 {section.title}
               </Typography>
-              { //TODO: fixing view
+              {
                 roleNames[user?.role] !== 'Staff' &&
                 <Grid container spacing={1}>
                   <Tooltip title={'Edit'}>

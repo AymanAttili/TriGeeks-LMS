@@ -10,6 +10,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { useDialogs } from "@toolpad/core";
 import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
 import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
+import CreateQuizDialog from "../../features/quiz/CreateQuizDialog";
+import { useDispatchQuestions } from "../../features/quiz/useDispatchQuestions";
 interface MaterialListItemProps {
   sectionPart: {
     id: number,
@@ -25,8 +27,11 @@ interface MaterialListItemProps {
       path: string
     },
     link?: string,
-    passThresholdPoints?: number,
-    questions?: [],
+    exam: {
+      durationMinutes?: number
+      passThresholdPoints?: number,
+      questions?: [],
+    }
     isDone: boolean
   }
 }
@@ -35,10 +40,19 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
   const { user } = useUser();
   const { courseDispatch, isLoading } = useDispatchCourse();
 
+  const { questionsDispatch } = useDispatchQuestions();
+
   const dialogs = useDialogs();
 
   const handleEdit = async () => {
-    await dialogs.open(AddMaterialDialog, { sectionPart });
+    if (sectionPart.exam) {
+      await questionsDispatch({ action: 'clear' })
+      await questionsDispatch({ action: 'add', payload: { data: sectionPart.exam.questions } })
+      await dialogs.open(CreateQuizDialog, { sectionPart, data: sectionPart.exam });
+    }
+
+    else
+      await dialogs.open(AddMaterialDialog, { sectionPart });
   };
 
 
@@ -81,17 +95,28 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
           {sectionPart.materialType === 1 && <DescriptionIcon sx={{ color: "#FFA726" }} />}
           {sectionPart.materialType === 3 && <Quiz />}
         </ListItemIcon>
-        {/* {use link here} */}
-        <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || ''} target="_blank" >
+        <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || (sectionPart.exam ? `quiz/${sectionPart.exam.id}` : false) || ' '} target="_blank" >
           <ListItemText primary={sectionPart.title} />
         </Link>
       </Grid>
       {
         (roleNames[user?.role] === 'Staff' && sectionPart.materialType !== 3) &&
-
         <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
       }
-
+      {
+        (roleNames[user?.role] === 'Staff' && sectionPart.materialType === 3) &&
+        <Button variant="outlined"
+          size={'small'}
+          sx={{
+            borderRadius: 5,
+            border: 2
+          }}
+        >
+          <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
+            Start Quiz
+          </Link>
+        </Button>
+      }
       {
         roleNames[user?.role] !== 'Staff' &&
         <Grid container spacing={1}>

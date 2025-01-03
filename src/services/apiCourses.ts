@@ -60,7 +60,7 @@ export async function getSection(courseId: string, sectionId: string){
     return await axiosAPI.get(`/courses/${courseId}/sections/${sectionId}`);
 }
 
-export async function editSection(courseId: string, sectionId: string, payload){ // TODO: verifying that it patches not posts
+export async function editSection(courseId: string, sectionId: string, payload){
     return await axiosAPI.put(`/courses/${courseId}/sections/${sectionId}`, payload);
 }
 
@@ -109,11 +109,59 @@ export async function addSectionPart(sectionId: string, payload){
     return await axiosAPI.post(`/sections/${sectionId}/parts`, newPayload);
 }
 
+export async function addQuiz(sectionId: string, data){
+    const { exam: {questions} } = data;
+
+    let newQuestions = []
+    await Promise.all(questions.map(async (question) => {
+        let imageId = null;
+        if(question.file)
+            imageId  =  (await addFile(question.file)).data.fileId
+        
+        newQuestions.push({
+            text: question.text,
+            points: question.points,
+            imageId,
+            choices: question.choices
+        })
+    }))
+
+    data.exam.questions = newQuestions
+    
+
+    return await axiosAPI.post(`/sections/${sectionId}/parts`, data);
+}
+
+export async function editQuiz(sectionId: string, sectionPartId: number, data){
+    const { exam: {questions} } = data;
+
+    let newQuestions = []
+    await Promise.all(questions.map(async (question) => {
+        let imageId = null;
+        if(question.file)
+            imageId  =  (await addFile(question.file)).data.fileId
+
+        
+        newQuestions.push({
+            text: question.text,
+            points: question.points,
+            imageId,
+            choices: question.choices,
+            id: question.id
+        })
+    }))
+
+    data.exam.questions = newQuestions    
+
+    return await axiosAPI.put(`/sections/${sectionId}/parts/${sectionPartId}`, data);
+}
+
+
 export async function getSectionPart(sectionId: string, sectionPartId: string){
     return await axiosAPI.get(`/sections/${sectionId}/parts/${sectionPartId}`);
 }
 
-export async function editSectionPart(sectionId: string, sectionPartId: string, payload){ // TODO: Error 500
+export async function editSectionPart(sectionId: string, sectionPartId: string, payload){
     const { materialType, file, title, link, questions } = payload;
     
     let newPayload = {

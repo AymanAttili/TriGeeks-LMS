@@ -1,7 +1,6 @@
-import SearchIcon from '@mui/icons-material/Search';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { PiCertificateFill, PiUserBold } from "react-icons/pi";
+import { PiUserBold } from "react-icons/pi";
 import { AccountBox, Dashboard, Notifications } from '@mui/icons-material';
 
 
