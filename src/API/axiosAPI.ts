@@ -24,7 +24,7 @@ axiosAPI.interceptors.response.use(response => {
 }, async (error) => {
     const request = error.request;
 
-    if (request.__URL__.includes('refresh-token')) {
+    if (request.__URL__?.includes('refresh-token')) {
         throw new AxiosError(error)
     }
     if (error.code === 'ERR_NETWORK') { // must be switched to Error.status === 401

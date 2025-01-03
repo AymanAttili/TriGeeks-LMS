@@ -66,7 +66,7 @@ function Department() {
                 alignItems: 'center'
             }}>
                 <Typography variant='h4' color='primary'>
-                    {department?.name}
+                    {department?.name} - Majors
                 </Typography>
                 <Button onClick={openMajorsDialog} variant='contained' endIcon={<Add />}>Add new</Button>
             </Grid>
