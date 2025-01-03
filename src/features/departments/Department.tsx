@@ -8,13 +8,13 @@ import { useMajors } from '../majors/useMajors';
 
 import { useDispatchMajors } from '../majors/useDispatchMajors';
 import { useDispatchDepartment } from './useDispatchDepartment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SpinnerLoader from '../../ui/SpinnerLoader';
 import AddMajorDialog from '../majors/AddMajorDialog';
-import PageNotFound from '../../pages/PageNotFound';
 
 function Department() {
     const { departmentId } = useParams();
+    const [loaded, setLoaded] = useState(false)
     const { department, departmentDispatch, isLoading: fetchingDep } = useDispatchDepartment()
     const { majors, isLoading: fetchingMajors } = useMajors(departmentId)
     const { majorsDispatch, isLoading: dispatchingMajors } = useDispatchMajors();
@@ -46,13 +46,17 @@ function Department() {
     }
 
     useEffect(() => {
-        departmentDispatch({ action: 'get', payload: { id: departmentId } })
+        async function fetchDep() {
+            await departmentDispatch({ action: 'get', payload: { id: departmentId } }).finally(() => setLoaded(true))
+        }
+        fetchDep()
     }, [departmentDispatch, departmentId])
+
 
     if (fetchingDep || fetchingMajors || dispatchingMajors)
         return <SpinnerLoader />
 
-    if (!department)
+    if (loaded && !department)
         return <Navigate to='/404' />
 
     return (

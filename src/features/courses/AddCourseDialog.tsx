@@ -68,7 +68,6 @@ function AddCourseDialog({ payload, open, onClose }) {
                         error={!!formErrors.expiration}
                         helperText={formErrors.expiration?.message}
                         {...register('expiration', {
-                            required: "Expiration months is required",
                             min: { value: 1, message: "Number of months should be more than 0" }
                         })}
                     />

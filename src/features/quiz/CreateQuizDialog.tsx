@@ -93,8 +93,8 @@ function CreateQuizDialog({ payload, open, onClose }) {
     }
 
     const handleDiscard = async () => {
-        const confirm = await dialogs.confirm('Are you sure you want to discard this quiz?\n All questions will be deleted permanently.', {
-            title: 'Discard quiz❌',
+        const confirm = await dialogs.confirm('Are you sure you want to discard changes?\n All changes will be deleted permanently.', {
+            title: 'Discard changes❌',
             okText: 'Yes',
             cancelText: 'No',
             severity: 'error'

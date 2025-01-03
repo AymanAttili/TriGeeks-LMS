@@ -53,9 +53,10 @@ export function useDispatchCourse() {
         },
         retry: false,
         onError: (err) => {     
+            
             if(err.message.status === 400)
                 navigate('/courses')
-            notifications.show(err.message.response?.data?.title, {
+            notifications.show(err.message?.response?.data?.errors?.PredicateValidator[0] || err.message.response?.data?.title, {
                 severity: 'error',
                 autoHideDuration: 3000,
             });
