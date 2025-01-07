@@ -61,14 +61,16 @@ const Quiz: React.FC = () => {
             okText: 'Submit',
             cancelText: 'Cancel'
         })
-        if (confirm)
+        if (confirm) {
+            await handleSubmitAnswer();
             await quizDispatch({ action: 'finish', payload: { quizId } }).then(() => navigate(`/courses/${courseId}`, { replace: true }))
+        }
     }
 
     const handleNext = async () => {
         if (selectedAnswer)
             await handleSubmitAnswer().then(() => {
-                if (questionIndex < quizSession?.questions.length - 2)
+                if (questionIndex < quizSession?.questions.length - 1)
                     setQuestionIndex(val => +val + 1)
             });
 
