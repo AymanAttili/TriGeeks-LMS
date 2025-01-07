@@ -15,7 +15,7 @@ function QuizSessionEnded() {
                 409
             </Typography>
             <Typography variant="h3">
-                Quiz Session ended or not started!
+                Quiz Session ended!
             </Typography>
             <Typography variant="h2">
                 ⌛
