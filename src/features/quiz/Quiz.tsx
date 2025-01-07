@@ -29,9 +29,6 @@ const Quiz: React.FC = () => {
     const { quizDispatch, isLoading } = useDispatchQuiz()
     const { currentQuestion, isLoading: fetchingQuestion } = useCurrentQuestion({ quizId, questionId });
     const [selectedAnswer, setSelectedAnswer] = useState(!fetchingQuestion && currentQuestion.chosenAnswer)
-    console.log(currentQuestion?.chosenAnswer);
-
-    const navigate = useNavigate();
 
     const dialogs = useDialogs()
 
@@ -63,7 +60,7 @@ const Quiz: React.FC = () => {
         })
         if (confirm) {
             await handleSubmitAnswer();
-            await quizDispatch({ action: 'finish', payload: { quizId } }).then(() => navigate(`/courses/${courseId}`, { replace: true }))
+            await quizDispatch({ action: 'finish', payload: { quizId } })
         }
     }
 
@@ -110,7 +107,7 @@ const Quiz: React.FC = () => {
         return () => clearInterval(timer as ReturnType<typeof setInterval>);
     }, [timeLeft]);
 
-    if ((!fetchingSession && quizSession?.ended))
+    if (((!fetchingSession && quizSession?.ended) || timeLeft === 0))
         return <QuizSessionEnded />
 
     return (
