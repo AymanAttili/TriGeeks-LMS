@@ -36,25 +36,25 @@ function Users() {
         {
             field: 'workId',
             headerName: 'Work ID',
-            width: 120,
+            minWidth: 120,
             editable: true,
         },
         {
             field: 'firstName',
             headerName: 'First name',
-            width: 120,
+            minWidth: 120,
             editable: true,
         },
         {
             field: 'lastName',
             headerName: 'Last name',
-            width: 120,
+            minWidth: 120,
             editable: true,
         },
         {
             field: 'email',
             headerName: 'Email',
-            width: 200,
+            minWidth: 200,
             editable: true,
         },
         {
@@ -63,7 +63,7 @@ function Users() {
                 return levelNames[value]
             },
             headerName: 'Educational level',
-            width: 150,
+            minWidth: 150,
             editable: true,
         },
         {
@@ -72,7 +72,7 @@ function Users() {
                 return roleNames[value]
             },
             headerName: 'Role',
-            width: 100,
+            minWidth: 100,
             editable: true,
         },
         {
@@ -81,7 +81,7 @@ function Users() {
                 return value?.name
             },
             headerName: 'Department',
-            width: 150,
+            minWidth: 150,
             editable: true,
         },
         {
@@ -90,14 +90,14 @@ function Users() {
                 return value?.name
             },
             headerName: 'Major',
-            width: 130,
+            minWidth: 130,
             editable: true,
         },
         {
             field: 'actions',
             type: 'actions',
             headerName: 'Actions',
-            width: 80,
+            minWidth: 80,
             cellClassName: 'actions',
             getActions: (value) => {
                 return [

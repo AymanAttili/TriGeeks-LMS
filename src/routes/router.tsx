@@ -4,8 +4,8 @@ import PrivateRoute from "../ui/PrivateRoute";
 import PublicRoute from "../ui/PublicRoute";
 import AppLayout from "../ui/AppLayout";
 import ErrorBoundary from "../Error/ErrorBoundary.tsx";
-import NotificationPage from "../features/notifications/NotificationPage.tsx";
-import Unauthorized from "../pages/Unauthorized.tsx";
+import { loader as startQuizLoader } from "../features/quiz/StartQuiz.tsx";
+
 
 const PageNotFound = lazy(() => import("../pages/PageNotFound.tsx"));
 const Login = lazy(() => import("../pages/Login.tsx"));
@@ -16,10 +16,13 @@ const Courses = lazy(() => import("../pages/Courses.tsx"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword.tsx"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword.tsx"));
 const Course = lazy(() => import("../features/courses/Course.tsx"));
-const Quiz = lazy(() => import("../features/quiz/Quiz.tsx"));
 const Departments = lazy(() => import("../pages/Departments.tsx"));
 const Department = lazy(() => import("../features/departments/Department.tsx"));
+const Unauthorized = lazy(() => import("../pages/Unauthorized.tsx"));
 const Notifications = lazy(() => import("../pages/Notifications.tsx"));
+const StartQuiz = lazy(() => import("../features/quiz/StartQuiz.tsx"));
+const Quiz = lazy(() => import("../features/quiz/Quiz.tsx"));
+const NotificationPage = lazy(() => import("../features/notifications/NotificationPage.tsx"));
 
 const router = createBrowserRouter([
   {
@@ -59,7 +62,15 @@ const router = createBrowserRouter([
                     path: ":courseId",
                     children: [
                       { index: true, element: <Course /> },
-                      { path: "quiz/:quizId", element: <Quiz /> },
+                      {
+                        path: "quiz/:quizId",
+                        children: [
+                          { index: true, element: <StartQuiz />, loader: startQuizLoader },
+                          {
+                            path: "session", element: <Quiz />
+                          }
+                        ]
+                      },
                     ],
                   },
                 ],

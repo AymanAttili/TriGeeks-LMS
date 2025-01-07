@@ -43,12 +43,16 @@ function NotificationPage() {
                     </Typography>
                 </Grid>
 
-                <Button variant="outlined" sx={{
-                    alignSelf: 'center',
-                    justifySelf: 'end'
-                }}>
-                    <Link component={RouterLink} to={notification?.link} underline={'none'}>Go to material</Link>
-                </Button>
+                {
+                    notification?.link &&
+                    <Button variant="outlined" sx={{
+                        alignSelf: 'center',
+                        justifySelf: 'end'
+                    }}>
+                        <Link component={RouterLink} to={notification?.link} underline={'none'}>Go to material</Link>
+                    </Button>
+                }
+
             </Grid>
         </Grid >
     )

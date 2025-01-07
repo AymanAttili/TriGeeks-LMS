@@ -17,10 +17,10 @@ export function useDispatchQuiz() {
             }
         },
         onSuccess: () => {
-            notifications.show('Successful quiz action', {
-                severity: 'success',
-                autoHideDuration: 3000,
-            });
+            // notifications.show('Successful quiz action', {
+            //     severity: 'success',
+            //     autoHideDuration: 3000,
+            // });
             
             queryClient.invalidateQueries({ queryKey: ['quizSession'] });
             queryClient.invalidateQueries({ queryKey: ['currentQuestion'] });
@@ -29,7 +29,7 @@ export function useDispatchQuiz() {
         onError: (err) => {  
             let msg = err.message.response?.data?.title
             if(err.message.status === 400){
-                msg = err.message?.response?.data?.errors?.LessThanValidator[0]
+                msg = err.message?.response?.data?.errors?.LessThanValidator  && err.message?.response?.data?.errors?.LessThanValidator[0]
             }
             notifications.show(msg, {
                 severity: 'error',

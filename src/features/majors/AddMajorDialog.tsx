@@ -3,13 +3,15 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import { useForm } from 'react-hook-form';
 import { useDispatchMajors } from './useDispatchMajors';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { cleanFormData, trimFormInputStart } from '../../utils/helpers';
 
 function AddMajorDialog({ payload, open, onClose }) {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, setValue } = useForm();
     const { majorsDispatch, isLoading } = useDispatchMajors();
 
 
     const handleAddDep = async (data) => {
+        data = cleanFormData(data)
         if (!data)
             return;
 
@@ -30,7 +32,7 @@ function AddMajorDialog({ payload, open, onClose }) {
                 major
             </DialogTitle>
             <DialogContent>
-                <TextField label="Major name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name} {...register('name', { required: true })} />
+                <TextField label="Major name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name} {...register('name', { required: true })} onChange={(e) => trimFormInputStart(e, setValue)} />
             </DialogContent>
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>

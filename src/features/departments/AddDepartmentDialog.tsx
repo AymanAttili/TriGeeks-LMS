@@ -3,13 +3,16 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import { useForm } from 'react-hook-form';
 import { useDispatchDepartment } from './useDispatchDepartment';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { cleanFormData, trimFormInputStart } from '../../utils/helpers';
 
 function AddDepartmentDialog({ payload, open, onClose }) {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, setValue } = useForm();
     const { departmentDispatch, isLoading } = useDispatchDepartment();
 
 
+
     const handleAddDep = async (data) => {
+        data = cleanFormData(data);
         if (!data)
             return;
 
@@ -26,7 +29,7 @@ function AddDepartmentDialog({ payload, open, onClose }) {
                 department
             </DialogTitle>
             <DialogContent>
-                <TextField label="Department name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name} {...register('name', { required: true })} />
+                <TextField label="Department name" margin='dense' disabled={isLoading} fullWidth defaultValue={payload?.name}  {...register('name', { required: true })} onChange={(e) => trimFormInputStart(e, setValue)} />
             </DialogContent>
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, Grid2 as Grid, LinearProgress, Link, Paper, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, ButtonGroup, Grid2 as Grid, LinearProgress, Link, Paper, Typography } from "@mui/material";
 
 import { Link as RouterLink } from "react-router-dom";
 import Category from "../../ui/course/Category";
@@ -16,6 +16,7 @@ import SpinnerLoader from "../../ui/SpinnerLoader";
 import AddCourseDialog from "./AddCourseDialog";
 import AssignToCourseDialog from "./AssignToCourseDialog";
 import { courseStatuses } from "../../Enums/courseStatuses";
+import CourseParticipants from "./CourseParticipants";
 
 interface Material {
   id: string;
@@ -30,6 +31,8 @@ interface Category {
 }
 
 const Course: React.FC = () => {
+  const [page, setPage] = useState(0)
+
   const { courseId } = useParams()
   const navigate = useNavigate();
 
@@ -58,7 +61,6 @@ const Course: React.FC = () => {
 
     if (ok) {
       await courseDispatch({ action: 'delete', payload: { courseId } }).then(() => navigate('/courses'))
-
     }
   }
 
@@ -87,9 +89,26 @@ const Course: React.FC = () => {
 
   return (
     <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} spacing={2} padding={2} flex={1}>
-      <Link component={RouterLink} to="/courses">
-        ⇐ Back to courses
-      </Link>
+      <Grid container alignItems={'center'} justifyContent={'space-between'}>
+        <Link component={RouterLink} to="/courses">
+          ⇐ Back to courses
+        </Link>
+        {
+          roleNames[user.role] !== 'Staff' &&
+          <ButtonGroup>
+            <Button disabled={page === 0} onClick={() => setPage(0)}>
+              Home
+            </Button>
+            <Button disabled={page === 1} onClick={() => setPage(1)}>
+              participants
+            </Button>
+          </ButtonGroup>
+        }
+
+        <Link component={RouterLink} to="/courses" sx={{ visibility: 'hidden' }}>
+          ⇐ Back to courses
+        </Link>
+      </Grid>
       <Grid container size={12} flexDirection={{ xs: 'column', sm: 'row' }} alignItems={'start'} justifyContent={'space-between'} spacing={2} paddingY={1} borderBottom={1} borderColor={'primary.main'}>
         <Grid container size={{ xs: 12, sm: 8, md: 7 }} flexDirection={'column'} spacing={1}>
           <Typography variant="h5" fontWeight={600}>
@@ -169,28 +188,35 @@ const Course: React.FC = () => {
         }
 
       </Grid>
+      {
+        (page === 0 || roleNames[user.role] === 'Staff') &&
+        <Grid container size={12} flexDirection={'column'} spacing={1} paddingY={2}>
+          {
+            roleNames[user?.role] !== 'Staff' &&
+            <Grid container paddingBottom={1}>
+              <Button
+                onClick={openAddSection}
+                variant="outlined"
+                startIcon={<Add />}
+                sx={{
+                  fontWeight: "bold",
+                }}
+              >
+                Add new section
+              </Button>
+            </Grid>
+          }
+          {
+            course?.sections?.sort((it1, it2) => it1.index - it2.index).map((section) => <Category key={section.id} section={section} courseId={course.id} />)
+          }
 
-      <Grid container size={12} flexDirection={'column'} spacing={1} paddingY={2}>
-        {
-          roleNames[user?.role] !== 'Staff' &&
-          <Grid container paddingBottom={1}>
-            <Button
-              onClick={openAddSection}
-              variant="outlined"
-              startIcon={<Add />}
-              sx={{
-                fontWeight: "bold",
-              }}
-            >
-              Add new section
-            </Button>
-          </Grid>
-        }
-        {
-          course?.sections?.sort((it1, it2) => it1.index - it2.index).map((section) => <Category key={section.id} section={section} courseId={course.id} />)
-        }
+        </Grid>
+      }
+      {
+        (page === 1 && roleNames[user.role] !== 'Staff') &&
+        <CourseParticipants />
+      }
 
-      </Grid>
     </Grid>
   );
 };

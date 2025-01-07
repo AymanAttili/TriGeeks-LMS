@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { Button, Grid2 as Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-
+import { Link as RouterLink } from 'react-router-dom'
 import { useDialogs } from '@toolpad/core';
 import ActionsMenu from '../../ui/ActionsMenu';
 import { Navigate, useParams } from "react-router-dom"
@@ -60,17 +60,24 @@ function Department() {
         return <Navigate to='/404' />
 
     return (
-        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} spacing={5} flex={1}>
+        <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} padding={2} spacing={2} flex={1}>
+            <Link component={RouterLink} to="/departments">
+                ⇐ Back to departments
+            </Link>
             <Grid container justifyContent={'space-between'} padding={1} sx={{
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center'
             }}>
                 <Typography variant='h4' color='primary'>
-                    {department?.name} - Majors
+                    {department?.name}
                 </Typography>
                 <Button onClick={openMajorsDialog} variant='contained' endIcon={<Add />}>Add new</Button>
             </Grid>
+            <Typography variant='h5' padding={2}>
+                Majors:
+            </Typography>
             <TableContainer sx={{ maxHeight: '65dvh', overflow: 'auto' }}>
+
                 <Table stickyHeader >
                     <TableHead sx={{ bgcolor: 'whiteSmoke' }}>
                         <TableRow >
@@ -84,7 +91,7 @@ function Department() {
                                 fontSize: 18,
                                 bgcolor: 'primary.light'
                             }}>
-                                Name
+                                Major name
                             </TableCell>
                             <TableCell width={40} sx={{
                                 fontSize: 18,

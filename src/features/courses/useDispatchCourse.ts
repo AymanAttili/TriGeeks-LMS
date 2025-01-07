@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
 import { addQuiz, addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, submitExam, toggleSectionPartStatus } from "../../services/apiCourses";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type data = {
     payload: object,
@@ -9,6 +9,7 @@ type data = {
 }
 
 export function useDispatchCourse() {
+    const {courseId} = useParams();
     const queryClient = useQueryClient();
     const notifications = useNotifications();
     const navigate = useNavigate()
@@ -44,8 +45,9 @@ export function useDispatchCourse() {
                 autoHideDuration: 3000,
             });
 
-            queryClient.invalidateQueries({queryKey: ['course']}) // TODO: invalidate just the edited course by courseId
-            queryClient.invalidateQueries({queryKey: ['courseAssignments']}) // TODO: invalidate just the edited course by courseId
+            queryClient.invalidateQueries({queryKey: ['course', courseId]}) // TODO: invalidate just the edited course by courseId
+            queryClient.invalidateQueries({queryKey: ['courseAssignments', courseId]}) // TODO: invalidate just the edited course by courseId
+            queryClient.invalidateQueries({queryKey: ['participants', courseId]})
 
             if(res) // for edit, add, delete operations
                 queryClient.invalidateQueries({queryKey: ['courses']})

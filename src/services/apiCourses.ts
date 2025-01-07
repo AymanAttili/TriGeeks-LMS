@@ -2,6 +2,26 @@ import { AxiosError } from "axios";
 import axiosAPI from "../API/axiosAPI";
 import { addFile } from "./apiFiles";
 
+export async function getCourseParticipants(courseId: string,page:string,filter: number){
+    let newFilter=''
+    if(filter > 0){
+        newFilter = `status==${filter}`
+    }
+    const payload = {
+        filters: newFilter,
+        sorts: "",
+        page,
+        pageSize: 10
+    }
+    return await axiosAPI.post(`/courses/${courseId}/participants`, payload)
+}
+
+export async function pokeUser(courseId: string, userId: string) {
+    return await axiosAPI.post(`/courses/${courseId}/participants/${userId}/late-notifications`)
+
+}
+
+
 export async function getCourse(courseId: string){
     return await axiosAPI.get(`/courses/${courseId}`).catch((err) => new AxiosError(err))
 }
@@ -160,6 +180,11 @@ export async function editQuiz(sectionId: string, sectionPartId: number, data){
 export async function getSectionPart(sectionId: string, sectionPartId: string){
     return await axiosAPI.get(`/sections/${sectionId}/parts/${sectionPartId}`);
 }
+
+export async function getExamOverview(examId){
+    return await axiosAPI.get(`/exams/${examId}`);
+}
+
 
 export async function editSectionPart(sectionId: string, sectionPartId: string, payload){
     const { materialType, file, title, link, questions } = payload;

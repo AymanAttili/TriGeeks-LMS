@@ -9,7 +9,7 @@ import AddQuestionDialog from './AddQuestionDialog';
 import { useQuestionsDraft, } from './useQuestionsDraft';
 import { useDispatchQuestions } from './useDispatchQuestions';
 import { useDispatchCourse } from '../courses/useDispatchCourse';
-import { toText } from '../../utils/helpers';
+import { cleanFormData, toText, trimFormInputStart } from '../../utils/helpers';
 
 function CreateQuizDialog({ payload, open, onClose }) {
     const [totalMarks, setTotalMarks] = useState(0);
@@ -23,9 +23,10 @@ function CreateQuizDialog({ payload, open, onClose }) {
         setTotalMarks(() => questionsDraft?.reduce((sum, cur) => sum += cur.points, 0))
     }, [setTotalMarks, questionsDraft])
 
-    const { register, handleSubmit, formState: { errors: formErrors, isLoading } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors: formErrors, isLoading } } = useForm();
 
     const handleEditQuiz = async (data) => {
+        data = cleanFormData(data)
         const questions = questionsDraft?.map((question) => {
             return {
                 text: question.text,
@@ -153,6 +154,8 @@ function CreateQuizDialog({ payload, open, onClose }) {
                         disabled={isLoading || dispatchingCourse}
                         {...register('title', { required: "Title is required", })}
                         defaultValue={payload.sectionPart?.title}
+                        onChange={(e) => trimFormInputStart(e, setValue)}
+
                     />
                     <TextField label="Duration" margin='dense'
                         type={'number'}
@@ -224,7 +227,7 @@ function CreateQuizDialog({ payload, open, onClose }) {
                                                 {question.preview || toText(question.text)}
                                             </TableCell>
                                             <TableCell >
-                                                {question.choices[0].text === 'False' ? 'True or False' : 'Multiple Choices'}
+                                                {(question.choices.length === 2 && question.choices[0].text === 'False') ? 'True or False' : 'Multiple Choices'}
                                             </TableCell>
                                             <TableCell sx={{ textAlign: 'center' }}>
                                                 {question.points}

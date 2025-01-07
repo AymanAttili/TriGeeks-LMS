@@ -1,9 +1,8 @@
-import React from "react";
-import { Button, Grid2 as Grid, IconButton, Link, ListItem, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Chip, FormHelperText, Grid2 as Grid, IconButton, Link, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import MarkDone from "./MarkDone";
-import DescriptionIcon from "@mui/icons-material/Description";
-import { Delete, Edit, Quiz } from "@mui/icons-material";
+import { Delete, Edit, ExpandLess, ExpandMore, Quiz } from "@mui/icons-material";
 import { useUser } from "../../features/users/useUser";
 import { roleNames } from "../../Enums/roles";
 import { Link as RouterLink } from "react-router-dom";
@@ -12,6 +11,7 @@ import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
 import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
 import CreateQuizDialog from "../../features/quiz/CreateQuizDialog";
 import { useDispatchQuestions } from "../../features/quiz/useDispatchQuestions";
+import FileIcon from "./FileIcon";
 interface MaterialListItemProps {
   sectionPart: {
     id: number,
@@ -39,6 +39,7 @@ interface MaterialListItemProps {
 const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
   const { user } = useUser();
   const { courseDispatch, isLoading } = useDispatchCourse();
+  const [expanded, setExpanded] = useState(false);
 
   const { questionsDispatch } = useDispatchQuestions();
 
@@ -69,70 +70,131 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
     }
   }
   return (
+
     <Grid component={ListItem}
-      flexDirection={{ xs: 'column', sm: 'row' }}
-      gap={2}
+      flexDirection={'column'}
       paddingX={0}
       paddingY={2}
       borderBottom={3}
       borderColor={'primary.light'}
-      sx={{
+
+    >
+      <Grid container size={12} flexDirection={{ xs: 'column', sm: 'row' }} gap={2} sx={{
         alignItems: { xs: 'start', sm: "center" },
         justifyContent: "space-between",
-      }}
-    >
-      <Grid container alignItems={'center'} >
-        <ListItemIcon
-          sx={{
-            backgroundColor: `${sectionPart.materialType === 2 ? "#027e7b" : ""}`,
-            minWidth: "fit-content",
-            mr: 1,
-            borderRadius: 1,
-            padding: 0.2,
-          }}
-        >
-          {sectionPart.materialType === 2 && <LinkIcon sx={{ color: "#ffffff" }} />}
-          {sectionPart.materialType === 1 && <DescriptionIcon sx={{ color: "#FFA726" }} />}
-          {sectionPart.materialType === 3 && <Quiz />}
-        </ListItemIcon>
-        <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || (sectionPart.exam ? `quiz/${sectionPart.exam.id}` : false) || ' '} target="_blank" >
-          <ListItemText primary={sectionPart.title} />
-        </Link>
+      }}>
+        <Grid container alignItems={'center'} >
+          <ListItemIcon
+            sx={{
+              minWidth: "fit-content",
+              mr: 1,
+              padding: 0.2,
+            }}
+          >
+            {sectionPart.materialType === 2 && <LinkIcon fontSize="large" sx={{ bgcolor: 'primary.main', padding: 0.5, color: 'white', borderRadius: 1 }} />}
+            {sectionPart.materialType === 1 && <FileIcon type={sectionPart.file?.contentType} />}
+            {sectionPart.materialType === 3 && <Quiz fontSize="large" />}
+          </ListItemIcon>
+          <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || (sectionPart.exam ? `quiz/${sectionPart.exam.id}` : false) || ' '} target="_blank" >
+            <ListItemText primary={sectionPart.title} />
+          </Link>
+        </Grid>
+        {
+          (roleNames[user?.role] === 'Staff' && sectionPart.materialType !== 3) &&
+          <Grid container spacing={1}>
+            {
+              ['audio', 'video', 'image'].includes(sectionPart.file?.contentType.split('/')[0]) &&
+              <IconButton onClick={() => setExpanded(val => !val)}>
+                {
+                  expanded ? <ExpandLess /> : <ExpandMore />
+                }
+
+              </IconButton>
+            }
+
+            <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
+          </Grid>
+        }
+        {
+          (roleNames[user?.role] === 'Staff' && sectionPart.materialType === 3) &&
+          <Grid container spacing={2} alignItems={'center'}>
+            {
+              sectionPart.exam.status !== 3 &&
+              <>
+                <FormHelperText>
+                  Your latest grade: {` ${sectionPart.exam.lastGottenGradePoints} `} / {` ${sectionPart.exam.maxGradePoints}`}
+                </FormHelperText>
+
+                {
+                  sectionPart.exam.lastGottenGradePoints >= sectionPart.exam.passThresholdPoints ?
+                    <Chip label='Passed' color="success" size="small" />
+                    :
+                    <Chip label='Failed' color="error" size='small' />
+
+                }
+
+              </>
+            }
+            <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
+              <Button variant="outlined"
+                size={'small'}
+                sx={{
+                  borderRadius: 5,
+                  border: 2
+                }}
+              >
+                {
+                  sectionPart.exam.status === 3 ? "Start " : "Retake "
+                }
+                Quiz
+              </Button>
+            </Link>
+          </Grid>
+
+        }
+        {
+          roleNames[user?.role] !== 'Staff' &&
+          <Grid container spacing={1}>
+            <Tooltip title={'Edit'}>
+              <IconButton size="small" onClick={handleEdit} disabled={isLoading} >
+                <Edit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={'Delete'}>
+              <IconButton size="small" color="error" onClick={handleDelete} disabled={isLoading} >
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        }
       </Grid>
       {
-        (roleNames[user?.role] === 'Staff' && sectionPart.materialType !== 3) &&
-        <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
+        expanded &&
+        <>
+          {
+            sectionPart.file?.contentType.split('/')[0] === 'video' &&
+            <Grid container size={12} justifyContent={'center'} alignItems={'center'} paddingY={4}>
+              <video height="300" controls>
+                <source src={sectionPart.file.path} type={sectionPart.file.contentType} />
+              </video>
+            </Grid>
+          }
+          {
+            sectionPart.file?.contentType.split('/')[0] === 'audio' &&
+            <Grid container size={12} justifyContent={'center'} alignItems={'center'} paddingY={4}>
+              <audio controls>
+                <source src={sectionPart.file.path} type={sectionPart.file.contentType} />
+              </audio>
+            </Grid>
+          }
+          {
+            sectionPart.file?.contentType.split('/')[0] === 'image' &&
+            <Grid container size={12} justifyContent={'center'} alignItems={'center'} paddingY={4}>
+              <img height={300} src={sectionPart.file.path} type={sectionPart.file.contentType} />
+            </Grid>
+          }
+        </>
       }
-      {
-        (roleNames[user?.role] === 'Staff' && sectionPart.materialType === 3) &&
-        <Button variant="outlined"
-          size={'small'}
-          sx={{
-            borderRadius: 5,
-            border: 2
-          }}
-        >
-          <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
-            Start Quiz
-          </Link>
-        </Button>
-      }
-      {
-        roleNames[user?.role] !== 'Staff' &&
-        <Grid container spacing={1}>
-          <Tooltip title={'Edit'}>
-            <IconButton size="small" onClick={handleEdit} disabled={isLoading} >
-              <Edit />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={'Delete'}>
-            <IconButton size="small" color="error" onClick={handleDelete} disabled={isLoading} >
-              <Delete />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-      }
-
     </Grid>
   );
 };

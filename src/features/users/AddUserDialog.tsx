@@ -9,11 +9,11 @@ import { useMajors } from '../majors/useMajors';
 import { useDepartments } from '../departments/useDepartments';
 import { useDispatchUsers } from './useDispatchUsers';
 import { gender } from '../../Enums/gender';
-import SpinnerLoader from '../../ui/SpinnerLoader';
+import { cleanFormData, trimFormInputStart } from '../../utils/helpers';
 
 function AddUserDialog({ payload, open, onClose }) {
     const { usersDispatch, isError, isLoading: dispatchingUser } = useDispatchUsers();
-    const { register, handleSubmit, watch, control, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
+    const { register, handleSubmit, watch, control, setValue, formState: { isLoading, isValid, isValidating, errors: formErrors } } = useForm();
     const [activeStep, setActiveStep] = useState(0);
     const { majors, isLoading: fetchingMajors } = useMajors(watch('departmentId'))
     const { departments, isLoading: fetchingDeps } = useDepartments();
@@ -21,6 +21,7 @@ function AddUserDialog({ payload, open, onClose }) {
     const user = payload?.user
 
     const handleAddUser = async (data) => {
+        data = cleanFormData(data);
         if (!isValid)
             return;
 
@@ -49,6 +50,7 @@ function AddUserDialog({ payload, open, onClose }) {
                                 error={!!formErrors.workId}
                                 helperText={formErrors.workId?.message}
                                 {...register('workId', { required: "Work ID is required", })}
+                                onChange={(e) => trimFormInputStart(e, setValue)}
                                 defaultValue={user?.workId}
                             />
 
@@ -57,6 +59,7 @@ function AddUserDialog({ payload, open, onClose }) {
                                     error={!!formErrors.firstName}
                                     helperText={formErrors.firstName?.message}
                                     {...register('firstName', { required: "First name is required", })}
+                                    onChange={(e) => trimFormInputStart(e, setValue)}
                                     defaultValue={user?.firstName}
                                 />
 
@@ -64,6 +67,8 @@ function AddUserDialog({ payload, open, onClose }) {
                                     error={!!formErrors.middleName}
                                     helperText={formErrors.middleName?.message}
                                     {...register('middleName', { required: "Middle name is required", })}
+                                    onChange={(e) => trimFormInputStart(e, setValue)}
+
                                     defaultValue={user?.middleName}
                                 />
 
@@ -71,6 +76,8 @@ function AddUserDialog({ payload, open, onClose }) {
                                     error={!!formErrors.lastName}
                                     helperText={formErrors.lastName?.message}
                                     {...register('lastName', { required: "Last name is required", })}
+                                    onChange={(e) => trimFormInputStart(e, setValue)}
+
                                     defaultValue={user?.lastName}
                                 />
                             </Grid>

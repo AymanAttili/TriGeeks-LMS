@@ -3,13 +3,15 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import { useForm } from 'react-hook-form';
 import { useDispatchCourse } from './useDispatchCourse';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { cleanFormData, trimFormInputStart } from '../../utils/helpers';
 
 function AddSectionDialog({ payload, open, onClose }) {
-    const { register, handleSubmit, formState: { isLoading, errors: formErrors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { isLoading, errors: formErrors } } = useForm();
 
     const { courseDispatch, isLoading: dispatchingCourse } = useDispatchCourse();
 
     const handleAddSection = async (data) => {
+        data = cleanFormData(data)
         if (!data)
             return;
 
@@ -38,6 +40,8 @@ function AddSectionDialog({ payload, open, onClose }) {
                     helperText={formErrors.sectionName?.message}
                     defaultValue={payload.section?.title}
                     {...register('sectionName', { required: "Section Name is required", })}
+                    onChange={(e) => trimFormInputStart(e, setValue)}
+
                 />
             </DialogContent>
             <DialogActions>

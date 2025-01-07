@@ -13,3 +13,11 @@ export const courseStatuses = {
     [Status.Failed]: 'Failed',
     [Status.Expired]: 'Expired',
 };
+
+export const statuses = [
+    {value: 1, label: 'NotStarted'},
+    {value: 2, label: 'InProgress'},
+    {value: 3, label: 'Finished'},
+    {value: 4, label: 'Failed'},
+    {value: 5, label: 'Expired'}
+]

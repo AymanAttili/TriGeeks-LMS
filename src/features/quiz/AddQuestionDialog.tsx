@@ -24,7 +24,7 @@ const extractQuestionType = (choices) => {
     if (!choices)
         return 0;
 
-    return choices[0].text === 'False' ? 0 : 1
+    return (choices.length === 2 && choices[0].text === 'False') ? 0 : 1
 }
 
 const extractChoices = (choices) => {
@@ -77,9 +77,11 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
         if (!checkAvailabilty())
             return;
 
+        console.log(payload?.question.choices);
+
         let question = {
-            text,
-            preview,
+            text: text.trim(),
+            preview: preview.trim(),
             points: Number(points),
             file: image,
             correctAnswer,
@@ -88,8 +90,8 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
             id: payload?.question.id || 0,
             choices: answers.map((ans, ind) => {
                 return {
-                    id: 0,
-                    text: ans,
+                    id: payload?.question.choices[ind]?.id || 0,
+                    text: ans.trim(),
                     isCorrect: ind === correctAnswer
                 }
             })
@@ -107,7 +109,7 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
     }
 
     const handleAnswerChange = (e, index) => {
-        const val = e.target.value;
+        const val = e.target.value.trimStart();
 
         setAnswers((ans) =>
             ans.map((item, ind) => {
@@ -196,8 +198,8 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                             </Typography>
                             <Grid container minHeight={120} marginBottom={5}>
                                 <ReactQuill theme="snow" value={text} onChange={(value, delta, source, editor) => {
-                                    setPreview(editor.getText())
-                                    setText(editor.getHTML())
+                                    setPreview(editor.getText().trimStart())
+                                    setText(editor.getHTML().trimStart())
                                 }} style={{ width: '100%' }} />
                             </Grid>
                             {
@@ -258,7 +260,7 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                                             <Typography variant="h6" width={24}>
                                                 {+index + 1}.
                                             </Typography>
-                                            <TextField multiline value={answers[index]} disabled={questionType === 0} onChange={(e) => handleAnswerChange(e, index)} sx={{ width: '80%' }} />
+                                            <TextField multiline value={answers[index]} disabled={questionType === 0} onChange={(e) => handleAnswerChange(e, index)} sx={{ width: '70%' }} />
 
 
                                             {

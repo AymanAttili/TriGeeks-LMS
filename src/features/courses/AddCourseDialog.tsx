@@ -3,12 +3,14 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid2 as Gri
 import { useForm } from 'react-hook-form';
 import { useDispatchCourse } from './useDispatchCourse';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { cleanFormData, trimFormInputStart } from '../../utils/helpers';
 
 function AddCourseDialog({ payload, open, onClose }) {
     const { register, handleSubmit, setValue, formState: { isLoading, errors: formErrors } } = useForm();
     const { courseDispatch, isLoading: dispatchingCourse } = useDispatchCourse();
 
     const handleAddCourse = async (data) => {
+        data = cleanFormData(data)
         if (!data)
             return;
 
@@ -52,6 +54,7 @@ function AddCourseDialog({ payload, open, onClose }) {
                     helperText={formErrors.courseName?.message}
                     defaultValue={payload?.course.name}
                     {...register('courseName', { required: "Course Name is required", })}
+                    onChange={(e) => trimFormInputStart(e, setValue)}
                 />
 
                 <Grid container spacing={2} pt={2}>

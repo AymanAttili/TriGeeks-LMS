@@ -25,7 +25,7 @@ function AssignToCourseDialog({ payload, onClose, open }) {
     }
 
     const isChecked = (id) => {
-        return checkedList.indexOf(id) !== -1
+        return checkedList?.indexOf(id) !== -1
     }
 
     const handleAssignToCourse = async (e) => {
