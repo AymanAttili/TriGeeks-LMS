@@ -7,7 +7,6 @@ import { getExamOverview } from "../../services/apiCourses";
 function StartQuiz() {
     const data = useLoaderData();
     const { exam, started } = data;
-    console.log(exam, started);
 
 
     const { courseId, quizId } = useParams();

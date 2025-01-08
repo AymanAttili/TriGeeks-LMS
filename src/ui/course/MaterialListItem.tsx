@@ -12,7 +12,7 @@ import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
 import CreateQuizDialog from "../../features/quiz/CreateQuizDialog";
 import { useDispatchQuestions } from "../../features/quiz/useDispatchQuestions";
 import FileIcon from "./FileIcon";
-interface MaterialListItemProps {
+export interface MaterialListItemProps {
   sectionPart: {
     id: number,
     sectionId: number,

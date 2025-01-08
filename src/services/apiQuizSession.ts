@@ -10,14 +10,8 @@ export async function checkStartedQuiz(quizId: string){
 
 export async function getQuizSession(quizId: string){
     return await axiosAPI.get(`exams/${quizId}/user/current-session`).catch((err) => {if(err.message.status===409)
-        return{data:{
-            ended: true,
-            questions:[{}],
-            checkpointQuestionId:0,
-            startDateUtc:"2025-01-07T20:15:59.567631"
-            ,
-            durationMinutes:1
-        }
+        return{
+            data:null
     }
     }
     )

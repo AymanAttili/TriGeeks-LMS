@@ -11,14 +11,15 @@ function QuizSessionEnded() {
     }
     return (
         <Grid container flexDirection={'column'} size={12} flex={1} alignItems={'center'} justifyContent={'center'} spacing={3}>
-            <Typography variant="h1" fontWeight={700} color="error">
-                409
-            </Typography>
-            <Typography variant="h3">
+
+            <Typography variant="h2">
                 Quiz Session ended!
             </Typography>
             <Typography variant="h2">
                 ⌛
+            </Typography>
+            <Typography variant="h6">
+                All your answers have been saved, so 'Don't worry'.
             </Typography>
 
             <Button size={'large'} variant={'contained'} sx={{ marginTop: 20 }} onClick={handleEndQuiz}>

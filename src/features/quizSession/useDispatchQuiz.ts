@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { answerQuestion, finishQuiz, startQuiz } from "../../services/apiQuizSession";
 import { useNotifications } from "@toolpad/core";
+import { useParams } from "react-router-dom";
 
 export function useDispatchQuiz() {
+    const {quizId} = useParams();
     const queryClient = useQueryClient();
     const notifications = useNotifications();
 
@@ -23,7 +25,7 @@ export function useDispatchQuiz() {
             // });
             
             queryClient.invalidateQueries({ queryKey: ['quizSession'] });
-            queryClient.invalidateQueries({ queryKey: ['currentQuestion'] });
+            queryClient.invalidateQueries({ queryKey: ['currentQuestion', quizId] });
         },
 
         onError: (err) => {  

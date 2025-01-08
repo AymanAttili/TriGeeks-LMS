@@ -30,6 +30,49 @@ interface Category {
   materials: Material[];
 }
 
+const findGrade = (course) => {
+  if (!course?.sections)
+    return 0;
+
+  const [maxPoints, mark] = course.sections?.map((sec) => {
+    return sec.sectionParts
+      .reduce(([sumTotal, sum], part) => {
+        sumTotal += part.exam?.maxGradePoints || 0
+        sum += part.exam?.lastGottenGradePoints || 0
+        return [sumTotal, sum];
+      }, [0, 0])
+  })
+    .reduce(([sumTotal, sum], [it1, it2]) => {
+      sumTotal += it1;
+      sum += it2;
+      return [sumTotal, sum]
+    }, [0, 0])
+
+  const grade = (mark / maxPoints) * 100
+  return grade;
+}
+
+const passedQuizzes = (course) => {
+  if (!course?.sections)
+    return false;
+
+  return course.sections?.map((sec) => {
+    return sec.sectionParts
+      .reduce((passed, part) => {
+        if (part.exam) {
+
+          if (!part.exam.lastGottenGradePoints)
+            return false;
+
+          return passed && part.exam.lastGottenGradePoints >= part.exam.passThresholdPoints
+        }
+        return passed;
+      }, true)
+  })
+    .reduce((passed, it) => passed && it, true)
+}
+
+
 const Course: React.FC = () => {
   const [page, setPage] = useState(0)
 
@@ -40,6 +83,8 @@ const Course: React.FC = () => {
   const { course, isError, isLoading: fetchingCourse } = useCourse(courseId);
   const dialogs = useDialogs();
 
+  const grade = findGrade(course)
+  const passed = passedQuizzes(course);
 
   const { courseDispatch, isLoading } = useDispatchCourse()
 
@@ -125,8 +170,8 @@ const Course: React.FC = () => {
                   </Typography>
                 </Grid>
                 <Grid container size={12} spacing={2} alignItems={'center'} justifyContent={'space-between'}>
-                  <Typography variant="h6">
-                    Grade: {course?.grade || '--'}
+                  <Typography variant="h6" color={passed ? 'success' : 'error'}>
+                    Grade: {Math.floor(grade)}%
                   </Typography>
 
                   {

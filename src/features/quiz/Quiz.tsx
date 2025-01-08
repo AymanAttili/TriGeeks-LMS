@@ -11,7 +11,7 @@ import {
     FormControl,
     FormLabel,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import QuizNavigation from "./QuizNavigation";
 import QuizSessionEnded from "./QuizSessionEnded";
 import { useDialogs } from "@toolpad/core";
@@ -25,10 +25,10 @@ const Quiz: React.FC = () => {
     const { quizId, courseId } = useParams();
     const { quizSession, isLoading: fetchingSession } = useQuizSession(quizId);
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [questionId, setQuestionId] = useState(quizSession?.questions[questionIndex].id)
+    const [questionId, setQuestionId] = useState(0)
     const { quizDispatch, isLoading } = useDispatchQuiz()
     const { currentQuestion, isLoading: fetchingQuestion } = useCurrentQuestion({ quizId, questionId });
-    const [selectedAnswer, setSelectedAnswer] = useState(!fetchingQuestion && currentQuestion.chosenAnswer)
+    const [selectedAnswer, setSelectedAnswer] = useState(0)
 
     const dialogs = useDialogs()
 
@@ -40,20 +40,20 @@ const Quiz: React.FC = () => {
     }
 
     const handleSelectQuestion = async (index) => {
-        if (selectedAnswer)
-            await handleSubmitAnswer()
+        await handleSubmitAnswer()
 
         setQuestionIndex(index)
-        setSelectedAnswer(null)
+        setSelectedAnswer(0)
 
     }
 
     const handleSubmitAnswer = async () => {
-        await quizDispatch({ action: 'submitAnswer', payload: { quizId, questionId, answer: selectedAnswer } })
+        if (selectedAnswer !== 0)
+            await quizDispatch({ action: 'submitAnswer', payload: { quizId, questionId, answer: selectedAnswer } })
     };
 
     const handleFinishQuiz = async () => {
-        const confirm = await dialogs.confirm('Are you sure you want to submit quiz?', {
+        const confirm = await dialogs.confirm('Are you sure you want to submit and finish quiz?', {
             title: 'Submit Quiz',
             okText: 'Submit',
             cancelText: 'Cancel'
@@ -65,19 +65,15 @@ const Quiz: React.FC = () => {
     }
 
     const handleNext = async () => {
-        if (selectedAnswer)
-            await handleSubmitAnswer().then(() => {
-                if (questionIndex < quizSession?.questions.length - 1)
-                    setQuestionIndex(val => +val + 1)
-            });
+        await handleSubmitAnswer()
 
-        else
+        if (questionIndex < quizSession?.questions.length - 1)
             setQuestionIndex(val => +val + 1)
+
     }
 
     const handlePrevious = async () => {
-        if (selectedAnswer)
-            await handleSubmitAnswer()
+        await handleSubmitAnswer()
         setQuestionIndex(val => val - 1)
     }
 
@@ -96,7 +92,8 @@ const Quiz: React.FC = () => {
     }, [questionIndex, setQuestionId, quizSession])
 
     useEffect(() => {
-        setSelectedAnswer(currentQuestion?.chosenAnswer)
+        setSelectedAnswer(currentQuestion?.chosenAnswer || 0)
+
     }, [currentQuestion])
 
     useEffect(() => {
@@ -107,7 +104,7 @@ const Quiz: React.FC = () => {
         return () => clearInterval(timer as ReturnType<typeof setInterval>);
     }, [timeLeft]);
 
-    if (((!fetchingSession && quizSession?.ended) || timeLeft === 0))
+    if (((!fetchingSession && !quizSession) || timeLeft === 0))
         return <QuizSessionEnded />
 
     return (
@@ -157,7 +154,7 @@ const Quiz: React.FC = () => {
                                             <div dangerouslySetInnerHTML={{ __html: currentQuestion?.text }} />
                                         </Typography>
                                         <Grid2 container justifyContent={'center'}>
-                                            <img width={400} src={currentQuestion?.image?.path} />
+                                            <img width={400} src={currentQuestion.image?.path} />
                                         </Grid2>
                                         <FormControl component="fieldset" fullWidth>
                                             <FormLabel component="legend">Select one:</FormLabel>
@@ -167,49 +164,60 @@ const Quiz: React.FC = () => {
                                                 onChange={handleSelectAnswer}
                                             >
                                                 {
-                                                    currentQuestion?.choices?.map((choice) => <FormControlLabel value={choice.id} control={<Radio />} label={choice.text}
+                                                    currentQuestion?.choices?.map((choice) => <FormControlLabel key={choice.id} value={choice.id} control={<Radio />} label={choice.text}
                                                     />)
                                                 }
 
                                             </RadioGroup>
                                         </FormControl>
 
-                                        <Grid2 container justifyContent={'end'} paddingTop={8}>
-                                            <Button variant="outlined" onClick={handleNext} disabled={selectedAnswer === null}>
-                                                Submit answer
+                                        <Grid2 container justifyContent={'space-between'} paddingTop={8}>
+                                            <Button color="error" disabled={selectedAnswer === 0} onClick={() => setSelectedAnswer(0)}>
+                                                Clear answer
                                             </Button>
+                                            <Grid2
+                                                container
+                                                spacing={3}
+                                                justifyContent={"center"}
+                                                style={{ marginTop: 10 }}
+                                            >
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={handlePrevious}
+                                                    sx={{
+                                                        minWidth: 40,
+                                                        rotate: '180deg'
+                                                    }}
+                                                    disabled={questionIndex === 0}
+                                                >
+                                                    ▶
+                                                </Button>
+
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={handleNext}
+                                                    sx={{
+                                                        minWidth: 40
+                                                    }}
+                                                    disabled={questionIndex === quizSession?.questions?.length - 1}
+                                                >
+                                                    ▶
+                                                </Button>
+                                            </Grid2>
+                                            {
+                                                questionIndex === quizSession?.questions?.length - 1 ?
+                                                    <Button variant="outlined" onClick={handleFinishQuiz} disabled={selectedAnswer === 0}>
+                                                        Finish quiz
+                                                    </Button>
+                                                    :
+                                                    <Button variant="outlined" onClick={handleNext} disabled={selectedAnswer === 0}>
+                                                        Submit answer
+                                                    </Button>
+                                            }
+
                                         </Grid2>
                                     </Grid2>
-                                    <Grid2
-                                        container
-                                        spacing={3}
-                                        justifyContent={"center"}
-                                        style={{ marginTop: 10 }}
-                                    >
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handlePrevious}
-                                            size="small"
-                                            sx={{
-                                                minWidth: 40
-                                            }}
-                                            disabled={questionIndex === 0}
-                                        >
-                                            Previous
-                                        </Button>
 
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleNext}
-                                            size="small"
-                                            sx={{
-                                                minWidth: 40
-                                            }}
-                                            disabled={questionIndex === quizSession?.questions.length - 1}
-                                        >
-                                            Next
-                                        </Button>
-                                    </Grid2>
                                 </Grid2>
                             </Grid2>
                             <Grid2 container flexDirection={'column'} size={2} paddingLeft={2}>
@@ -229,7 +237,6 @@ const Quiz: React.FC = () => {
                             </Grid2>
                         </>
                 }
-
             </Grid2>
         </Grid2 >
     );

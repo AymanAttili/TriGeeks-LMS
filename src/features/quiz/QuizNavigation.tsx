@@ -21,9 +21,8 @@ const QuizNavigation: React.FC = ({ handleSubmit, questions, handleSelectQuestio
         // sx={{ border: "3px solid red" }} not that good
         >
             {questions?.map((item, index) => (
-                <Grid2 size={2}>
+                <Grid2 size={2} key={item.id}>
                     <Button
-                        key={item.id}
                         size="small"
                         variant={index === questionIndex || item.isAnswered ? "contained" : "outlined"}
                         color={item.isAnswered && index !== questionIndex ? 'success' : 'primary'}
