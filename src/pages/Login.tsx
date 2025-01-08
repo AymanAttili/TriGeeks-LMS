@@ -58,13 +58,14 @@ const Login = () => {
                     </Typography>
                     <Box >
                         <TextField id="workId" fullWidth label="Work ID" variant="outlined"
+                            disabled={isLoading}
                             {...register('workId', { required: true })}
                         >
                         </TextField>
                         {formErrors.workId && <Typography mt={1} fontSize={12} textAlign={'left'} color="error">*Work id is required</Typography>}
                     </Box>
                     <Grid container flexDirection={'column'} gap={1}>
-                        <InputPassword id="password" label="Password" showPassword={showPassword} register={register} handleClickShowPassword={handleClickShowPassword} />
+                        <InputPassword id="password" label="Password" showPassword={showPassword} register={register} handleClickShowPassword={handleClickShowPassword} isLoading={isLoading} />
 
                         {formErrors.password && <Typography fontSize={12} textAlign={'left'} color="error">*Password is required</Typography>}
                         <FormControlLabel control={<Checkbox

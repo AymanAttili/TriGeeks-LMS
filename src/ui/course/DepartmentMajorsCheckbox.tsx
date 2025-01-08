@@ -23,7 +23,7 @@ function DepartmentMajorsCheckbox({ department, isChecked, check, disabled }) {
                         label={department.name}
                         control={
                             <Checkbox
-                                checked={majors.reduce((has, major) => (has && isChecked(major.id)), true)}
+                                checked={majors.length > 0 && majors.reduce((has, major) => (has && isChecked(major.id)), true)}
                                 indeterminate={majors.reduce((has, major) => (has || isChecked(major.id)), false) && !majors.reduce((has, major) => (has && isChecked(major.id)), true)}
                                 onChange={handleParentCheck}
                                 disabled={disabled}

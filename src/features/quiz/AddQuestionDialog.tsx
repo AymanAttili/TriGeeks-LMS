@@ -168,8 +168,8 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                 </Typography>
 
             </Grid>
-            <Grid container component={DialogContent} sx={{ minHeight: '70vh' }}>
-                <Grid container size={2} flexDirection={'column'} spacing={2} paddingRight={3} borderRight={1} borderColor={'primary.main'} alignItems={'center'}>
+            <Grid container component={DialogContent} size={12} spacing={2} sx={{ minHeight: '70vh' }}>
+                <Grid container size={{ xs: 12, sm: 2 }} flexDirection={'column'} spacing={2} paddingRight={{ sm: 3 }} borderRight={{ sm: 1 }} borderColor={'primary.main'} alignItems={'center'}>
                     <Grid container flexDirection={'column'} alignItems={'center'} paddingBottom={5} borderBottom={1} spacing={3} size={12}>
                         <Typography variant="h6">
                             Question type:
@@ -190,9 +190,9 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                     }
 
                 </Grid>
-                <Grid container size={10} flexDirection={'column'} spacing={3} paddingLeft={3} >
-                    <Grid container>
-                        <Grid container flexDirection={'column'} size={9} spacing={1} paddingX={2}>
+                <Grid container size={{ xs: 12, sm: 9 }} flexDirection={'column'} spacing={3} paddingLeft={{ sm: 3 }} >
+                    <Grid container flexDirection={{ xs: 'column', sm: 'row' }} spacing={4}>
+                        <Grid container flexDirection={'column'} size={{ xs: 12, sm: 9 }} spacing={1} paddingX={2}>
                             <Typography variant="h5" fontWeight={600} color="primary.main">
                                 Question text:
                             </Typography>
@@ -210,7 +210,7 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                             }
                         </Grid>
 
-                        <Grid container flexDirection={'column'} size={2}>
+                        <Grid container flexDirection={'column'} size={{ xs: 12, sm: 2 }}>
                             <img width={200} ref={imagePreview} src={currImage} />
                             <Button
                                 component="label"
@@ -277,7 +277,7 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                                             }
 
                                         </Grid>
-                                        <FormControlLabel value={index} checked={correctAnswer === index} control={<Radio size="small" />} label='' onChange={() => setCorrectAnswer(index)} sx={{ width: 24 }} />
+                                        <FormControlLabel value={index} checked={correctAnswer === index} control={<Radio size="small" />} label='' onChange={() => setCorrectAnswer(index)} sx={{ width: 12 }} />
 
                                     </Grid>
                                 )
@@ -299,7 +299,7 @@ function AddQuestionDialog({ payload, open, onClose }) {//TODO: handle data when
                     Save
                 </LoadingButton>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     )
 }
 

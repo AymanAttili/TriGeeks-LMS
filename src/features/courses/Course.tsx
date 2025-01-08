@@ -48,6 +48,8 @@ const findGrade = (course) => {
       return [sumTotal, sum]
     }, [0, 0])
 
+  if (maxPoints === 0)
+    return 0;
   const grade = (mark / maxPoints) * 100
   return grade;
 }
@@ -134,8 +136,8 @@ const Course: React.FC = () => {
 
   return (
     <Grid component={Paper} container flexDirection={'column'} size={{ xs: 12 }} spacing={2} padding={2} flex={1}>
-      <Grid container alignItems={'center'} justifyContent={'space-between'}>
-        <Link component={RouterLink} to="/courses">
+      <Grid container alignItems={'center'} flexDirection={{ xs: 'column', sm: 'row' }} justifyContent={'space-between'}>
+        <Link component={RouterLink} to="/courses" alignSelf={{ xs: 'start', sm: 'unset' }}>
           ⇐ Back to courses
         </Link>
         {
@@ -150,7 +152,7 @@ const Course: React.FC = () => {
           </ButtonGroup>
         }
 
-        <Link component={RouterLink} to="/courses" sx={{ visibility: 'hidden' }}>
+        <Link component={RouterLink} to="/courses" display={{ xs: 'none', sm: 'block' }} sx={{ visibility: 'hidden' }}>
           ⇐ Back to courses
         </Link>
       </Grid>

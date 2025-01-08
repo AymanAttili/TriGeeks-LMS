@@ -5,13 +5,15 @@ import MarkDone from "./MarkDone";
 import { Delete, Edit, ExpandLess, ExpandMore, Quiz } from "@mui/icons-material";
 import { useUser } from "../../features/users/useUser";
 import { roleNames } from "../../Enums/roles";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { useDialogs } from "@toolpad/core";
 import { useDispatchCourse } from "../../features/courses/useDispatchCourse";
 import AddMaterialDialog from "../../features/courses/AddMaterialDialog";
 import CreateQuizDialog from "../../features/quiz/CreateQuizDialog";
 import { useDispatchQuestions } from "../../features/quiz/useDispatchQuestions";
 import FileIcon from "./FileIcon";
+import { useCourse } from "../../features/courses/useCourse";
+import { courseStatuses } from "../../Enums/courseStatuses";
 export interface MaterialListItemProps {
   sectionPart: {
     id: number,
@@ -38,6 +40,8 @@ export interface MaterialListItemProps {
 
 const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
   const { user } = useUser();
+  const { courseId } = useParams();
+  const { course } = useCourse(courseId);
   const { courseDispatch, isLoading } = useDispatchCourse();
   const [expanded, setExpanded] = useState(false);
 
@@ -95,9 +99,15 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
             {sectionPart.materialType === 1 && <FileIcon type={sectionPart.file?.contentType} />}
             {sectionPart.materialType === 3 && <Quiz fontSize="large" />}
           </ListItemIcon>
-          <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || (sectionPart.exam ? `quiz/${sectionPart.exam.id}` : false) || ' '} target="_blank" >
-            <ListItemText primary={sectionPart.title} />
-          </Link>
+          {
+            sectionPart.materialType === 3 ?
+              <ListItemText primary={sectionPart.title} />
+              :
+              <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || ' '} target="_blank" >
+                <ListItemText primary={sectionPart.title} />
+              </Link>
+          }
+
         </Grid>
         {
           (roleNames[user?.role] === 'Staff' && sectionPart.materialType !== 3) &&
@@ -111,8 +121,10 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
 
               </IconButton>
             }
-
-            <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
+            {
+              courseStatuses[course?.status] !== 'Finished' &&
+              <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
+            }
           </Grid>
         }
         {
@@ -135,20 +147,24 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
 
               </>
             }
-            <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
-              <Button variant="outlined"
-                size={'small'}
-                sx={{
-                  borderRadius: 5,
-                  border: 2
-                }}
-              >
-                {
-                  sectionPart.exam.status === 3 ? "Start " : "Retake "
-                }
-                Quiz
-              </Button>
-            </Link>
+            {
+              courseStatuses[course?.status] !== 'Finished' &&
+              <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
+                <Button variant="outlined"
+                  size={'small'}
+                  sx={{
+                    borderRadius: 5,
+                    border: 2
+                  }}
+                >
+                  {
+                    sectionPart.exam.status === 3 ? "Start " : "Retake "
+                  }
+                  Quiz
+                </Button>
+              </Link>
+            }
+
           </Grid>
 
         }

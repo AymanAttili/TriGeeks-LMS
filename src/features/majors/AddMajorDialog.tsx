@@ -37,7 +37,7 @@ function AddMajorDialog({ payload, open, onClose }) {
             <DialogActions>
                 <Button color='error' variant='outlined' disabled={isLoading} onClick={() => onClose()}>Cancel</Button>
                 <LoadingButton type='submit' variant='outlined' loading={isLoading} disabled={isLoading} loadingPosition='end' endIcon={<Add />} >
-                    {payload ? 'Edit' : 'Add'}
+                    {payload?.name ? 'Edit' : 'Add'}
                 </LoadingButton>
             </DialogActions>
         </Dialog>

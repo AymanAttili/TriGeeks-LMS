@@ -107,23 +107,25 @@ function AddMaterialDialog({ payload, open, onClose }) {
                 }
                 Material
             </Typography>
-            <Grid component={DialogContent} container spacing={2} height={300} marginY={3}>
-                <Grid container flexDirection={'column'} size={3} paddingRight={2} borderRight={2} borderColor={'primary.main'} paddingTop={2}>
+            <Grid component={DialogContent} container spacing={2} flexDirection={{ xs: 'column', sm: 'row' }} height={300} marginY={3}>
+                <Grid container flexDirection={{ sm: 'column' }} justifyContent={{ xs: 'center', sm: 'start' }} size={{ xs: 12, sm: 3 }} paddingRight={{ sm: 2 }} paddingBottom={{ xs: 2, sm: 0 }} borderBottom={{ xs: 2, sm: 0 }} borderRight={{ sm: 2 }} borderColor={'green'} paddingTop={{ sm: 2 }}>
                     <Button
                         variant={type === 2 ? 'outlined' : 'text'}
                         startIcon={<Link />}
+                        disabled={isLoading || dispatchingCourse}
                         onClick={() => setMaterialType(2)}>
                         Link
                     </Button>
                     <Button
                         variant={type === 1 ? 'outlined' : 'text'}
                         startIcon={<AttachFile />}
+                        disabled={isLoading || dispatchingCourse}
                         onClick={() => setMaterialType(1)}>
                         File
                     </Button>
                 </Grid>
-                <Grid container flexDirection={'column'} spacing={2} size={9} paddingTop={2}>
-                    <TextField label="Material title" disabled={isLoading}
+                <Grid container flexDirection={'column'} spacing={2} size={{ xs: 12, sm: 9 }} paddingTop={2}>
+                    <TextField label="Material title" disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.title}
                         helperText={formErrors.title?.message}
                         defaultValue={payload.sectionPart?.title}
@@ -132,7 +134,7 @@ function AddMaterialDialog({ payload, open, onClose }) {
 
                     />
 
-                    {type === 2 && <TextField label="Link" disabled={isLoading}
+                    {type === 2 && <TextField label="Link" disabled={isLoading || dispatchingCourse}
                         fullWidth
                         error={!!formErrors.link}
                         helperText={formErrors.link?.message}
@@ -145,11 +147,12 @@ function AddMaterialDialog({ payload, open, onClose }) {
 
                     {type === 1 &&
                         <Grid container flexDirection={'column'} spacing={1} alignItems={'center'}>
-                            <Grid container size={12}>
+                            <Grid container size={12} alignItems={'center'}>
                                 <Button
                                     component="label"
                                     variant="contained"
                                     tabIndex={-1}
+                                    disabled={isLoading || dispatchingCourse}
                                     startIcon={<AttachFile />}
                                 >
                                     Select file
@@ -163,7 +166,7 @@ function AddMaterialDialog({ payload, open, onClose }) {
                                     {watch('file')?.length > 0 ? watch('file')[0]?.name : formErrors.file ? formErrors.file?.message : payload.sectionPart?.file?.name}
                                 </Typography>
                             </Grid>
-                            <Grid container size={12}>
+                            <Grid container size={12} display={{ xs: 'none', sm: 'flex' }}>
                                 <Typography>
                                     Supported file extensions:
                                 </Typography>

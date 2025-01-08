@@ -109,14 +109,14 @@ const Quiz: React.FC = () => {
 
     return (
 
-        <Grid2 container width={"100%"} height={"100%"} padding={1}>
+        <Grid2 container flexDirection={{ xs: 'column', sm: 'row' }} width={"100%"} height={"100%"} padding={1} spacing={{ xs: 1, sm: 0 }}>
             <Grid2
                 container
                 component={Paper}
                 alignItems={"center"}
                 flexDirection={"column"}
                 spacing={4}
-                size={{ lg: 2.5 }}
+                size={{ xs: 12, sm: 3.5, md: 3, lg: 2.5 }}
                 padding={2}
             >
                 <Typography
@@ -137,7 +137,7 @@ const Quiz: React.FC = () => {
                 <QuizNavigation handleSubmit={handleFinishQuiz} questions={quizSession?.questions} handleSelectQuestion={handleSelectQuestion} questionIndex={questionIndex} />
 
             </Grid2>
-            <Grid2 container flex={1} justifyContent={'center'}>
+            <Grid2 container flexDirection={{ xs: 'column-reverse', sm: 'row' }} flex={1} size={{ xs: 12, sm: 8.5, md: 9, lg: 9.5 }} justifyContent={'center'}>
                 {
                     fetchingQuestion ? <SpinnerLoader /> :
                         <>
@@ -146,15 +146,22 @@ const Quiz: React.FC = () => {
                                 alignItems={"center"}
                                 flex={1}
                                 size={12}
-                                paddingLeft={2}
+                                paddingLeft={{ sm: 2 }}
                             >
-                                <Grid2 container flexDirection={'column'} justifyContent={'space-between'} height={'100%'}>
-                                    <Grid2 container flexDirection={'column'} component={Paper} padding={2} spacing={4}>
-                                        <Typography variant="h5" >
-                                            <div dangerouslySetInnerHTML={{ __html: currentQuestion?.text }} />
+                                <Grid2 container flexDirection={'column'} justifyContent={'space-between'} height={'100%'} >
+                                    <Grid2 container size={12} flexDirection={'column'} component={Paper} padding={2} spacing={4}>
+                                        <Typography fontSize={22} width={'100%'}>
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: currentQuestion?.text }}
+                                                style={{
+                                                    wordWrap: 'normal', // Ensures long words wrap
+                                                    maxWidth: '100%'
+                                                }}
+                                            />
                                         </Typography>
                                         <Grid2 container justifyContent={'center'}>
-                                            <img width={400} src={currentQuestion.image?.path} />
+
+                                            <img src={currentQuestion.image?.path} />
                                         </Grid2>
                                         <FormControl component="fieldset" fullWidth>
                                             <FormLabel component="legend">Select one:</FormLabel>
@@ -171,7 +178,7 @@ const Quiz: React.FC = () => {
                                             </RadioGroup>
                                         </FormControl>
 
-                                        <Grid2 container justifyContent={'space-between'} paddingTop={8}>
+                                        <Grid2 container size={12} flexDirection={{ xs: 'column', sm: 'row' }} justifyContent={'space-between'} paddingTop={8}>
                                             <Button color="error" disabled={selectedAnswer === 0} onClick={() => setSelectedAnswer(0)}>
                                                 Clear answer
                                             </Button>
@@ -206,7 +213,7 @@ const Quiz: React.FC = () => {
                                             </Grid2>
                                             {
                                                 questionIndex === quizSession?.questions?.length - 1 ?
-                                                    <Button variant="outlined" onClick={handleFinishQuiz} disabled={selectedAnswer === 0}>
+                                                    <Button variant="contained" onClick={handleFinishQuiz} disabled={selectedAnswer === 0}>
                                                         Finish quiz
                                                     </Button>
                                                     :
@@ -217,10 +224,10 @@ const Quiz: React.FC = () => {
 
                                         </Grid2>
                                     </Grid2>
-
                                 </Grid2>
                             </Grid2>
-                            <Grid2 container flexDirection={'column'} size={2} paddingLeft={2}>
+                            <Grid2 container flexDirection={'column'} size={{ xs: 12, sm: 4, md: 3, lg: 2.5 }} paddingLeft={{ sm: 2 }}
+                            >
                                 <Grid2 container flexDirection={'column'} component={Paper} padding={2} alignItems={'center'} spacing={2}>
                                     <Typography variant="h6">
                                         Question {+questionIndex + 1}

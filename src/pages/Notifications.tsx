@@ -29,12 +29,18 @@ function Notifications() {
 
     return (
         <Grid component={Paper} container flexDirection={'column'} padding={2} spacing={3} flex={1}>
-            <Grid container justifyContent={'space-between'} alignItems={'center'}>
+            <Grid container flexDirection={{ xs: 'column', sm: 'row' }} justifyContent={'space-between'} alignItems={'center'}>
                 <Typography variant="h4" color="primary.main">
                     Notifications
                 </Typography>
-                <Pagination count={notifications?.metadata.totalPages} disabled={isLoading} page={page} onChange={(e, val) => setPage(val)} variant="outlined" color="primary" />
-                <Button variant="contained" size={'small'} onClick={markAllAsRead}>Mark all as read</Button>
+                <Pagination count={notifications?.metadata.totalPages} disabled={isLoading} page={page} onChange={(e, val) => setPage(val)} variant="outlined" color="primary" sx={{
+                    order: { xs: 2, sm: 1 }
+                }} />
+                <Button variant="contained" size={'small'} onClick={markAllAsRead}
+                    sx={{
+                        order: { xs: 1, sm: 2 }
+                    }}
+                >Mark all as read</Button>
             </Grid>
 
             <Grid container flexDirection={'column'} spacing={0} borderTop={2} borderColor={'primary.main'} paddingTop={2}>

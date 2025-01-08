@@ -131,8 +131,8 @@ function CreateQuizDialog({ payload, open, onClose }) {
 
     return (
         <Dialog component='form' onSubmit={handleSubmit(handleAddQuiz)} fullWidth maxWidth={'lg'} open={open} >
-            <Grid container justifyContent={'space-between'} borderBottom={2} borderColor={'primary.main'} marginBottom={2} padding={2}>
-                <Button sx={{ visibility: 'hidden' }}>
+            <Grid container justifyContent={'space-between'} alignItems={'center'} flexDirection={{ xs: 'column', sm: 'row' }} borderBottom={2} borderColor={'primary.main'} marginBottom={2} padding={2} spacing={2}>
+                <Button sx={{ visibility: 'hidden', display: { xs: 'none', sm: 'unset' } }}>
                     Add questions
                 </Button>
                 <Typography variant='h4' color='primary.main' fontWeight={600}>
@@ -144,11 +144,10 @@ function CreateQuizDialog({ payload, open, onClose }) {
                     Add question
                 </Button>
             </Grid>
-            <Grid container component={DialogContent} sx={{ minHeight: '70vh' }}>
-                <Grid container size={3} flexDirection={'column'} flex={1} borderRight={1} borderColor={'primary.main'} paddingRight={3}>
+            <Grid container component={DialogContent} flexDirection={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 0 }} sx={{ minHeight: '70vh' }}>
+                <Grid container size={{ xs: 12, sm: 3 }} spacing={1} flexDirection={'column'} borderRight={{ sm: 1 }} borderColor={'primary.main'} paddingRight={{ sm: 3 }}>
 
                     <TextField label="Title" margin='normal'
-                        // disabled={isLoading}
                         error={!!formErrors.title}
                         helperText={formErrors.title?.message}
                         disabled={isLoading || dispatchingCourse}
@@ -165,7 +164,6 @@ function CreateQuizDialog({ payload, open, onClose }) {
                             },
                         }}
                         defaultValue={payload.data?.durationMinutes || 30}
-                        // disabled={isLoading || dispatchingCourse}
                         error={!!formErrors.durationMinutes}
                         helperText={formErrors.durationMinutes?.message}
                         disabled={isLoading || dispatchingCourse}
@@ -200,7 +198,7 @@ function CreateQuizDialog({ payload, open, onClose }) {
                     />
 
                 </Grid>
-                <Grid container size={9} flexDirection={'column'} paddingLeft={3} >
+                <Grid container size={{ xs: 12, sm: 9 }} flexDirection={'column'} paddingLeft={{ sm: 3 }} >
                     <TableContainer sx={{ overflow: 'auto', maxHeight: 500 }}>
                         <Table stickyHeader>
                             <TableHead >
