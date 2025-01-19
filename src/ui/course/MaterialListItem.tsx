@@ -131,14 +131,14 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
           (roleNames[user?.role] === 'Staff' && sectionPart.materialType === 3) &&
           <Grid container spacing={2} alignItems={'center'}>
             {
-              sectionPart.exam.status !== 3 &&
+              sectionPart.exam?.status !== 3 &&
               <>
                 <FormHelperText>
-                  Your latest grade: {` ${sectionPart.exam.lastGottenGradePoints} `} / {` ${sectionPart.exam.maxGradePoints}`}
+                  Your latest grade: {` ${sectionPart.exam?.lastGottenGradePoints} `} / {` ${sectionPart.exam?.maxGradePoints}`}
                 </FormHelperText>
 
                 {
-                  sectionPart.exam.lastGottenGradePoints >= sectionPart.exam.passThresholdPoints ?
+                  sectionPart.exam?.lastGottenGradePoints >= sectionPart.exam?.passThresholdPoints ?
                     <Chip label='Passed' color="success" size="small" />
                     :
                     <Chip label='Failed' color="error" size='small' />
@@ -149,7 +149,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
             }
             {
               courseStatuses[course?.status] !== 'Finished' &&
-              <Link component={RouterLink} to={`quiz/${sectionPart.exam.id}`} target="_blank" underline="none">
+              <Link component={RouterLink} to={`quiz/${sectionPart.exam?.id}`} target="_blank" underline="none">
                 <Button variant="outlined"
                   size={'small'}
                   sx={{
@@ -158,7 +158,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
                   }}
                 >
                   {
-                    sectionPart.exam.status === 3 ? "Start " : "Retake "
+                    sectionPart.exam?.status === 3 ? "Start " : "Retake "
                   }
                   Quiz
                 </Button>

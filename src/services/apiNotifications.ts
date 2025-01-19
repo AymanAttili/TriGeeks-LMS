@@ -14,11 +14,11 @@ export async function getNotification(id: string){
         page: 1,
         pageSize: 1
     }    
-    return await axiosAPI.post('user/notifications', payload)
+    return await axiosAPI.post('user/notifications/search', payload)
 }
 
 export async function getNotifications(page: number){
-    return await axiosAPI.post('user/notifications', {
+    return await axiosAPI.post('user/notifications/search', {
         filters: "",
         sorts: "-CreatedAtUtc",
         page,

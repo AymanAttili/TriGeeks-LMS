@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addQuiz, addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, submitExam, toggleSectionPartStatus } from "../../services/apiCourses";
+import { addQuiz, addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, toggleSectionPartStatus } from "../../services/apiCourses";
 import { useNavigate, useParams } from "react-router-dom";
 
 type data = {
@@ -33,7 +33,6 @@ export function useDispatchCourse() {
                 case 'editSectionPart': return await editSectionPart(payload.sectionId, payload.sectionPartId, payload.data);
                 case 'deleteSectionPart': return await deleteSectionPart(payload.sectionId, payload.sectionPartId);
                 case 'toggleSectionPartStatus': return await toggleSectionPartStatus(payload.sectionId, payload.sectionPartId);
-                case 'submitExam': await submitExam(payload.sectionId, payload.sectionPartId, payload.data); break;
                 default: throw new Error('Unknown action')
             }
         },

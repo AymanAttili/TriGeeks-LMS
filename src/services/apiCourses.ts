@@ -17,7 +17,7 @@ export async function getCourseParticipants(courseId: string,page:string,filter:
 }
 
 export async function pokeUser(courseId: string, userId: string) {
-    return await axiosAPI.post(`/courses/${courseId}/participants/${userId}/late-notifications`)
+    return await axiosAPI.post(`/courses/${courseId}/participants/${userId}/poke`)
 
 }
 
@@ -230,8 +230,4 @@ export async function toggleSectionPartStatus(sectionId: string, sectionPartId: 
     await axiosAPI.patch(`/sections/${sectionId}/parts/${sectionPartId}/current-user/done`);
 
     return {action: 'toggleSectionPartStatus'}
-}
-
-export async function submitExam(sectionId: string, sectionPartId: string, payload){
-    return await axiosAPI.put(`/sections/${sectionId}/parts/${sectionPartId}/current-user/status`, payload);
 }
