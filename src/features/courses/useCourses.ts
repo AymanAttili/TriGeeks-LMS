@@ -3,16 +3,16 @@ import { searchCourses } from "../../services/apiCourses";
 
 const initialQuery = {
     page: 1,
-    pageSize: 9999
+    pageSize: 12
 }
 
 export function useCourses(query = initialQuery) {
 
-    const { isFetching, data: courses, error, isError } = useQuery({
+    const { isFetching, data, error, isError } = useQuery({
         queryKey: ["courses", query],
-        queryFn: async () => (await searchCourses(query)).data.items,
+        queryFn: async () => (await searchCourses(query)).data,
         throwOnError: true
     });
 
-    return { isLoading: isFetching, courses, error, isError };
+    return { isLoading: isFetching, courses: data?.items, metadata: data?.metadata, error, isError };
 }
