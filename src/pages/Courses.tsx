@@ -91,7 +91,7 @@ function Courses() {
       <Grid container justifyContent={'center'}>
         <Pagination count={metadata?.totalPages}
           disabled={fetchingCourses}
-          page={metadata?.page}
+          page={page}
           onChange={(e, val) => setPage(val)}
           variant="outlined" color="primary" />
       </Grid>
