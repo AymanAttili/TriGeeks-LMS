@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addQuiz, addSection, addSectionPart, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, toggleSectionPartStatus } from "../../services/apiCourses";
+import { addQuiz, addSection, addSectionPart, assignManager, assignStaffToCourse, checkCourseFinish, createCourse, deleteCourse, deleteSection, deleteSectionPart, editCourse, editQuiz, editSection, editSectionPart, finishCourse, startCourse, toggleSectionPartStatus } from "../../services/apiCourses";
 import { useNavigate, useParams } from "react-router-dom";
 
 type data = {
@@ -22,6 +22,7 @@ export function useDispatchCourse() {
                 case 'delete': return await deleteCourse(payload.courseId);
                 case 'checkCourseFinish': await checkCourseFinish(payload.courseId); break;
                 case 'assignStaffToCourse': await assignStaffToCourse(payload.courseId, payload.assignments); break;
+                case 'assignManager': await assignManager(payload.courseId, payload.subAdminId); break;
                 case 'startCourse': await startCourse(payload.courseId); break;
                 case 'finishCourse': await finishCourse(payload.courseId); break;
                 case 'addSection': return await addSection(payload.courseId, payload.data); 

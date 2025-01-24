@@ -68,6 +68,18 @@ export async function getCoursesOverview() {
     return await axiosAPI.get('/user/courses-status');
 }
 
+export async function assignManager(courseId:number, subAdminId:number) {
+    return await axiosAPI.patch(`/courses/${courseId}/manager`, [
+        {
+            path: "SubAdminId",
+            op: "replace",
+            value: subAdminId
+        }
+    ]
+    );
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Section
 ////////////////////////////////////////////////////////////////////////////////////////////

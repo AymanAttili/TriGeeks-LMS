@@ -17,6 +17,7 @@ import AddCourseDialog from "./AddCourseDialog";
 import AssignToCourseDialog from "./AssignToCourseDialog";
 import { courseStatuses } from "../../Enums/courseStatuses";
 import CourseParticipants from "./CourseParticipants";
+import ChangeManagerDialog from "./ChangeManagerDialog";
 
 interface Material {
   id: string;
@@ -119,6 +120,10 @@ const Course: React.FC = () => {
     await courseDispatch({ action: 'finishCourse', payload: { courseId } })
   }
 
+  const openChangeManagerDialog = async () => {
+    await dialogs.open(ChangeManagerDialog, { course });
+  }
+
   useEffect(() => {
     const startCourse = async () => {
       await courseDispatch({ action: 'startCourse', payload: { courseId } })
@@ -152,9 +157,17 @@ const Course: React.FC = () => {
           </ButtonGroup>
         }
 
-        <Link component={RouterLink} to="/courses" display={{ xs: 'none', sm: 'block' }} sx={{ visibility: 'hidden' }}>
-          ⇐ Back to courses
-        </Link>
+        {
+          roleNames[user.role] === 'Admin' ?
+            <Button size={'small'} variant={'contained'} onClick={openChangeManagerDialog}>
+              Change manager
+            </Button>
+            :
+            <Link component={RouterLink} to="/courses" display={{ xs: 'none', sm: 'block' }} sx={{ visibility: 'hidden' }}>
+              ⇐ Back to courses
+            </Link>
+        }
+
       </Grid>
       <Grid container size={12} flexDirection={{ xs: 'column', sm: 'row' }} alignItems={'start'} justifyContent={'space-between'} spacing={2} paddingY={1} borderBottom={1} borderColor={'primary.main'}>
         <Grid container size={{ xs: 12, sm: 8, md: 7 }} flexDirection={'column'} spacing={1}>
