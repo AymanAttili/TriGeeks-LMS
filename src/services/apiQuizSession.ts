@@ -9,7 +9,7 @@ export async function checkStartedQuiz(quizId: string){
 }
 
 export async function getQuizSession(quizId: string){
-    return await axiosAPI.get(`exams/${quizId}/user/current-session`).catch((err) => {if(err.message.status===409)
+    return await axiosAPI.get(`exams/${quizId}/user/current-session`).catch((err) => {
         return{
             data:null
     }

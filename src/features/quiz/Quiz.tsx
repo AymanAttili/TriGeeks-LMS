@@ -105,7 +105,7 @@ const Quiz: React.FC = () => {
     }, [timeLeft]);
 
 
-    if ((!fetchingSession && quizSession === undefined) || timeLeft === 0)
+    if ((!fetchingSession && !quizSession) || timeLeft === 0)
         return <QuizSessionEnded />
 
     return (
