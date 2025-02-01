@@ -20,7 +20,7 @@ export function useLogin() {
             queryClient.invalidateQueries();
         },
         onError: () => {      
-            notifications.show('Invalid credentials', {
+            notifications.show('Invalid credentials', { // TODO: handle {inactive user} error message
                 severity: 'error',
                 autoHideDuration: 3000,
             });

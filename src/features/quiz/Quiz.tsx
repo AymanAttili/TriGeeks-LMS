@@ -104,7 +104,8 @@ const Quiz: React.FC = () => {
         return () => clearInterval(timer as ReturnType<typeof setInterval>);
     }, [timeLeft]);
 
-    if (((!fetchingSession && !quizSession) || timeLeft === 0))
+
+    if ((!fetchingSession && quizSession === undefined) || timeLeft === 0)
         return <QuizSessionEnded />
 
     return (

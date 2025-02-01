@@ -102,7 +102,7 @@ function Account() {
   };
 
   const isValidFile = (profilePicture) => {
-    const allowedExtensions = ["jpg", "png"];
+    const allowedExtensions = ["jpg", "png", "jpeg"];
     const fileExtension = profilePicture[0]?.name.split(".").pop().toLowerCase();
     return allowedExtensions.includes(fileExtension)
   }
@@ -130,7 +130,7 @@ function Account() {
       return;
     }
     if (!isValidFile(data.profilePicture)) {
-      await dialogs.alert('Please upload a valid profile picture. (.jpg, .png)')
+      await dialogs.alert('Please upload a valid profile picture. (.jpg, .jpeg, .png)')
       reset();
       return;
     }
@@ -280,7 +280,7 @@ function Account() {
               />
               <VisuallyHiddenInput
                 type="file"
-                accept=".png, .jpg"
+                accept=".png, .jpg, .jpeg"
                 {...register("profilePicture")}
                 ref={(e) => {
                   register("profilePicture").ref(e);

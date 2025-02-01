@@ -1,4 +1,4 @@
-import { Button, Grid2 as Grid, Paper, Typography } from '@mui/material';
+import { Button, ButtonGroup, Grid2 as Grid, Paper, Typography } from '@mui/material';
 import { DataGrid, } from '@mui/x-data-grid';
 import { roleNames } from '../Enums/roles';
 import { levelNames } from '../Enums/educationLevels';
@@ -7,17 +7,18 @@ import { useDialogs } from '@toolpad/core';
 import ActionsMenu from '../ui/ActionsMenu';
 import { useDispatchUsers } from '../features/users/useDispatchUsers';
 import { Add } from '@mui/icons-material';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { filterOperators } from '../Enums/filterOperators';
 import ShowUserDetails from '../features/users/ShowUserDetails';
 import AddUserDialog from '../features/users/AddUserDialog';
 
 function Users() {
     const [filters, setFilters] = useState('')
+    const [userStatus, setUserStatus] = useState(true);
     const [paginationModel, setPaginationModel] = useState({
-        filters,
         page: 1,
-        pageSize: 10
+        pageSize: 10,
+        userStatus
     })
     const { users, isLoading: fetchingUsers } = useUsers(paginationModel);
     const { usersDispatch, isLoading: dispatchingUser } = useDispatchUsers()
@@ -104,7 +105,7 @@ function Users() {
                     <ActionsMenu key={value.id}
                         items={[
                             { title: 'Edit', onClick: () => handleEdit(value.row) },
-                            { title: 'Delete', onClick: () => handleDelete(value.id) }
+                            { title: `${userStatus ? 'Deactivate' : 'Activate'}`, onClick: () => handleDeactivate(value.id) }
                         ]}
                     />
                 ];
@@ -120,16 +121,29 @@ function Users() {
         await dialogs.open(AddUserDialog, { user: data })
     }
 
-    const handleDelete = async (id) => {
-        const confirmed = await dialogs.confirm('Are you sure to delete this User?', {
-            title: 'Delete User ❌',
+    const handleDeactivate = async (id) => {
+        const confirmed = await dialogs.confirm(`Are you sure to change this User to ${userStatus ? 'inactive' : 'active'}?`, {
+            title: `${userStatus ? 'Deactivate user ❌' : 'Activate user ✅'}`,
             okText: 'Yes',
             cancelText: 'No',
         })
 
         if (confirmed)
-            usersDispatch({ action: 'delete', payload: { id } })
+            usersDispatch({
+                action: 'deactivate', payload: {
+                    id,
+                    status: !userStatus
+                }
+            })
     }
+
+    useEffect(() => {
+        setPaginationModel({
+            page: 1,
+            pageSize: 10,
+            userStatus
+        })
+    }, [userStatus, setPaginationModel])
 
     return (
         <Grid component={Paper} container alignSelf={'center'} flexDirection={'column'}
@@ -145,13 +159,17 @@ function Users() {
                 }
             }}
         >
-            <Grid container justifyContent={'space-between'} padding={1} sx={{
+            <Grid container justifyContent={'space-between'} wrap={'wrap'} padding={1} sx={{
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center'
             }}>
                 <Typography variant='h4' color='primary'>
                     Users
                 </Typography>
+                <ButtonGroup >
+                    <Button variant={userStatus ? 'contained' : 'outlined'} onClick={() => setUserStatus(true)}>Active</Button>
+                    <Button variant={!userStatus ? 'contained' : 'outlined'} onClick={() => setUserStatus(false)}>Inactive</Button>
+                </ButtonGroup>
                 <Button
                     onClick={openUsersDialog}
                     variant='contained' endIcon={<Add />}>Add user</Button>
@@ -193,7 +211,21 @@ function Users() {
                 // filterModel={ }
                 onFilterModelChange={
                     (model) => {
+                        if (model.items.length === 0) {
+                            setPaginationModel(
+                                {
+                                    page: 1,
+                                    pageSize: 10,
+                                    userStatus
+                                }
+                            )
+                            return;
+                        }
+
                         const item = model.items[0];
+                        if (!item.operator.includes('Empty') && item.value === undefined)
+                            return;
+
                         let newFilters = '';
                         if (item?.value?.length && item.operator === 'isAnyOf') {
                             newFilters = `${item.field}==`
@@ -208,13 +240,16 @@ function Users() {
                             const op = filterOperators[item.operator];
                             newFilters = `${item.field}${op}${item.value}`;
                         }
-
+                        else if (item.operator !== 'isEmpty') {
+                            newFilters = `${item.field}$$`;
+                        }
                         setFilters(newFilters);
                         setPaginationModel((model) => {
                             return {
                                 ...model,
                                 filters: newFilters,
-                                page: 1
+                                page: 1,
+                                userStatus
                             }
                         })
                     }

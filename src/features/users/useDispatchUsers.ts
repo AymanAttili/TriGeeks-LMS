@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotifications } from "@toolpad/core";
-import { addUser, changePassword, deleteUser, editUser, searchUsers, updateProfilePicture, User } from "../../services/apiUser";
+import { addUser, changePassword, deactivateUser, deleteUser, editUser, searchUsers, updateProfilePicture, User } from "../../services/apiUser";
 import axios, { AxiosError } from "axios";
 
 type UserPayload = {
     id?: number
-    user?: User
+    user?: User,
+    status?: boolean
 }
 
 type UpdatePicturePayload = {
@@ -47,6 +48,7 @@ export function useDispatchUsers() {
                     return await changePassword(payload.currentPassword, payload.newPassword)
                 }
                 case 'delete': return await deleteUser(payload.id); 
+                case 'deactivate': return await deactivateUser(payload.id, payload.status); 
                 case 'search': return await searchUsers(payload); 
                 default: throw new AxiosError('Unknown action')
             }

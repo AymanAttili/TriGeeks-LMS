@@ -86,10 +86,15 @@ export type searchPayload = {
     "filters"?: string,
     "sorts"?: string,
     "page": number,
-    "pageSize": number
+    "pageSize": number,
+    userStatus?:boolean
 }
 
-export async function searchUsers(payload:searchPayload = initialPayload) {
+export async function searchUsers(payload:searchPayload) {
+    payload = {
+        ...payload,
+        filters: `isActive==${payload.userStatus}, ${payload.filters ? payload.filters : ''}`
+    }
     const response = await axiosAPI.post('users/search', payload)
     return response.data;
 }
@@ -109,4 +114,14 @@ export async function editUser(id:number, payload: User){
 
 export async function deleteUser(id: number){
     return await axiosAPI.delete(`users/${id}`)
+}
+
+export async function deactivateUser(id: number, status: boolean){
+    return await axiosAPI.patch(`users/${id}/activation`, [
+        {
+            path: "IsActive",
+            op: "replace",
+            value: status
+        }
+    ])
 }
