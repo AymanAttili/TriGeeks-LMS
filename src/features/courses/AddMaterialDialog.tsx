@@ -50,6 +50,15 @@ function AddMaterialDialog({ payload, open, onClose }) {
                     }
                 }
             }
+            else {
+                newPayload = {
+                    ...newPayload,
+                    data: {
+                        ...(newPayload.data),
+                        fileId: payload?.sectionPart?.file.id
+                    }
+                }
+            }
 
             await courseDispatch({
                 action: 'editSectionPart', payload: newPayload

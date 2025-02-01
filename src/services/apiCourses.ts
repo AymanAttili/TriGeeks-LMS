@@ -199,8 +199,7 @@ export async function getExamOverview(examId){
 
 
 export async function editSectionPart(sectionId: string, sectionPartId: string, payload){
-    const { materialType, file, title, link, questions } = payload;
-    
+    const { materialType, file, title, link, questions, fileId } = payload;
     let newPayload = {
         title,
         materialType
@@ -227,9 +226,13 @@ export async function editSectionPart(sectionId: string, sectionPartId: string, 
         }
     }
 
-    else{
-        return new AxiosError('Invalid Material Type')
+    if(fileId){
+        newPayload = {
+            ...newPayload,
+            fileId
+        }
     }
+
 
     return await axiosAPI.put(`/sections/${sectionId}/parts/${sectionPartId}`, newPayload);
 }
