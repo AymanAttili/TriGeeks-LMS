@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 function AdminDashboard() {
     // const {courses} = useCourses()
     const { departments } = useDepartments();
-    const { users } = useUsers();
+    const { users } = useUsers({ all: true });
     const { courses } = useCourses();
 
     return (

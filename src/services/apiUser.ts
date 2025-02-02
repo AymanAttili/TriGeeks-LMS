@@ -87,14 +87,22 @@ export type searchPayload = {
     "sorts"?: string,
     "page": number,
     "pageSize": number,
-    userStatus?:boolean
+    userStatus?:boolean,
+    all?:boolean
 }
 
 export async function searchUsers(payload:searchPayload) {
-    payload = {
-        ...payload,
-        filters: `isActive==${payload.userStatus}, ${payload.filters ? payload.filters : ''}`
+    if(payload.all){
+        payload = {
+            page:1,
+            pageSize: 99999
+        }
     }
+    else
+        payload = {
+            ...payload,
+            filters: `isActive==${payload.userStatus}, ${payload.filters ? payload.filters : ''}`
+        }
     const response = await axiosAPI.post('users/search', payload)
     return response.data;
 }
