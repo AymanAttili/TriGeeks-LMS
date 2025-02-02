@@ -199,7 +199,7 @@ const Course: React.FC = () => {
                     }} />
                   }
                   {
-                    (roleNames[user?.role] === 'Staff' && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
+                    (roleNames[user?.role] === 'Staff' && passed && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
                     <Grid sx={{ display: { sm: 'none' } }}>
                       <Button variant="contained" onClick={handleFinishCourse}>
                         Finish Course
@@ -225,7 +225,7 @@ const Course: React.FC = () => {
           </Grid>
         }
         {
-          (roleNames[user?.role] === 'Staff' && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
+          (roleNames[user?.role] === 'Staff' && passed && course?.progress === 1 && courseStatuses[course?.status] !== 'Finished') &&
           <Grid sx={{ display: { xs: 'none', sm: 'flex' } }}>
             <Button variant="contained" onClick={handleFinishCourse}>
               Finish Course
