@@ -10,7 +10,8 @@ function ChangeManagerDialog({ payload, open, onClose }) {
     const { users, isLoading } = useUsers({
         page: 1,
         pageSize: 9999,
-        filters: `role==SubAdmin`
+        filters: `role==SubAdmin`,
+        userStatus: true
     })
     const [subAdminId, setSubAdminId] = useState(null);
     const handleChangeManager = async (e) => {

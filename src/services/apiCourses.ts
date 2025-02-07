@@ -241,8 +241,14 @@ export async function deleteSectionPart(sectionId: string, sectionPartId: string
     return await axiosAPI.delete(`/sections/${sectionId}/parts/${sectionPartId}`);
 }
 
-export async function toggleSectionPartStatus(sectionId: string, sectionPartId: string){
-    await axiosAPI.patch(`/sections/${sectionId}/parts/${sectionPartId}/current-user/done`);
+export async function changeSectionPartStatus(sectionId: string, sectionPartId: string, status: number){
+    await axiosAPI.patch(`/sections/${sectionId}/parts/${sectionPartId}/current-user/status`,[
+        {
+            path: "Status",
+            op: "replace",
+            value: status
+        }
+    ]);
 
     return {action: 'toggleSectionPartStatus'}
 }

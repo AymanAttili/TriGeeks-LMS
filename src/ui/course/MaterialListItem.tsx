@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Chip, FormHelperText, Grid2 as Grid, IconButton, Link, ListItem, ListItemIcon, ListItemText, Tooltip, Typography } from "@mui/material";
+import { Button, Chip, FormHelperText, Grid2 as Grid, IconButton, Link, ListItem, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
 import MarkDone from "./MarkDone";
 import { Delete, Edit, ExpandLess, ExpandMore, Quiz } from "@mui/icons-material";
@@ -34,7 +34,7 @@ export interface MaterialListItemProps {
       passThresholdPoints?: number,
       questions?: [],
     }
-    isDone: boolean
+    status: 1 | 2 | 3
   }
 }
 
@@ -73,6 +73,16 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
       await courseDispatch({ action: 'deleteSectionPart', payload: { sectionPartId: sectionPart.id, sectionId: sectionPart.sectionId } })
     }
   }
+
+  const handleViewMaterial = async () => {
+    if (sectionPart.status === 1)
+      await courseDispatch({ action: 'changeSectionPartStatus', payload: { sectionId: sectionPart.sectionId, sectionPartId: sectionPart.id, status: 2 } })
+  }
+
+  const handleExpand = async () => {
+    setExpanded(val => !val)
+    await handleViewMaterial();
+  }
   return (
 
     <Grid component={ListItem}
@@ -103,7 +113,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
             sectionPart.materialType === 3 ?
               <ListItemText primary={sectionPart.title} />
               :
-              <Link component={RouterLink} to={sectionPart.file?.path || sectionPart.link || ' '} target="_blank" >
+              <Link component={RouterLink} onClick={handleViewMaterial} to={sectionPart.file?.path || sectionPart.link || ' '} target="_blank" >
                 <ListItemText primary={sectionPart.title} />
               </Link>
           }
@@ -114,7 +124,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
           <Grid container spacing={1}>
             {
               ['audio', 'video', 'image'].includes(sectionPart.file?.contentType.split('/')[0]) &&
-              <IconButton onClick={() => setExpanded(val => !val)}>
+              <IconButton onClick={handleExpand}>
                 {
                   expanded ? <ExpandLess /> : <ExpandMore />
                 }
@@ -123,7 +133,7 @@ const MaterialListItem: React.FC<MaterialListItemProps> = ({ sectionPart }) => {
             }
             {
               courseStatuses[course?.status] !== 'Finished' &&
-              <MarkDone done={sectionPart.isDone} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
+              <MarkDone status={sectionPart.status} sectionId={sectionPart.sectionId} sectionPartId={sectionPart.id} />
             }
           </Grid>
         }

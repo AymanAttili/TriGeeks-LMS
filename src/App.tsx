@@ -10,7 +10,6 @@ import { DialogsProvider, NotificationsProvider } from "@toolpad/core"
 import SpinnerLoader from "./ui/SpinnerLoader.tsx"
 
 import theme from "./utils/theme.js"
-import store from './store.js'
 
 import queryClient from "./cache/queryClient.js"
 import router from "./routes/router.tsx"
@@ -20,19 +19,17 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
       <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <NotificationsProvider>
-            <DialogsProvider>
-              <Suspense fallback={<SpinnerLoader />} >
-                <RouterProvider router={router} />
-              </Suspense>
-              <ReactQueryDevtools
-                initialIsOpen={false}
-                buttonPosition="bottom-left"
-              />
-            </DialogsProvider>
-          </NotificationsProvider>
-        </Provider>
+        <NotificationsProvider>
+          <DialogsProvider>
+            <Suspense fallback={<SpinnerLoader />} >
+              <RouterProvider router={router} />
+            </Suspense>
+            <ReactQueryDevtools
+              initialIsOpen={false}
+              buttonPosition="bottom-left"
+            />
+          </DialogsProvider>
+        </NotificationsProvider>
       </QueryClientProvider>
     </ThemeProvider >
   )
