@@ -128,6 +128,11 @@ function Department() {
                             )}
                     </TableBody>
                 </Table>
+                {
+                    majors?.length === 0 && <Typography variant="h6" padding={2}>
+                        No majors yet!🤌
+                    </Typography>
+                }
             </TableContainer>
         </Grid >
     )

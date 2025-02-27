@@ -101,8 +101,15 @@ function Departments() {
                                     </TableCell>
                                 </TableRow>
                             )}
+
+
                     </TableBody>
                 </Table>
+                {
+                    departments?.length === 0 && <Typography variant="h6" padding={2}>
+                        No departments yet!🤌
+                    </Typography>
+                }
             </TableContainer>
         </Grid >
     )
