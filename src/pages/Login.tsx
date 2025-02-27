@@ -9,7 +9,7 @@ import { Box, Checkbox, FormControlLabel, Grid2 as Grid, Link, TextField, Typogr
 import InputPassword from "../ui/InputPassword";
 import { useLogin } from "../features/authentication/useLogin";
 
-import logo from '../images/logo.jpg'
+import logo from '../images/logo.png'
 import { useUser } from "../features/users/useUser";
 
 const Login = () => {

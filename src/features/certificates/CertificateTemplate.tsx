@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Button, Grid2 as Grid, Paper, Typography } from '@mui/material';
-import logo from '../../images/logo.jpg'
+import logo from '../../images/logo.png'
 import { Task } from '@mui/icons-material';
 
 const CertificateGenerator = ({ userDetails, sx = {} }) => {

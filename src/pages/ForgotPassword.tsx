@@ -6,7 +6,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import { useDialogs } from '@toolpad/core/useDialogs';
 
 
-import logo from '../images/logo.jpg'
+import logo from '../images/logo.png'
 import { useForgotPassword } from '../features/authentication/useForgotPassword';
 import LoadingButton from '@mui/lab/LoadingButton'
 

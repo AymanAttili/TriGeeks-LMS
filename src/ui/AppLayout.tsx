@@ -8,7 +8,7 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import useDashboardNavigation from "../utils/useDashboardNavigation.tsx";
 
 
-import logo from "../images/logo.jpg";
+import logo from "../images/logo.png";
 import { roleNames } from '../Enums/roles.ts';
 import SpinnerLoader from './SpinnerLoader.tsx';
 import { useUser } from '../features/users/useUser.ts';
@@ -44,8 +44,8 @@ const AppLayout = () => {
       branding={
         !isQuizPage ?
           {
-            logo: <img src={logo} alt="Makassed LMS" />,
-            title: "Makassed LMS",
+            logo: <img src={logo} alt="TriGeeks LMS" />,
+            title: "TriGeeks LMS",
           }
           :
           {

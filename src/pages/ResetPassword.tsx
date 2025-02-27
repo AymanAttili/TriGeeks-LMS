@@ -7,7 +7,7 @@ import { Grid2 as Grid, IconButton, InputAdornment, InputLabel, TextField, Typog
 
 import { resetPasswordTokenValidation } from "../services/apiAuth";
 
-import logo from '../images/logo.jpg'
+import logo from '../images/logo.png'
 import LoginIcon from '@mui/icons-material/Login'
 import { useUser } from "../features/users/useUser";
 import SpinnerLoader from '../ui/SpinnerLoader';

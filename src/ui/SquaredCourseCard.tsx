@@ -9,7 +9,7 @@ import {
   Grid2 as Grid,
 
 } from "@mui/material";
-import logo from '../images/logo.jpg'
+import logo from '../images/logo.png'
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/users/useUser";
 import { roleNames } from "../Enums/roles";
